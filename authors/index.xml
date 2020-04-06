@@ -5,12 +5,52 @@
     <link>https://cimeister.github.io/authors/</link>
       <atom:link href="https://cimeister.github.io/authors/index.xml" rel="self" type="application/rss+xml" />
     <description>Authors</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sat, 01 Aug 2020 00:00:00 +0000</lastBuildDate>
     <image>
       <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
       <title>Authors</title>
       <link>https://cimeister.github.io/authors/</link>
     </image>
+    
+    <item>
+      <title>Clara Meister</title>
+      <link>https://cimeister.github.io/authors/clara-meister/</link>
+      <pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/authors/clara-meister/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Pinjia He</title>
+      <link>https://cimeister.github.io/authors/pinjia-he/</link>
+      <pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/authors/pinjia-he/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Zhendong Su</title>
+      <link>https://cimeister.github.io/authors/zhendong-su/</link>
+      <pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/authors/zhendong-su/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Elizabeth Salesky</title>
+      <link>https://cimeister.github.io/authors/elizabeth-salesky/</link>
+      <pubDate>Wed, 01 Jul 2020 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/authors/elizabeth-salesky/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ryan Cotterell</title>
+      <link>https://cimeister.github.io/authors/ryan-cotterell/</link>
+      <pubDate>Wed, 01 Jul 2020 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/authors/ryan-cotterell/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title></title>

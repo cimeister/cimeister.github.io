@@ -5,12 +5,28 @@
     <link>https://cimeister.github.io/publication/</link>
       <atom:link href="https://cimeister.github.io/publication/index.xml" rel="self" type="application/rss+xml" />
     <description>Publications</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sat, 01 Aug 2020 00:00:00 +0000</lastBuildDate>
     <image>
       <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
       <title>Publications</title>
       <link>https://cimeister.github.io/publication/</link>
     </image>
+    
+    <item>
+      <title>Structure-Invariant Testing for Machine Translation</title>
+      <link>https://cimeister.github.io/publication/heal-icse-2020/</link>
+      <pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publication/heal-icse-2020/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Generalized Entropy Regularization or: There&#39;s Nothing Special about Label Smoothing</title>
+      <link>https://cimeister.github.io/publication/meisteral-acl-20/</link>
+      <pubDate>Wed, 01 Jul 2020 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publication/meisteral-acl-20/</guid>
+      <description></description>
+    </item>
     
   </channel>
 </rss>
