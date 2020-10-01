@@ -28,11 +28,10 @@
   
     
   
-  <meta name="description" content="Machine translation software has increasingly been integrated into our daily lives. People routinely use machine translation for various applications, such as describing symptoms to a foreign doctor and reading political news in a foreign language. However, due to the complexity and intractability of neural machine translation (NMT) models that power modern machine translation systems, these systems are far from being robust. They can return inferior results that lead to misunderstanding, medical misdiagnoses, threats to personal safety, or political conflicts. Despite its apparent importance, validating the robustness of machine translation is very difficult and has, therefore, been much under-explored.
-To tackle this challenge, we introduce structure-invariant testing (SIT), a novel metamorphic testing approach for validating machine translation software. Our key insight is that the translation results of “similar” source sentences should typically exhibit a similar sentence structure. Specifically, SIT (1) generates similar source sentences by substituting one word in a given sentence with semantically similar, syntactically equivalent words, and (2) represents sentence structure by syntax parse trees (obtained via constituency or dependency parsing). To evaluate SIT, we have used it to test Google Translate and Bing Microsoft Translator with 200 source sentences as input, which led to 64 and 70 buggy translations with 69.5% and 70% top-1 accuracy, respectively. The bugs are diverse, including under-translation, over-translation, incorrect modification, word/phrase mistranslation, and unclear logic, none of which could be detected via existing translation quality metrics.">
+  <meta name="description" content="Machine translation software has become heavily integrated into our daily lives due to the recent improvement in the performance of deep neural networks. However, machine translation software has been shown to regularly return erroneous translations, which can lead to harmful consequences such as economic loss and political conflicts. Additionally, due to the complexity of the underlying neural models, testing machine translation systems presents new challenges. To address this problem, we introduce a novel methodology called PatInv.  The main intuition behind PatInv is that sentences with different meanings should not have the same translation. Under this general idea, we provide two realizations of PatInv that given an arbitrary sentence, generate syntactically similar but semantically different sentences by: (1) replacing one word in the sentence using a masked language model or (2) removing one word or phrase from the sentence based on its constituency structure. We then test whether the returned translations are the same for the original and modified sentences. We have applied PatInv to test Google Translate and Bing Microsoft Translator using 200 English sentences. Two language settings are considered: English to Hindi (En-Hi) and  English to Chinese (En-Zh). The results show that PatInv can accurately find 308 erroneous translations in Google Translate and 223 erroneous translations in Bing Microsoft Translator, most of which cannot be found by the state-of-the-art approaches.">
 
   
-  <link rel="alternate" hreflang="en-us" href="https://cimeister.github.io/publication/heal-icse-2020/">
+  <link rel="alternate" hreflang="en-us" href="https://cimeister.github.io/publication/guptaal-fse-2020/">
 
   
 
@@ -214,7 +213,7 @@ To tackle this challenge, we introduce structure-invariant testing (SIT), a nove
   <link rel="icon" type="image/png" href="/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_32x32_fill_lanczos_center_2.png">
   <link rel="apple-touch-icon" type="image/png" href="/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_192x192_fill_lanczos_center_2.png">
 
-  <link rel="canonical" href="https://cimeister.github.io/publication/heal-icse-2020/">
+  <link rel="canonical" href="https://cimeister.github.io/publication/guptaal-fse-2020/">
 
   
   
@@ -228,10 +227,9 @@ To tackle this challenge, we introduce structure-invariant testing (SIT), a nove
   <meta property="twitter:card" content="summary">
   
   <meta property="og:site_name" content="Meister">
-  <meta property="og:url" content="https://cimeister.github.io/publication/heal-icse-2020/">
-  <meta property="og:title" content="Structure-Invariant Testing for Machine Translation | Meister">
-  <meta property="og:description" content="Machine translation software has increasingly been integrated into our daily lives. People routinely use machine translation for various applications, such as describing symptoms to a foreign doctor and reading political news in a foreign language. However, due to the complexity and intractability of neural machine translation (NMT) models that power modern machine translation systems, these systems are far from being robust. They can return inferior results that lead to misunderstanding, medical misdiagnoses, threats to personal safety, or political conflicts. Despite its apparent importance, validating the robustness of machine translation is very difficult and has, therefore, been much under-explored.
-To tackle this challenge, we introduce structure-invariant testing (SIT), a novel metamorphic testing approach for validating machine translation software. Our key insight is that the translation results of “similar” source sentences should typically exhibit a similar sentence structure. Specifically, SIT (1) generates similar source sentences by substituting one word in a given sentence with semantically similar, syntactically equivalent words, and (2) represents sentence structure by syntax parse trees (obtained via constituency or dependency parsing). To evaluate SIT, we have used it to test Google Translate and Bing Microsoft Translator with 200 source sentences as input, which led to 64 and 70 buggy translations with 69.5% and 70% top-1 accuracy, respectively. The bugs are diverse, including under-translation, over-translation, incorrect modification, word/phrase mistranslation, and unclear logic, none of which could be detected via existing translation quality metrics."><meta property="og:image" content="img/map[gravatar:%!s(bool=false) shape:circle]">
+  <meta property="og:url" content="https://cimeister.github.io/publication/guptaal-fse-2020/">
+  <meta property="og:title" content="Machine Translation Testing via Pathological Invariance | Meister">
+  <meta property="og:description" content="Machine translation software has become heavily integrated into our daily lives due to the recent improvement in the performance of deep neural networks. However, machine translation software has been shown to regularly return erroneous translations, which can lead to harmful consequences such as economic loss and political conflicts. Additionally, due to the complexity of the underlying neural models, testing machine translation systems presents new challenges. To address this problem, we introduce a novel methodology called PatInv.  The main intuition behind PatInv is that sentences with different meanings should not have the same translation. Under this general idea, we provide two realizations of PatInv that given an arbitrary sentence, generate syntactically similar but semantically different sentences by: (1) replacing one word in the sentence using a masked language model or (2) removing one word or phrase from the sentence based on its constituency structure. We then test whether the returned translations are the same for the original and modified sentences. We have applied PatInv to test Google Translate and Bing Microsoft Translator using 200 English sentences. Two language settings are considered: English to Hindi (En-Hi) and  English to Chinese (En-Zh). The results show that PatInv can accurately find 308 erroneous translations in Google Translate and 223 erroneous translations in Bing Microsoft Translator, most of which cannot be found by the state-of-the-art approaches."><meta property="og:image" content="img/map[gravatar:%!s(bool=false) shape:circle]">
   <meta property="twitter:image" content="img/map[gravatar:%!s(bool=false) shape:circle]"><meta property="og:locale" content="en-us">
   
     
@@ -259,16 +257,16 @@ To tackle this challenge, we introduce structure-invariant testing (SIT), a nove
   "@type": "Article",
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://cimeister.github.io/publication/heal-icse-2020/"
+    "@id": "https://cimeister.github.io/publication/guptaal-fse-2020/"
   },
-  "headline": "Structure-Invariant Testing for Machine Translation",
+  "headline": "Machine Translation Testing via Pathological Invariance",
   
   "datePublished": "2020-04-06T05:47:36Z",
   "dateModified": "2020-08-01T00:00:00Z",
   
   "author": {
     "@type": "Person",
-    "name": "Pinjia He\""
+    "name": "Shahij Gupta"
   },
   
   "publisher": {
@@ -279,7 +277,7 @@ To tackle this challenge, we introduce structure-invariant testing (SIT), a nove
       "url": "https://cimeister.github.io/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_192x192_fill_lanczos_center_2.png"
     }
   },
-  "description": "Machine translation software has increasingly been integrated into our daily lives. People routinely use machine translation for various applications, such as describing symptoms to a foreign doctor and reading political news in a foreign language. However, due to the complexity and intractability of neural machine translation (NMT) models that power modern machine translation systems, these systems are far from being robust. They can return inferior results that lead to misunderstanding, medical misdiagnoses, threats to personal safety, or political conflicts. Despite its apparent importance, validating the robustness of machine translation is very difficult and has, therefore, been much under-explored.\nTo tackle this challenge, we introduce structure-invariant testing (SIT), a novel metamorphic testing approach for validating machine translation software. Our key insight is that the translation results of “similar” source sentences should typically exhibit a similar sentence structure. Specifically, SIT (1) generates similar source sentences by substituting one word in a given sentence with semantically similar, syntactically equivalent words, and (2) represents sentence structure by syntax parse trees (obtained via constituency or dependency parsing). To evaluate SIT, we have used it to test Google Translate and Bing Microsoft Translator with 200 source sentences as input, which led to 64 and 70 buggy translations with 69.5% and 70% top-1 accuracy, respectively. The bugs are diverse, including under-translation, over-translation, incorrect modification, word/phrase mistranslation, and unclear logic, none of which could be detected via existing translation quality metrics."
+  "description": "Machine translation software has become heavily integrated into our daily lives due to the recent improvement in the performance of deep neural networks. However, machine translation software has been shown to regularly return erroneous translations, which can lead to harmful consequences such as economic loss and political conflicts. Additionally, due to the complexity of the underlying neural models, testing machine translation systems presents new challenges. To address this problem, we introduce a novel methodology called PatInv.  The main intuition behind PatInv is that sentences with different meanings should not have the same translation. Under this general idea, we provide two realizations of PatInv that given an arbitrary sentence, generate syntactically similar but semantically different sentences by: (1) replacing one word in the sentence using a masked language model or (2) removing one word or phrase from the sentence based on its constituency structure. We then test whether the returned translations are the same for the original and modified sentences. We have applied PatInv to test Google Translate and Bing Microsoft Translator using 200 English sentences. Two language settings are considered: English to Hindi (En-Hi) and  English to Chinese (En-Zh). The results show that PatInv can accurately find 308 erroneous translations in Google Translate and 223 erroneous translations in Bing Microsoft Translator, most of which cannot be found by the state-of-the-art approaches."
 }
 </script>
 
@@ -297,7 +295,7 @@ To tackle this challenge, we introduce structure-invariant testing (SIT), a nove
 
 
 
-  <title>Structure-Invariant Testing for Machine Translation | Meister</title>
+  <title>Machine Translation Testing via Pathological Invariance | Meister</title>
 
 </head>
 
@@ -504,7 +502,7 @@ To tackle this challenge, we introduce structure-invariant testing (SIT), a nove
   
   
 <div class="article-container pt-3">
-  <h1>Structure-Invariant Testing for Machine Translation</h1>
+  <h1>Machine Translation Testing via Pathological Invariance</h1>
 
   
 
@@ -522,7 +520,7 @@ To tackle this challenge, we introduce structure-invariant testing (SIT), a nove
     
 
   
-  <span><a href="/authors/pinjia-he/">Pinjia He</a></span>, <span><a href="/authors/clara-meister/">Clara Meister</a></span>, <span><a href="/authors/zhendong-su/">Zhendong Su</a></span>
+  <span><a href="/authors/shahij-gupta/">Shahij Gupta</a></span>, <span><a href="/authors/pinjia-he/">Pinjia He&rdquo;</a></span>, <span><a href="/authors/clara-meister/">Clara Meister</a></span>, <span><a href="/authors/zhendong-su/">Zhendong Su</a></span>
   </div>
   
   
@@ -578,19 +576,13 @@ To tackle this challenge, we introduce structure-invariant testing (SIT), a nove
 
 
   
-    
-  
 
 
-
-<a class="btn btn-outline-primary my-1 mr-1" href="https://arxiv.org/abs/1907.08710" target="_blank" rel="noopener">
-  PDF
-</a>
 
 
 
 <button type="button" class="btn btn-outline-primary my-1 mr-1 js-cite-modal"
-        data-filename="/publication/heal-icse-2020/cite.bib">
+        data-filename="/publication/guptaal-fse-2020/cite.bib">
   Cite
 </button>
 
@@ -620,8 +612,7 @@ To tackle this challenge, we introduce structure-invariant testing (SIT), a nove
 
     
     <h3>Abstract</h3>
-    <p class="pub-abstract">Machine translation software has increasingly been integrated into our daily lives. People routinely use machine translation for various applications, such as describing symptoms to a foreign doctor and reading political news in a foreign language. However, due to the complexity and intractability of neural machine translation (NMT) models that power modern machine translation systems, these systems are far from being robust. They can return inferior results that lead to misunderstanding, medical misdiagnoses, threats to personal safety, or political conflicts. Despite its apparent importance, validating the robustness of machine translation is very difficult and has, therefore, been much under-explored.
-To tackle this challenge, we introduce structure-invariant testing (SIT), a novel metamorphic testing approach for validating machine translation software. Our key insight is that the translation results of “similar” source sentences should typically exhibit a similar sentence structure. Specifically, SIT (1) generates similar source sentences by substituting one word in a given sentence with semantically similar, syntactically equivalent words, and (2) represents sentence structure by syntax parse trees (obtained via constituency or dependency parsing). To evaluate SIT, we have used it to test Google Translate and Bing Microsoft Translator with 200 source sentences as input, which led to 64 and 70 buggy translations with 69.5% and 70% top-1 accuracy, respectively. The bugs are diverse, including under-translation, over-translation, incorrect modification, word/phrase mistranslation, and unclear logic, none of which could be detected via existing translation quality metrics.</p>
+    <p class="pub-abstract">Machine translation software has become heavily integrated into our daily lives due to the recent improvement in the performance of deep neural networks. However, machine translation software has been shown to regularly return erroneous translations, which can lead to harmful consequences such as economic loss and political conflicts. Additionally, due to the complexity of the underlying neural models, testing machine translation systems presents new challenges. To address this problem, we introduce a novel methodology called PatInv.  The main intuition behind PatInv is that sentences with different meanings should not have the same translation. Under this general idea, we provide two realizations of PatInv that given an arbitrary sentence, generate syntactically similar but semantically different sentences by: (1) replacing one word in the sentence using a masked language model or (2) removing one word or phrase from the sentence based on its constituency structure. We then test whether the returned translations are the same for the original and modified sentences. We have applied PatInv to test Google Translate and Bing Microsoft Translator using 200 English sentences. Two language settings are considered: English to Hindi (En-Hi) and  English to Chinese (En-Zh). The results show that PatInv can accurately find 308 erroneous translations in Google Translate and 223 erroneous translations in Bing Microsoft Translator, most of which cannot be found by the state-of-the-art approaches.</p>
     
 
     
@@ -651,7 +642,7 @@ To tackle this challenge, we introduce structure-invariant testing (SIT), a nove
       <div class="col-md-10">
         <div class="row">
           <div class="col-12 col-md-3 pub-row-heading">Publication</div>
-          <div class="col-12 col-md-9"><em>Proceedings of the 42nd International Conference on Software Engineering</em></div>
+          <div class="col-12 col-md-9"><em>Proceedings of the 28th ACM Joint European Software Engineering Conference and Symposium on the Foundations of Software Engineering</em></div>
         </div>
       </div>
       <div class="col-md-1"></div>
@@ -682,7 +673,7 @@ To tackle this challenge, we introduce structure-invariant testing (SIT), a nove
       
       
       <li>
-        <a href="https://twitter.com/intent/tweet?url=https://cimeister.github.io/publication/heal-icse-2020/&amp;text=Structure-Invariant%20Testing%20for%20Machine%20Translation" target="_blank" rel="noopener" class="share-btn-twitter">
+        <a href="https://twitter.com/intent/tweet?url=https://cimeister.github.io/publication/guptaal-fse-2020/&amp;text=Machine%20Translation%20Testing%20via%20Pathological%20Invariance" target="_blank" rel="noopener" class="share-btn-twitter">
           <i class="fab fa-twitter"></i>
         </a>
       </li>
@@ -695,7 +686,7 @@ To tackle this challenge, we introduce structure-invariant testing (SIT), a nove
       
       
       <li>
-        <a href="https://www.facebook.com/sharer.php?u=https://cimeister.github.io/publication/heal-icse-2020/&amp;t=Structure-Invariant%20Testing%20for%20Machine%20Translation" target="_blank" rel="noopener" class="share-btn-facebook">
+        <a href="https://www.facebook.com/sharer.php?u=https://cimeister.github.io/publication/guptaal-fse-2020/&amp;t=Machine%20Translation%20Testing%20via%20Pathological%20Invariance" target="_blank" rel="noopener" class="share-btn-facebook">
           <i class="fab fa-facebook"></i>
         </a>
       </li>
@@ -708,7 +699,7 @@ To tackle this challenge, we introduce structure-invariant testing (SIT), a nove
       
       
       <li>
-        <a href="mailto:?subject=Structure-Invariant%20Testing%20for%20Machine%20Translation&amp;body=https://cimeister.github.io/publication/heal-icse-2020/" target="_blank" rel="noopener" class="share-btn-email">
+        <a href="mailto:?subject=Machine%20Translation%20Testing%20via%20Pathological%20Invariance&amp;body=https://cimeister.github.io/publication/guptaal-fse-2020/" target="_blank" rel="noopener" class="share-btn-email">
           <i class="fas fa-envelope"></i>
         </a>
       </li>
@@ -721,7 +712,7 @@ To tackle this challenge, we introduce structure-invariant testing (SIT), a nove
       
       
       <li>
-        <a href="https://www.linkedin.com/shareArticle?url=https://cimeister.github.io/publication/heal-icse-2020/&amp;title=Structure-Invariant%20Testing%20for%20Machine%20Translation" target="_blank" rel="noopener" class="share-btn-linkedin">
+        <a href="https://www.linkedin.com/shareArticle?url=https://cimeister.github.io/publication/guptaal-fse-2020/&amp;title=Machine%20Translation%20Testing%20via%20Pathological%20Invariance" target="_blank" rel="noopener" class="share-btn-linkedin">
           <i class="fab fa-linkedin-in"></i>
         </a>
       </li>
@@ -734,7 +725,7 @@ To tackle this challenge, we introduce structure-invariant testing (SIT), a nove
       
       
       <li>
-        <a href="https://web.whatsapp.com/send?text=Structure-Invariant%20Testing%20for%20Machine%20Translation%20https://cimeister.github.io/publication/heal-icse-2020/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+        <a href="https://web.whatsapp.com/send?text=Machine%20Translation%20Testing%20via%20Pathological%20Invariance%20https://cimeister.github.io/publication/guptaal-fse-2020/" target="_blank" rel="noopener" class="share-btn-whatsapp">
           <i class="fab fa-whatsapp"></i>
         </a>
       </li>
@@ -747,7 +738,7 @@ To tackle this challenge, we introduce structure-invariant testing (SIT), a nove
       
       
       <li>
-        <a href="https://service.weibo.com/share/share.php?url=https://cimeister.github.io/publication/heal-icse-2020/&amp;title=Structure-Invariant%20Testing%20for%20Machine%20Translation" target="_blank" rel="noopener" class="share-btn-weibo">
+        <a href="https://service.weibo.com/share/share.php?url=https://cimeister.github.io/publication/guptaal-fse-2020/&amp;title=Machine%20Translation%20Testing%20via%20Pathological%20Invariance" target="_blank" rel="noopener" class="share-btn-weibo">
           <i class="fab fa-weibo"></i>
         </a>
       </li>
@@ -764,6 +755,34 @@ To tackle this challenge, we introduce structure-invariant testing (SIT), a nove
 
 
 
+
+
+  
+    
+    
+
+
+
+
+
+  
+  
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="/authors/shahij-gupta/"></a></h5>
+      
+      
+      <ul class="network-icon" aria-hidden="true">
+  
+</ul>
+
+    </div>
+  </div>
 
 
   

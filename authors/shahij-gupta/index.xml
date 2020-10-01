@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Zhendong Su | Meister</title>
-    <link>https://cimeister.github.io/authors/zhendong-su/</link>
-      <atom:link href="https://cimeister.github.io/authors/zhendong-su/index.xml" rel="self" type="application/rss+xml" />
-    <description>Zhendong Su</description>
+    <title>Shahij Gupta | Meister</title>
+    <link>https://cimeister.github.io/authors/shahij-gupta/</link>
+      <atom:link href="https://cimeister.github.io/authors/shahij-gupta/index.xml" rel="self" type="application/rss+xml" />
+    <description>Shahij Gupta</description>
     <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sat, 01 Aug 2020 00:00:00 +0000</lastBuildDate>
     <image>
       <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
-      <title>Zhendong Su</title>
-      <link>https://cimeister.github.io/authors/zhendong-su/</link>
+      <title>Shahij Gupta</title>
+      <link>https://cimeister.github.io/authors/shahij-gupta/</link>
     </image>
     
     <item>
@@ -17,14 +17,6 @@
       <link>https://cimeister.github.io/publication/guptaal-fse-2020/</link>
       <pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
       <guid>https://cimeister.github.io/publication/guptaal-fse-2020/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Structure-Invariant Testing for Machine Translation</title>
-      <link>https://cimeister.github.io/publication/heal-icse-2020/</link>
-      <pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publication/heal-icse-2020/</guid>
       <description></description>
     </item>
     
