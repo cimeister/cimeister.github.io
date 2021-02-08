@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>1 | Meister</title>
+    <link>https://cimeister.github.io/publication-type/1/</link>
+      <atom:link href="https://cimeister.github.io/publication-type/1/index.xml" rel="self" type="application/rss+xml" />
+    <description>1</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><lastBuildDate>Sun, 23 May 2021 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://cimeister.github.io/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_2.png</url>
+      <title>1</title>
+      <link>https://cimeister.github.io/publication-type/1/</link>
+    </image>
+    
+    <item>
+      <title>Testing Machine Translation via Referential Transparency</title>
+      <link>https://cimeister.github.io/publication/heal-icse-2021/</link>
+      <pubDate>Sun, 23 May 2021 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publication/heal-icse-2021/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Searching for Search Errors in Neural Morphological Inflection</title>
+      <link>https://cimeister.github.io/publication/forster-eacl-21/</link>
+      <pubDate>Mon, 19 Apr 2021 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publication/forster-eacl-21/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>If Beam Search is the Answer, What was the Question?</title>
+      <link>https://cimeister.github.io/publication/meisteral-emnlp-20/</link>
+      <pubDate>Sun, 01 Nov 2020 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publication/meisteral-emnlp-20/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Best-First Beam Search</title>
+      <link>https://cimeister.github.io/publication/meisteral-tacl-20/</link>
+      <pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publication/meisteral-tacl-20/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Machine Translation Testing via Pathological Invariance</title>
+      <link>https://cimeister.github.io/publication/guptaal-fse-2020/</link>
+      <pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publication/guptaal-fse-2020/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Structure-Invariant Testing for Machine Translation</title>
+      <link>https://cimeister.github.io/publication/heal-icse-2020/</link>
+      <pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publication/heal-icse-2020/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Generalized Entropy Regularization or: There&#39;s Nothing Special about Label Smoothing</title>
+      <link>https://cimeister.github.io/publication/meisteral-acl-20/</link>
+      <pubDate>Wed, 01 Jul 2020 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publication/meisteral-acl-20/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
