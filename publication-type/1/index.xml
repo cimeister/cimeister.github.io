@@ -5,12 +5,36 @@
     <link>https://cimeister.github.io/publication-type/1/</link>
       <atom:link href="https://cimeister.github.io/publication-type/1/index.xml" rel="self" type="application/rss+xml" />
     <description>1</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><lastBuildDate>Mon, 01 Nov 2021 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><lastBuildDate>Sun, 01 May 2022 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://cimeister.github.io/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_2.png</url>
       <title>1</title>
       <link>https://cimeister.github.io/publication-type/1/</link>
     </image>
+    
+    <item>
+      <title>Analyzing Wrap-Up Effects through an Information-Theoretic Lens</title>
+      <link>https://cimeister.github.io/publication/meisteral-acl-22-b/</link>
+      <pubDate>Sun, 01 May 2022 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publication/meisteral-acl-22-b/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Estimating the Entropy of Linguistic Distributions</title>
+      <link>https://cimeister.github.io/publication/aroraal-acl-22/</link>
+      <pubDate>Sun, 01 May 2022 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publication/aroraal-acl-22/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>On the probability–quality paradox in language generation generation</title>
+      <link>https://cimeister.github.io/publication/meisteral-acl-22-a/</link>
+      <pubDate>Sun, 01 May 2022 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publication/meisteral-acl-22-a/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Conditional Poisson Stochastic Beams</title>
