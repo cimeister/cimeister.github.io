@@ -5,12 +5,52 @@
     <link>https://cimeister.github.io/publication/</link>
       <atom:link href="https://cimeister.github.io/publication/index.xml" rel="self" type="application/rss+xml" />
     <description>Publications</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><lastBuildDate>Thu, 01 Dec 2022 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><lastBuildDate>Sat, 01 Jul 2023 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://cimeister.github.io/media/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_3.png</url>
       <title>Publications</title>
       <link>https://cimeister.github.io/publication/</link>
     </image>
+    
+    <item>
+      <title>A Formal Perspective on Byte-Pair Encoding</title>
+      <link>https://cimeister.github.io/publication/zouharal-acl-findings-23/</link>
+      <pubDate>Sat, 01 Jul 2023 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publication/zouharal-acl-findings-23/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>A Measure-theoretic Characterzation of Tight Language Model</title>
+      <link>https://cimeister.github.io/publication/dual-acl-23-a/</link>
+      <pubDate>Sat, 01 Jul 2023 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publication/dual-acl-23-a/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>On the Efficacy of Sampling Adapters</title>
+      <link>https://cimeister.github.io/publication/meisteral-acl-23/</link>
+      <pubDate>Sat, 01 Jul 2023 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publication/meisteral-acl-23/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tokenization and the Noiseless Channel</title>
+      <link>https://cimeister.github.io/publication/zouharal-acl-23/</link>
+      <pubDate>Sat, 01 Jul 2023 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publication/zouharal-acl-23/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>On the Usefulness of Embeddings, Clusters and Strings for Text Generation Evaluation</title>
+      <link>https://cimeister.github.io/publication/pimentelal-iclr-23/</link>
+      <pubDate>Mon, 01 May 2023 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publication/pimentelal-iclr-23/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Mutual Information and Hallucinations in Abstractive Summarization</title>
