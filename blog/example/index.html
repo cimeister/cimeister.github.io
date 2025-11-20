@@ -274,12 +274,12 @@
 
   
 
-<meta name="description" content="Subword tokenization is a key part of most NLP pipelines.However, little is known about why some tokenizer and hyperparameter combinations lead to improved downstream model performance over others. We propose that good tokenizers lead to efficient channel usage, where the channel is the means by which some input is conveyed to the model and efficiency can be quantified in information-theoretic terms as the ratio of the Shannon entropy to the maximum entropy of the subword distribution.Nevertheless, an optimal encoding according to Shannon entropy assigns extremely long codes to low-frequency subwords and very short codes to high-frequency subwords.Defining efficiency in terms of Rényi entropy, on the other hand, penalizes distributions with either very high or very low-frequency subwords.We posit that (1) extremely high-frequency subwords are problematic because their meaning is not distinct and (2) that low-frequency subwords may not appear frequently enough for their meaning to be learned properly; encodings that induce unigram distributions with either can harm model performance.In machine translation, we find that across multiple tokenizers, the Rényi entropy has a very strong correlation with BLEU: 0.82 in comparison to just -0.30 for compressed length." />
+<meta name="description" content="Everything you didn&#39;t need to know about UnigramLM" />
 
 
 
-<link rel="alternate" hreflang="en-us" href="https://cimeister.github.io/publication/zouharal-acl-23/" />
-<link rel="canonical" href="https://cimeister.github.io/publication/zouharal-acl-23/" />
+<link rel="alternate" hreflang="en-us" href="https://cimeister.github.io/blog/example/" />
+<link rel="canonical" href="https://cimeister.github.io/blog/example/" />
 
 
 
@@ -315,18 +315,18 @@
   <meta property="twitter:creator" content="@wowchemy" />
 <meta property="twitter:image" content="https://cimeister.github.io/media/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_3.png" />
 <meta property="og:site_name" content="Clara Meister" />
-<meta property="og:url" content="https://cimeister.github.io/publication/zouharal-acl-23/" />
-<meta property="og:title" content="Tokenization and the Noiseless Channel | Clara Meister" />
-<meta property="og:description" content="Subword tokenization is a key part of most NLP pipelines.However, little is known about why some tokenizer and hyperparameter combinations lead to improved downstream model performance over others. We propose that good tokenizers lead to efficient channel usage, where the channel is the means by which some input is conveyed to the model and efficiency can be quantified in information-theoretic terms as the ratio of the Shannon entropy to the maximum entropy of the subword distribution.Nevertheless, an optimal encoding according to Shannon entropy assigns extremely long codes to low-frequency subwords and very short codes to high-frequency subwords.Defining efficiency in terms of Rényi entropy, on the other hand, penalizes distributions with either very high or very low-frequency subwords.We posit that (1) extremely high-frequency subwords are problematic because their meaning is not distinct and (2) that low-frequency subwords may not appear frequently enough for their meaning to be learned properly; encodings that induce unigram distributions with either can harm model performance.In machine translation, we find that across multiple tokenizers, the Rényi entropy has a very strong correlation with BLEU: 0.82 in comparison to just -0.30 for compressed length." /><meta property="og:image" content="https://cimeister.github.io/media/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_3.png" /><meta property="og:locale" content="en-us" />
+<meta property="og:url" content="https://cimeister.github.io/blog/example/" />
+<meta property="og:title" content="UnigramLM: The Missing Manual | Clara Meister" />
+<meta property="og:description" content="Everything you didn&#39;t need to know about UnigramLM" /><meta property="og:image" content="https://cimeister.github.io/media/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_3.png" /><meta property="og:locale" content="en-us" />
 
   
     <meta
       property="article:published_time"
-      content="2023-07-09T15:59:37&#43;00:00"
+      content="2025-11-19T00:00:00&#43;00:00"
     />
   
   
-    <meta property="article:modified_time" content="2023-07-09T16:30:25&#43;02:00">
+    <meta property="article:modified_time" content="2025-11-19T00:00:00&#43;00:00">
   
 
 
@@ -334,47 +334,6 @@
 
 
 
-    
-
-
-
-
-
-
-
-
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Article",
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://cimeister.github.io/publication/zouharal-acl-23/"
-  },
-  "headline": "Tokenization and the Noiseless Channel",
-  
-  "datePublished": "2023-07-09T15:59:37Z",
-  "dateModified": "2023-07-09T16:30:25+02:00",
-  
-  "author": {
-    "@type": "Person",
-    "name": "Vilém Zouhar"
-  },
-  
-  "publisher": {
-    "@type": "Organization",
-    "name": "Clara Meister",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://cimeister.github.io/media/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_192x192_fill_lanczos_center_3.png"
-    }
-  },
-  "description": "Subword tokenization is a key part of most NLP pipelines.However, little is known about why some tokenizer and hyperparameter combinations lead to improved downstream model performance over others. We propose that good tokenizers lead to efficient channel usage, where the channel is the means by which some input is conveyed to the model and efficiency can be quantified in information-theoretic terms as the ratio of the Shannon entropy to the maximum entropy of the subword distribution.Nevertheless, an optimal encoding according to Shannon entropy assigns extremely long codes to low-frequency subwords and very short codes to high-frequency subwords.Defining efficiency in terms of Rényi entropy, on the other hand, penalizes distributions with either very high or very low-frequency subwords.We posit that (1) extremely high-frequency subwords are problematic because their meaning is not distinct and (2) that low-frequency subwords may not appear frequently enough for their meaning to be learned properly; encodings that induce unigram distributions with either can harm model performance.In machine translation, we find that across multiple tokenizers, the Rényi entropy has a very strong correlation with BLEU: 0.82 in comparison to just -0.30 for compressed length."
-}
-</script>
-
-  
 
   
 
@@ -392,7 +351,7 @@
 
 
   
-  <title>Tokenization and the Noiseless Channel | Clara Meister</title>
+  <title>UnigramLM: The Missing Manual | Clara Meister</title>
 
   
   
@@ -412,7 +371,7 @@
 </head>
 
 
-<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="40d8d293763634740fb3ad754488196a" >
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="5e8d948f37237f6c1873c58f894a364e" >
 
   
   
@@ -686,16 +645,7 @@
     
     
 
-    
-
-
-
-
-
-
-
-
-<div class="pub">
+    <article class="article">
 
   
 
@@ -717,7 +667,7 @@
   
   
 <div class="article-container pt-3">
-  <h1>Tokenization and the Noiseless Channel</h1>
+  <h1>UnigramLM: The Missing Manual</h1>
 
   
 
@@ -729,21 +679,6 @@
 
   
   
-  
-  
-  <div>
-    
-
-  <span >
-      Vilém Zouhar</span>, <span >
-      Clara Meister</span>, <span >
-      Juan Gastaldi</span>, <span >
-      Li Du</span>, <span >
-      Mrinmaya Sachan</span>, <span >
-      Ryan Cotterell</span>
-  </div>
-  
-  
 
   
   <span class="article-date">
@@ -751,7 +686,7 @@
     
       
     
-    July, 2023
+    Nov 19, 2025
   </span>
   
 
@@ -774,58 +709,6 @@
 
 
 
-<div class="btn-links mb-3">
-  
-  
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-<a href="#" class="btn btn-outline-primary btn-page-header js-cite-modal"
-        data-filename="/publication/zouharal-acl-23/cite.bib">
-  Cite
-</a>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-  
-    
-  
-  
-  
-  
-  
-    
-  
-  <a class="btn btn-outline-primary btn-page-header" href="https://arxiv.org/abs/2306.16842" target="_blank" rel="noopener">
-    URL</a>
-
-
-</div>
-
 
   
 </div>
@@ -834,47 +717,12 @@
 
   <div class="article-container">
 
-    
-    <h3>Abstract</h3>
-    <p class="pub-abstract">Subword tokenization is a key part of most NLP pipelines.However, little is known about why some tokenizer and hyperparameter combinations lead to improved downstream model performance over others. We propose that good tokenizers lead to efficient channel usage, where the channel is the means by which some input is conveyed to the model and efficiency can be quantified in information-theoretic terms as the ratio of the Shannon entropy to the maximum entropy of the subword distribution.Nevertheless, an optimal encoding according to Shannon entropy assigns extremely long codes to low-frequency subwords and very short codes to high-frequency subwords.Defining efficiency in terms of Rényi entropy, on the other hand, penalizes distributions with either very high or very low-frequency subwords.We posit that (1) extremely high-frequency subwords are problematic because their meaning is not distinct and (2) that low-frequency subwords may not appear frequently enough for their meaning to be learned properly; encodings that induce unigram distributions with either can harm model performance.In machine translation, we find that across multiple tokenizers, the Rényi entropy has a very strong correlation with BLEU: 0.82 in comparison to just -0.30 for compressed length.</p>
-    
+    <div class="article-style">
+      <p>When I first tried to <em>really</em> understand UnigramLM, I did what everyone does: I went to the original 2018 paper. That&hellip; didn&rsquo;t get me very far. So then I went to the SentencePiece repo, hoping I could reconstruct the missing pieces from the code. After a brief flashback while staring at the C++ implementation to the terror of my undergraduate CS classes, I bailed on that too. The paper gives a nice high-level story, and the code clearly works in practice, but I couldn&rsquo;t find a single place that actually spells out the full generative model, why the algorithm is mathematically sound, or how all the little &ldquo;engineering details&rdquo; (like pruning and vocabulary initialization) fit into that picture.</p>
+<p>At that point, I figured to myself, well this is a <em>unigram</em> model. How complicated can it be? I can definitely reason through the logic myself. Turns out that was a tad bit naive. But I&rsquo;m nothing if not stubborn, so here we are a few months later!</p>
+<p>This post is what I wish I&rsquo;d had at the start of the endeavor&ndash;approachable but rigorous walkthrough of UnigramLM as a probabilistic model, showing why EM is a reasonable tool here, what the posterior over segmentations actually looks like, and how the SentencePiece-style implementation approximates all of this in practice. If you&rsquo;ve ever felt that UnigramLM is &ldquo;clear enough to use, but not clear enough to explain on a whiteboard,&rdquo; my hope is that this takes you the rest of the way to really understanding it, and maybe even extending it. Because at least I think its a pretty cool algorithm that deserves some of BPE&rsquo;s limelight.</p>
 
-    
-    
-    <div class="row">
-      <div class="col-md-1"></div>
-      <div class="col-md-10">
-        <div class="row">
-          <div class="col-12 col-md-3 pub-row-heading">Type</div>
-          <div class="col-12 col-md-9">
-            <a href="/publication/#1">
-              Conference paper
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-1"></div>
     </div>
-    <div class="d-md-none space-below"></div>
-    
-
-    
-    <div class="row">
-      <div class="col-md-1"></div>
-      <div class="col-md-10">
-        <div class="row">
-          <div class="col-12 col-md-3 pub-row-heading">Publication</div>
-          <div class="col-12 col-md-9"><em>Proceedings of the 61th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)</em></div>
-        </div>
-      </div>
-      <div class="col-md-1"></div>
-    </div>
-    <div class="d-md-none space-below"></div>
-    
-
-    <div class="space-below"></div>
-
-    <div class="article-style"></div>
 
     
 
@@ -899,7 +747,7 @@
       
       
       <li>
-        <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fcimeister.github.io%2Fpublication%2Fzouharal-acl-23%2F&amp;text=Tokenization&#43;and&#43;the&#43;Noiseless&#43;Channel" target="_blank" rel="noopener" class="share-btn-twitter" aria-label="twitter">
+        <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fcimeister.github.io%2Fblog%2Fexample%2F&amp;text=UnigramLM%3A&#43;The&#43;Missing&#43;Manual" target="_blank" rel="noopener" class="share-btn-twitter" aria-label="twitter">
           <i class="fab fa-twitter"></i>
         </a>
       </li>
@@ -916,7 +764,7 @@
       
       
       <li>
-        <a href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fcimeister.github.io%2Fpublication%2Fzouharal-acl-23%2F&amp;t=Tokenization&#43;and&#43;the&#43;Noiseless&#43;Channel" target="_blank" rel="noopener" class="share-btn-facebook" aria-label="facebook">
+        <a href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Fcimeister.github.io%2Fblog%2Fexample%2F&amp;t=UnigramLM%3A&#43;The&#43;Missing&#43;Manual" target="_blank" rel="noopener" class="share-btn-facebook" aria-label="facebook">
           <i class="fab fa-facebook"></i>
         </a>
       </li>
@@ -935,7 +783,7 @@
         
       
       <li>
-        <a href="mailto:?subject=Tokenization%20and%20the%20Noiseless%20Channel&amp;body=https%3A%2F%2Fcimeister.github.io%2Fpublication%2Fzouharal-acl-23%2F" target="_blank" rel="noopener" class="share-btn-email" aria-label="envelope">
+        <a href="mailto:?subject=UnigramLM%3A%20The%20Missing%20Manual&amp;body=https%3A%2F%2Fcimeister.github.io%2Fblog%2Fexample%2F" target="_blank" rel="noopener" class="share-btn-email" aria-label="envelope">
           <i class="fas fa-envelope"></i>
         </a>
       </li>
@@ -952,7 +800,7 @@
       
       
       <li>
-        <a href="https://www.linkedin.com/shareArticle?url=https%3A%2F%2Fcimeister.github.io%2Fpublication%2Fzouharal-acl-23%2F&amp;title=Tokenization&#43;and&#43;the&#43;Noiseless&#43;Channel" target="_blank" rel="noopener" class="share-btn-linkedin" aria-label="linkedin-in">
+        <a href="https://www.linkedin.com/shareArticle?url=https%3A%2F%2Fcimeister.github.io%2Fblog%2Fexample%2F&amp;title=UnigramLM%3A&#43;The&#43;Missing&#43;Manual" target="_blank" rel="noopener" class="share-btn-linkedin" aria-label="linkedin-in">
           <i class="fab fa-linkedin-in"></i>
         </a>
       </li>
@@ -969,7 +817,7 @@
       
       
       <li>
-        <a href="whatsapp://send?text=Tokenization&#43;and&#43;the&#43;Noiseless&#43;Channel%20https%3A%2F%2Fcimeister.github.io%2Fpublication%2Fzouharal-acl-23%2F" target="_blank" rel="noopener" class="share-btn-whatsapp" aria-label="whatsapp">
+        <a href="whatsapp://send?text=UnigramLM%3A&#43;The&#43;Missing&#43;Manual%20https%3A%2F%2Fcimeister.github.io%2Fblog%2Fexample%2F" target="_blank" rel="noopener" class="share-btn-whatsapp" aria-label="whatsapp">
           <i class="fab fa-whatsapp"></i>
         </a>
       </li>
@@ -986,7 +834,7 @@
       
       
       <li>
-        <a href="https://service.weibo.com/share/share.php?url=https%3A%2F%2Fcimeister.github.io%2Fpublication%2Fzouharal-acl-23%2F&amp;title=Tokenization&#43;and&#43;the&#43;Noiseless&#43;Channel" target="_blank" rel="noopener" class="share-btn-weibo" aria-label="weibo">
+        <a href="https://service.weibo.com/share/share.php?url=https%3A%2F%2Fcimeister.github.io%2Fblog%2Fexample%2F&amp;title=UnigramLM%3A&#43;The&#43;Missing&#43;Manual" target="_blank" rel="noopener" class="share-btn-weibo" aria-label="weibo">
           <i class="fab fa-weibo"></i>
         </a>
       </li>
@@ -1006,42 +854,100 @@
 
   
   
-    
-
-
-
-
-  
-    
-
 
 
 
   
-    
-
-
-
-
+  
   
     
-
-
-
-
   
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="https://cimeister.github.io/"><img class="avatar mr-3 avatar-circle" src="/authors/admin/avatar_hu37ad0adfa5f24407281e068a32520964_859640_270x270_fill_q75_lanczos_center.jpeg" alt=""></a>
     
 
-
-
-
+    <div class="media-body">
+      <h5 class="card-title"><a href="https://cimeister.github.io/"></a></h5>
+      <h6 class="card-subtitle">Postdoc in Computer Science</h6>
+      <p class="card-text">My research interests include decoding methods for sequence models and the general applications of information theory and statistics to NLP</p>
+      <ul class="network-icon" aria-hidden="true">
   
     
-
-
-
-
+    
+    
+      
+    
+    
+    
+    
+    
+    <li>
+      <a href="mailto:meistecl@inf.ethz.ch" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
   
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/ClaraIsabelMei1" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/cimeister" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://scholar.google.com/citations?user=quJhNH8AAAAJ&amp;hl=en" target="_blank" rel="noopener">
+        <i class="fab fa-google"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
 
 
 
@@ -1059,7 +965,7 @@
 
 
   </div>
-</div>
+</article>
   </div>
 
   <div class="page-footer">

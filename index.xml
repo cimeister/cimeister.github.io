@@ -33,6 +33,17 @@
     </item>
     
     <item>
+      <title>UnigramLM: The Missing Manual</title>
+      <link>https://cimeister.github.io/blog/example/</link>
+      <pubDate>Wed, 19 Nov 2025 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/blog/example/</guid>
+      <description>&lt;p&gt;When I first tried to &lt;em&gt;really&lt;/em&gt; understand UnigramLM, I did what everyone does: I went to the original 2018 paper. That&amp;hellip; didn&amp;rsquo;t get me very far. So then I went to the SentencePiece repo, hoping I could reconstruct the missing pieces from the code. After a brief flashback while staring at the C++ implementation to the terror of my undergraduate CS classes, I bailed on that too. The paper gives a nice high-level story, and the code clearly works in practice, but I couldn&amp;rsquo;t find a single place that actually spells out the full generative model, why the algorithm is mathematically sound, or how all the little &amp;ldquo;engineering details&amp;rdquo; (like pruning and vocabulary initialization) fit into that picture.&lt;/p&gt;
+&lt;p&gt;At that point, I figured to myself, well this is a &lt;em&gt;unigram&lt;/em&gt; model. How complicated can it be? I can definitely reason through the logic myself. Turns out that was a tad bit naive. But I&amp;rsquo;m nothing if not stubborn, so here we are a few months later!&lt;/p&gt;
+&lt;p&gt;This post is what I wish I&amp;rsquo;d had at the start of the endeavor&amp;ndash;approachable but rigorous walkthrough of UnigramLM as a probabilistic model, showing why EM is a reasonable tool here, what the posterior over segmentations actually looks like, and how the SentencePiece-style implementation approximates all of this in practice. If you&amp;rsquo;ve ever felt that UnigramLM is &amp;ldquo;clear enough to use, but not clear enough to explain on a whiteboard,&amp;rdquo; my hope is that this takes you the rest of the way to really understanding it, and maybe even extending it. Because at least I think its a pretty cool algorithm that deserves some of BPE&amp;rsquo;s limelight.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>A Formal Perspective on Byte-Pair Encoding</title>
       <link>https://cimeister.github.io/publication/zouharal-acl-findings-23/</link>
       <pubDate>Sat, 01 Jul 2023 00:00:00 +0000</pubDate>
