@@ -1457,18 +1457,15 @@ lexicon of frequent substrings from the corpus (on the order of $10^6$
 pieces by default), subject to length and frequency thresholds. Pruning
 is performed as described above in the approximations section, i.e., a
 piece&rsquo;s loss is approximated by assuming that the removed piece&rsquo;s
-probability mass transfers to its best alternative Viterbi segmentation
-(notably, pieces that do not appear in the current Viterbi segmentation
-of the corpus are pre-pruned). Third, SentencePiece does not use the
+probability mass transfers to its best alternative Viterbi segmentation. Third, SentencePiece does not use the
 plain MLE M-step update from
 Eq. (14). Instead, it performs a Bayesian-EM style update
 with an implicit Dirichlet(-process) prior, replacing expected counts by
 their digamma-transformed counterparts:
 ${\phi^{(n+1)}_{v}}\propto\exp(\Psi(\widehat{c}_{{v}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})))$.
 Mathematically, this is equivalent to using the posterior expectation of
-$\log {\phi_{v}}$ under a Dirichlet posterior. Intuitively, this
-&ldquo;softens&rdquo; the update by damping very large counts and preventing rare
-pieces from collapsing to near-zero probability too early.</p>
+$\log {\phi_{v}}$ under a Dirichlet posterior. This operation actually works as a form of inverse smoothing,
+ultimately penalizing tokens with very low expected counts, sending their assigned probability mass closer to zero. This is done on top of a pre-pruning step for tokens whose expected counts are below a certain threshold.</p>
 <p>Arguably some of the more critical design choices to be aware of are
 those pertaining to normalization and pretokenization, as these change
 which segmentations are feasible. By default it applies NFKC
