@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>1 | Clara Meister</title>
+    <link>https://cimeister.github.io/publication_types/1/</link>
+      <atom:link href="https://cimeister.github.io/publication_types/1/index.xml" rel="self" type="application/rss+xml" />
+    <description>1</description>
+    <generator>Hugo Blox Builder (https://hugoblox.com)</generator><language>en-us</language><lastBuildDate>Sat, 01 Jul 2023 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://cimeister.github.io/media/icon_hu_982c5d63a71b2961.png</url>
+      <title>1</title>
+      <link>https://cimeister.github.io/publication_types/1/</link>
+    </image>
+    
+    <item>
+      <title>A Formal Perspective on Byte-Pair Encoding</title>
+      <link>https://cimeister.github.io/publications/zouharal-acl-findings-23/</link>
+      <pubDate>Sat, 01 Jul 2023 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/zouharal-acl-findings-23/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>A Measure-theoretic Characterzation of Tight Language Model</title>
+      <link>https://cimeister.github.io/publications/dual-acl-23-a/</link>
+      <pubDate>Sat, 01 Jul 2023 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/dual-acl-23-a/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>On the Efficacy of Sampling Adapters</title>
+      <link>https://cimeister.github.io/publications/meisteral-acl-23/</link>
+      <pubDate>Sat, 01 Jul 2023 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/meisteral-acl-23/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tokenization and the Noiseless Channel</title>
+      <link>https://cimeister.github.io/publications/zouharal-acl-23/</link>
+      <pubDate>Sat, 01 Jul 2023 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/zouharal-acl-23/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>On the Usefulness of Embeddings, Clusters and Strings for Text Generation Evaluation</title>
+      <link>https://cimeister.github.io/publications/pimentelal-iclr-23/</link>
+      <pubDate>Mon, 01 May 2023 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/pimentelal-iclr-23/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Mutual Information and Hallucinations in Abstractive Summarization</title>
+      <link>https://cimeister.github.io/publications/vanderpoelal-emnlp-22/</link>
+      <pubDate>Thu, 01 Dec 2022 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/vanderpoelal-emnlp-22/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Analyzing Wrap-Up Effects through an Information-Theoretic Lens</title>
+      <link>https://cimeister.github.io/publications/meisteral-acl-22-b/</link>
+      <pubDate>Sun, 01 May 2022 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/meisteral-acl-22-b/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Estimating the Entropy of Linguistic Distributions</title>
+      <link>https://cimeister.github.io/publications/aroraal-acl-22/</link>
+      <pubDate>Sun, 01 May 2022 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/aroraal-acl-22/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>On the probability–quality paradox in language generation generation</title>
+      <link>https://cimeister.github.io/publications/meisteral-acl-22-a/</link>
+      <pubDate>Sun, 01 May 2022 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/meisteral-acl-22-a/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Cluster-based Evaluation of Automatically Generated Text</title>
+      <link>https://cimeister.github.io/publications/pimentelal-arxiv-22/</link>
+      <pubDate>Sat, 01 Jan 2022 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/pimentelal-arxiv-22/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Conditional Poisson Stochastic Beams</title>
+      <link>https://cimeister.github.io/publications/meisteral-emnlp-2021-b/</link>
+      <pubDate>Mon, 01 Nov 2021 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/meisteral-emnlp-2021-b/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Keyword2Text: A Plug-and-Play Method for Controlled Text Generation</title>
+      <link>https://cimeister.github.io/publications/pascualal-emnlp-2021/</link>
+      <pubDate>Mon, 01 Nov 2021 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/pascualal-emnlp-2021/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>On Homophony and Rényi Entropy</title>
+      <link>https://cimeister.github.io/publications/pimentelal-emnlp-2021-b/</link>
+      <pubDate>Mon, 01 Nov 2021 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/pimentelal-emnlp-2021-b/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Phone-level Uniform Information Density across and within Languages</title>
+      <link>https://cimeister.github.io/publications/pimentelal-emnlp-2021-a/</link>
+      <pubDate>Mon, 01 Nov 2021 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/pimentelal-emnlp-2021-a/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Revisiting the Uniform Information Density Hypothesis</title>
+      <link>https://cimeister.github.io/publications/meisteral-emnlp-2021-a/</link>
+      <pubDate>Mon, 01 Nov 2021 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/meisteral-emnlp-2021-a/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Determinantal Beam Search</title>
+      <link>https://cimeister.github.io/publications/meisteral2-acl-21/</link>
+      <pubDate>Mon, 02 Aug 2021 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/meisteral2-acl-21/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Is Sparse Attention more Interpretable?</title>
+      <link>https://cimeister.github.io/publications/meisteral3-acl-21/</link>
+      <pubDate>Mon, 02 Aug 2021 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/meisteral3-acl-21/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Language Model Evaluation Beyond Perplexity</title>
+      <link>https://cimeister.github.io/publications/meisteral-acl-21/</link>
+      <pubDate>Mon, 02 Aug 2021 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/meisteral-acl-21/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>A Cognitive Regularizer for Language Modeling</title>
+      <link>https://cimeister.github.io/publications/weial-acl-21/</link>
+      <pubDate>Sun, 01 Aug 2021 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/weial-acl-21/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Testing Machine Translation via Referential Transparency</title>
+      <link>https://cimeister.github.io/publications/heal-icse-2021/</link>
+      <pubDate>Sun, 23 May 2021 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/heal-icse-2021/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Searching for Search Errors in Neural Morphological Inflection</title>
+      <link>https://cimeister.github.io/publications/forster-eacl-21/</link>
+      <pubDate>Mon, 19 Apr 2021 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/forster-eacl-21/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>If Beam Search is the Answer, What was the Question?</title>
+      <link>https://cimeister.github.io/publications/meisteral-emnlp-20/</link>
+      <pubDate>Sun, 01 Nov 2020 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/meisteral-emnlp-20/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Best-First Beam Search</title>
+      <link>https://cimeister.github.io/publications/meisteral-tacl-20/</link>
+      <pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/meisteral-tacl-20/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Machine Translation Testing via Pathological Invariance</title>
+      <link>https://cimeister.github.io/publications/guptaal-fse-2020/</link>
+      <pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/guptaal-fse-2020/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Structure-Invariant Testing for Machine Translation</title>
+      <link>https://cimeister.github.io/publications/heal-icse-2020/</link>
+      <pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/heal-icse-2020/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Generalized Entropy Regularization or: There&#39;s Nothing Special about Label Smoothing</title>
+      <link>https://cimeister.github.io/publications/meisteral-acl-20/</link>
+      <pubDate>Wed, 01 Jul 2020 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/publications/meisteral-acl-20/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

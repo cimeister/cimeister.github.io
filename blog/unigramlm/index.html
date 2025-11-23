@@ -1,0 +1,2248 @@
+<!doctype html>
+<!-- This site was created with Hugo Blox. https://hugoblox.com -->
+<!-- Last Published: November 23, 2025 --><html lang="en-us" dir="ltr"
+      data-wc-theme-default="system">
+  
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="generator" content="Hugo Blox Builder 0.10.0" />
+
+  
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Clara Meister" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="Everything you didn&#39;t need to know about UnigramLM" />
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://cimeister.github.io/blog/unigramlm/" />
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="/css/themes/blue.min.css" />
+  
+
+  
+  
+  
+    
+
+  
+  
+  
+  
+  
+  
+  
+    
+      
+        <link rel="stylesheet" href="/css/_entry.a8f2c553996fbb2b9d7c1bee0a4c23ffd9021245b19f2a52762e0c2cdd30b66a.css" integrity="sha256-qPLFU5lvuyudfBvuCkwj/9kCEkWxnypSdi4MLN0wtmo=" crossorigin="anonymous">
+      
+    
+  
+
+
+  
+
+  
+  
+  
+
+  
+    
+    <link href="/css/custom.min.b0936463ced8014a361c211c08a714fc253bfe2e324b602e185ad5f0718c1388.css" rel="stylesheet" />
+  
+
+  <script src="/js/hb-head.min.01cd73a09512f0fc45bed2c68f9f9a23041c57dafb87c91cf91373611031bd84.js" integrity="sha256-Ac1zoJUS8PxFvtLGj5&#43;aIwQcV9r7h8kc&#43;RNzYRAxvYQ=" crossorigin="anonymous"></script>
+
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+  <link rel="icon" type="image/png" href="/media/icon_hu_c545d605fbaba839.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/media/icon_hu_b7aec86dcb688f0.png" />
+
+  <link rel="canonical" href="https://cimeister.github.io/blog/unigramlm/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+
+  
+  
+    
+    
+  
+  <meta property="twitter:card" content="summary" />
+  
+    <meta property="twitter:site" content="@GetResearchDev" />
+    <meta property="twitter:creator" content="@GetResearchDev" />
+  
+  <meta property="og:site_name" content="Clara Meister" />
+  <meta property="og:url" content="https://cimeister.github.io/blog/unigramlm/" />
+  <meta property="og:title" content="UnigramLM: An Attempt at Writing The Missing Manual | Clara Meister" />
+  <meta property="og:description" content="Everything you didn&#39;t need to know about UnigramLM" /><meta property="og:image" content="https://cimeister.github.io/media/icon_hu_982c5d63a71b2961.png" />
+    <meta property="twitter:image" content="https://cimeister.github.io/media/icon_hu_982c5d63a71b2961.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2025-11-19T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2025-11-19T00:00:00&#43;00:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://cimeister.github.io/blog/unigramlm/"
+  },
+  "headline": "UnigramLM: An Attempt at Writing The Missing Manual",
+  
+  "datePublished": "2025-11-19T00:00:00Z",
+  "dateModified": "2025-11-19T00:00:00Z",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Clara Meister"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "Clara Meister",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://cimeister.github.io/media/icon_hu_a6282450d1fd5f43.png"
+    }
+  },
+  "description": "Everything you didn't need to know about UnigramLM"
+}
+</script>
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+
+
+
+  <title>UnigramLM: An Attempt at Writing The Missing Manual | Clara Meister</title>
+
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  <style>
+    @font-face {
+      font-family: 'Inter var';
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url(/dist/font/Inter.var.woff2) format(woff2);
+    }
+  </style>
+
+  
+
+  
+  
+
+
+
+
+  
+  
+
+  
+  
+
+  
+
+  
+  
+    
+    
+      
+      
+      
+    
+    
+  
+
+  
+    
+    
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    
+  
+  
+  
+
+  
+  
+
+  
+
+  
+  
+    
+    
+      
+      
+      
+    
+      
+      
+      
+    
+      
+      
+      
+    
+    
+  
+
+  
+    
+    
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    
+  
+    
+    
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    
+  
+    
+    
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  <script
+    defer
+    src="/js/hugo-blox-en.min.65b31b94cb4f09cfd8f827efdb711400b677b90781e4aee753207d95de698687.js"
+    integrity="sha256-ZbMblMtPCc/Y&#43;Cfv23EUALZ3uQeB5K7nUyB9ld5phoc="
+  ></script>
+
+  
+  
+
+
+
+
+
+
+
+
+
+  <script>console.log('✓ Alpine.js loading on demand');</script>
+  
+  
+  <script src="/dist/lib/alpinejs/cdn.min.e041f1b639d1e6b2fc2736d8d7638a409afcd444a6ec90446f8f4e44fa36f406.js" integrity="sha256-4EHxtjnR5rL8JzbY12OKQJr81ESm7JBEb49ORPo29AY=" defer></script>
+
+
+
+
+<script defer src="/js/hb-search.min.135366008264b9d452ff89aad28374bc7e4b40d2c047098318511786419873b0.js" integrity="sha256-E1NmAIJkudRS/4mq0oN0vH5LQNLARwmDGFEXhkGYc7A="></script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link type="text/css" rel="stylesheet" href="/dist/lib/katex/katex.min.19095127357ed6d29fe0a63a6b000c913a89f7f1963b765dd3715e97c9852e75.css" integrity="sha256-GQlRJzV&#43;1tKf4KY6awAMkTqJ9/GWO3Zd03Fel8mFLnU=" />
+  
+  
+  <script defer src="/dist/lib/katex/katex.min.e8d885505949f3a5f4abdd5dd0d53696bd1371ad26ffbf4f310dcd77c8cdae89.js" integrity="sha256-6NiFUFlJ86X0q91d0NU2lr0Tca0m/79PMQ3Nd8jNrok="></script>
+  
+  
+  
+  
+  <script defer src="/js/katex-renderer.7bdcf3f3f669a04734c54d2fe7c91a2d07b44e4ec8f1ea72384893db11a740eb.js" integrity="sha256-e9zz8/ZpoEc0xU0v58kaLQe0Tk7I8epyOEiT2xGnQOs="></script>
+  
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+  
+    
+      
+        
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+        
+      
+    
+  
+
+
+
+
+</head>
+
+  <body class="dark:bg-hb-dark dark:text-white page-wrapper" id="top">
+    <div id="page-bg"></div>
+    <div class="page-header ">
+      
+      
+      
+        
+          <header id="site-header" class="header">
+  <nav class="navbar px-3 flex justify-start">
+    <div class="order-0 h-full">
+      
+      <a class="navbar-brand" href="/" title="Clara Meister">
+        
+      </a>
+    </div>
+    
+    <input id="nav-toggle" type="checkbox" class="hidden" />
+    <label
+      for="nav-toggle"
+      class="order-3 cursor-pointer flex items-center lg:hidden text-dark dark:text-white lg:order-1">
+      <svg id="show-button" class="h-6 fill-current block" viewBox="0 0 20 20">
+        <title>Open Menu</title>
+        <path d="M0 3h20v2H0V3z m0 6h20v2H0V9z m0 6h20v2H0V0z"></path>
+      </svg>
+      <svg id="hide-button" class="h-6 fill-current hidden" viewBox="0 0 20 20">
+        <title>Close Menu</title>
+        <polygon
+          points="11 9 22 9 22 11 11 11 11 22 9 22 9 11 -2 11 -2 9 9 9 9 -2 11 -2"
+          transform="rotate(45 10 10)"></polygon>
+      </svg>
+    </label>
+    
+
+    
+    
+    <ul
+      id="nav-menu"
+      class="navbar-nav order-3 hidden lg:flex w-full pb-6 lg:order-1 lg:w-auto lg:space-x-2 lg:pb-0 xl:space-x-8 justify-start
+      mr-auto ml-6">
+      
+      
+      
+      
+      
+      
+      <li class="nav-item">
+        <a
+          class="nav-link "
+          
+          href="/#about"
+        >Home</a
+        >
+      </li>
+      
+      
+      
+      
+      
+      
+      <li class="nav-item">
+        <a
+          class="nav-link "
+          
+          href="/#blog"
+        >Blog</a
+        >
+      </li>
+      
+      
+      
+    </ul>
+
+    <div class="order-1 ml-auto flex items-center md:order-2 lg:ml-0">
+
+      
+      
+      
+      <button
+        aria-label="toggle search"
+        class="text-black hover:text-primary inline-block px-3 text-xl dark:text-white cursor-pointer"
+        data-search-toggle>
+        <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512" fill="currentColor"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>
+      </button>
+      
+
+      
+      
+      <div class="px-3 text-black hover:text-primary-700 dark:text-white dark:hover:text-primary-300
+            [&.active]:font-bold [&.active]:text-black/90 dark:[&.active]:text-white">
+        <button class="theme-toggle mt-1" accesskey="t" title="appearance">
+          <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+               stroke-linejoin="round" class="block dark:hidden">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+               stroke-linejoin="round" class="hidden dark:block">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+      </div>
+      
+
+      
+      
+
+      
+      
+    </div>
+  </nav>
+</header>
+
+
+<div
+  x-data="searchModal()"
+  x-show="$store.search.open"
+  @keydown.escape.window="$store.search.open = false"
+  @keydown.cmd.k.window.prevent="$store.search.open = !$store.search.open"
+  @keydown.ctrl.k.window.prevent="$store.search.open = !$store.search.open"
+  x-cloak
+  class="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm"
+  style="display: none;"
+>
+  
+  <div class="absolute inset-0" @click="$store.search.open = false"></div>
+  
+  
+  <div 
+    class="relative mx-auto mt-[10vh] max-w-3xl"
+    x-show="$store.search.open"
+    x-transition:enter="transition ease-out duration-200"
+    x-transition:enter-start="opacity-0 translate-y-4 scale-95"
+    x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+    x-transition:leave="transition ease-in duration-150"
+    x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+    x-transition:leave-end="opacity-0 translate-y-4 scale-95"
+  >
+    <div class="mx-4 overflow-hidden rounded-2xl bg-white dark:bg-gray-900 shadow-2xl ring-1 ring-gray-900/10 dark:ring-white/10">
+      
+      
+      <div class="border-b border-gray-200 dark:border-gray-800">
+        <div class="flex items-center gap-3 px-4 py-3">
+          
+          
+          <svg class="h-5 w-5 flex-shrink-0 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+          
+          
+          <input
+            x-ref="searchInput"
+            x-model="query"
+            @input="loading = query.trim() !== ''"
+            @input.debounce.300ms="search()"
+            type="text"
+            placeholder="Search for answers..."
+            class="flex-1 bg-transparent text-lg outline-none text-gray-900 dark:text-gray-100 placeholder-gray-400"
+            autocomplete="off"
+            autofocus
+          />
+          
+          
+          <div x-show="loading" class="flex-shrink-0">
+            <svg class="animate-spin h-5 w-5 text-primary-600" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </div>
+          
+          
+          <kbd class="hidden sm:block flex-shrink-0 rounded bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-600 dark:bg-gray-800 dark:text-gray-400">ESC</kbd>
+          
+          
+    <button
+            @click="$store.search.open = false"
+            class="flex-shrink-0 rounded-lg p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300 cursor-pointer"
+    >
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+  </div>
+
+        
+        <div x-show="query && availableFilters.length > 0" x-transition class="border-t border-gray-100 dark:border-gray-800 px-4 py-2">
+          <div class="flex flex-wrap gap-2">
+            <button
+              @click="activeFilter = null; search()"
+              :class="activeFilter === null ? 'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400'"
+              class="rounded-full px-3 py-1 text-xs font-medium transition-colors cursor-pointer"
+            >
+              All Results
+            </button>
+            <template x-for="filter in availableFilters" :key="filter.filterKey">
+              <button
+                @click="activeFilter = filter.filterKey; search()"
+                :class="activeFilter === filter.filterKey ? 'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400'"
+                class="rounded-full px-3 py-1 text-xs font-medium transition-colors cursor-pointer"
+                x-text="filter.label + ' (' + filter.count + ')'"
+              ></button>
+            </template>
+          </div>
+        </div>
+      </div>
+      
+      
+      <div class="max-h-[60vh] overflow-y-auto">
+        
+        
+        <div x-show="!query && results.length === 0" class="p-6">
+          
+          
+          
+          
+          
+          
+          
+          
+        </div>
+        
+        
+        <div x-show="query && results.length > 0" class="divide-y divide-gray-200 dark:divide-gray-800">
+          <template x-for="(result, index) in results" :key="result.id">
+            <a
+              :href="result.url"
+              @mouseenter="selectedIndex = index"
+              @click="$store.search.open = false"
+              :class="selectedIndex === index ? 'bg-primary-50 dark:bg-primary-900/20 border-l-2 border-primary-600' : ''"
+              class="block px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group search-result"
+            >
+              
+              <div class="flex items-center gap-2 mb-2 flex-wrap">
+                
+                <span
+                  x-show="result.filters && result.filters.type"
+                  :class="{
+                    'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300': result.filters.type && result.filters.type[0] === 'questions',
+                    'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300': result.filters.type && result.filters.type[0] === 'faq',
+                    'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300': result.filters.type && result.filters.type[0] === 'docs'
+                  }"
+                  class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"
+                  x-text="result.filters.type ? (typeLabels[result.filters.type[0]] || result.filters.type[0]) : ''"
+                ></span>
+                
+                
+                <span 
+                  x-show="result.filters && result.filters.category" 
+                  class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                  x-text="result.filters.category ? result.filters.category[0] : ''"
+                ></span>
+                
+                
+                <span 
+                  x-show="result.filters && result.filters.difficulty" 
+                  class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300"
+                  x-text="result.filters.difficulty ? result.filters.difficulty[0] : ''"
+                ></span>
+              </div>
+              
+              
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors mb-2" x-html="result.meta.title || 'Untitled'"></h3>
+              
+              
+              <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2" x-html="result.excerpt"></p>
+            </a>
+          </template>
+        </div>
+        
+        
+        <div x-show="query && loading" class="px-6 py-16 text-center">
+          <div class="inline-flex items-center gap-3">
+            <svg class="animate-spin h-8 w-8 text-primary-600" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <div class="text-left">
+              <p class="text-lg font-medium text-gray-900 dark:text-white">Searching...</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400" x-text="'Finding results for &quot;' + query + '&quot;'"></p>
+            </div>
+          </div>
+        </div>
+        
+        
+        <div x-show="query && results.length === 0 && !loading && hasSearched" class="px-6 py-12 text-center">
+          <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <h3 class="mt-4 text-lg font-semibold text-gray-900 dark:text-white">No results found</h3>
+          <p class="mt-2 text-gray-600 dark:text-gray-400" x-text="'No results for &quot;' + query + '&quot;'"></p>
+          <button
+            @click="query = ''; $refs.searchInput.focus()"
+            class="mt-4 text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium"
+          >
+            Clear search
+          </button>
+        </div>
+      </div>
+      
+      
+      <div class="border-t border-gray-200 dark:border-gray-800 px-4 py-3 bg-gray-50 dark:bg-gray-900/50">
+        <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+          <div class="flex items-center gap-3">
+            <span class="flex items-center gap-1">
+              <kbd class="rounded bg-white dark:bg-gray-800 px-1.5 py-0.5 font-mono text-[10px] font-semibold border border-gray-300 dark:border-gray-700">↑↓</kbd>
+              Navigate
+            </span>
+            <span class="flex items-center gap-1">
+              <kbd class="rounded bg-white dark:bg-gray-800 px-1.5 py-0.5 font-mono text-[10px] font-semibold border border-gray-300 dark:border-gray-700">↵</kbd>
+              Select
+            </span>
+            <span x-show="availableFilters.length > 0" class="flex items-center gap-1">
+              <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+              </svg>
+              <span x-text="availableFilters.length + ' filters'"></span>
+            </span>
+          </div>
+          <a href="https://hugoblox.com" target="_blank" rel="noopener" class="flex items-center gap-1 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+            <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+            Powered by Hugo Blox
+          </a>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<script>
+  
+  function searchModal() {
+    return {
+      query: '',
+      results: [],
+      loading: false,
+      hasSearched: false,  
+      selectedIndex: -1,
+      activeFilter: null,
+      availableFilters: [],
+      trendingSearches: "[\"Search term 1\",\"Search term 2\"]",
+      pagefind: null,
+      
+      
+      typeLabels: {
+        'questions': "\"Questions\"",
+        'faq': "\"FAQ\"",
+        'docs': "\"Documentation\""
+      },
+      
+      async init() {
+        
+        try {
+          this.pagefind = await import('/pagefind/pagefind.js');
+          await this.pagefind.init();
+          console.log('✓ Pagefind initialized');
+          
+          
+          await this.loadFilters();
+        } catch (error) {
+          console.error('Failed to initialize Pagefind:', error);
+        }
+        
+        
+        this.$watch('$store.search.open', (open) => {
+          if (open) {
+            this.$nextTick(() => this.$refs.searchInput?.focus());
+            document.body.style.overflow = 'hidden';
+          } else {
+            document.body.style.overflow = '';
+            this.query = '';
+            this.results = [];
+            this.selectedIndex = -1;
+            this.hasSearched = false;  
+          }
+        });
+        
+        
+        window.addEventListener('keydown', (e) => {
+          if (!this.$store.search.open || this.results.length === 0) return;
+          
+          if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            this.selectedIndex = this.selectedIndex < this.results.length - 1 ? this.selectedIndex + 1 : 0;
+            this.scrollToSelected();
+          } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            this.selectedIndex = this.selectedIndex > 0 ? this.selectedIndex - 1 : this.results.length - 1;
+            this.scrollToSelected();
+          } else if (e.key === 'Enter' && this.selectedIndex >= 0) {
+            e.preventDefault();
+            const selected = this.results[this.selectedIndex];
+            if (selected) {
+              window.location.href = selected.url;
+              this.$store.search.open = false;
+            }
+          }
+        });
+      },
+      
+      scrollToSelected() {
+        this.$nextTick(() => {
+          const selectedEl = document.querySelector('.search-result:nth-child(' + (this.selectedIndex + 1) + ')');
+          if (selectedEl) {
+            selectedEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          }
+        });
+      },
+      
+      async search() {
+        if (!this.query.trim()) {
+          this.results = [];
+          this.hasSearched = false;
+          return;
+        }
+        
+        this.loading = true;
+        this.hasSearched = false;  
+        
+        try {
+          const options = {};
+          
+          
+          if (this.activeFilter) {
+            const [filterCategory, filterValue] = this.activeFilter.split(':');
+            options.filters = { [filterCategory]: filterValue };
+          }
+          
+          const search = await this.pagefind.search(this.query, options);
+          console.log('Search results:', search);
+          console.log('Search filters:', search.filters);
+          
+          
+          this.results = await Promise.all(
+            search.results.slice(0, 10).map(async (result) => {
+              const data = await result.data();
+              console.log('Result data:', data);
+              return {
+                id: data.url,
+                url: data.url,
+                meta: data.meta,
+                excerpt: data.excerpt,
+                filters: data.filters || {}
+              };
+            })
+          );
+          
+          
+          const filterCounts = { type: {}, category: {}, difficulty: {} };
+          
+          this.results.forEach(result => {
+            if (result.filters) {
+              
+              if (result.filters.type) {
+                result.filters.type.forEach(val => {
+                  filterCounts.type[val] = (filterCounts.type[val] || 0) + 1;
+                });
+              }
+              
+              if (result.filters.category) {
+                result.filters.category.forEach(val => {
+                  filterCounts.category[val] = (filterCounts.category[val] || 0) + 1;
+                });
+              }
+              
+              if (result.filters.difficulty) {
+                result.filters.difficulty.forEach(val => {
+                  filterCounts.difficulty[val] = (filterCounts.difficulty[val] || 0) + 1;
+                });
+              }
+            }
+          });
+          
+          console.log('Extracted filter counts from results:', filterCounts);
+          
+          
+          const filters = [];
+          
+          
+          Object.entries(filterCounts.type).forEach(([value, count]) => {
+            filters.push({
+              category: 'type',
+              value,
+              label: this.typeLabels[value] || value.charAt(0).toUpperCase() + value.slice(1),
+              count,
+              filterKey: `type:${value}`
+            });
+          });
+          
+          
+          Object.entries(filterCounts.category).forEach(([value, count]) => {
+            filters.push({
+              category: 'category',
+              value,
+              label: value,
+              count,
+              filterKey: `category:${value}`
+            });
+          });
+          
+          
+          Object.entries(filterCounts.difficulty).forEach(([value, count]) => {
+            filters.push({
+              category: 'difficulty',
+              value,
+              label: value,
+              count,
+              filterKey: `difficulty:${value}`
+            });
+          });
+          
+          this.availableFilters = filters;
+          console.log('Final availableFilters array:', this.availableFilters);
+          
+          
+          if (this.results.length > 0) {
+            this.selectedIndex = 0;
+          }
+        } catch (error) {
+          console.error('Search error:', error);
+          this.results = [];
+        } finally {
+          this.loading = false;
+          this.hasSearched = true;  
+        }
+      },
+      
+      async loadFilters() {
+        
+        try {
+          const search = await this.pagefind.search('');
+          console.log('Available Pagefind filters:', search.filters);
+          
+          const filters = [];
+          
+          
+          if (search.filters && search.filters.type) {
+            Object.entries(search.filters.type).forEach(([value, count]) => {
+              filters.push({
+                category: 'type',
+                value,
+                label: value.charAt(0).toUpperCase() + value.slice(1),
+                count,
+                filterKey: `type:${value}`
+              });
+            });
+          }
+          
+          
+          if (search.filters && search.filters.category) {
+            Object.entries(search.filters.category).forEach(([value, count]) => {
+              filters.push({
+                category: 'category',
+                value,
+                label: value,
+                count,
+                filterKey: `category:${value}`
+              });
+            });
+          }
+          
+          
+          if (search.filters && search.filters.difficulty) {
+            Object.entries(search.filters.difficulty).forEach(([value, count]) => {
+              filters.push({
+                category: 'difficulty',
+                value,
+                label: value,
+                count,
+                filterKey: `difficulty:${value}`
+              });
+            });
+          }
+          
+          this.availableFilters = filters;
+          console.log('Processed filters:', this.availableFilters);
+        } catch (error) {
+          console.error('Failed to load filters:', error);
+        }
+      }
+    };
+  }
+  
+  
+  document.addEventListener('alpine:init', () => {
+    Alpine.store('search', {
+      open: false
+    });
+  });
+</script>
+
+<style>
+  [x-cloak] { display: none !important; }
+</style>
+
+        
+      
+    </div>
+    <div class="page-body  my-10">
+      
+<div class="w-full px-4 my-10 max-w-[95vw] mx-auto">
+  
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-12">
+
+    
+    <div class="lg:col-span-3">
+      <article class="w-full prose prose-xl max-w-none dark:prose-invert">
+        
+        
+        <h1 class="text-4xl font-bold mb-4">UnigramLM: An Attempt at Writing The Missing Manual</h1>
+        <div class="text-gray-500 mb-8">
+          November 19, 2025
+        </div>
+
+        
+        <p><strong>TL;DR</strong>:  This post is my attempt to write down the UnigramLM tokenization algorithm cleanly and explicitly because
+the original paper does not provide such a derivation. Rather, anyone that wants to deeply understand UnigramLM is forced to make odds and ends of the C++ code in the SentencePiece library. In this post, we&rsquo;ll formalize the unigram generative
+model, derive the EM updates, explain why pruning is needed (and how it&rsquo;s done), and point out the
+spots where the practical implementation quietly diverges (and the implications that has for the mathematical models). Hopefully, by the end, you&rsquo;ll think the UnigramLM algorithm is just as cool as I do.</p>
+<h3 id="intro-and-origins-of-this-blog-post">Intro and origins of this blog post</h3>
+<p><em>(feel free to <a href="#sec:background">skip</a> this section)</em></p>
+<p>These days, tokenization is basically syonymous with Byte-pair Encoding (BPE). If you ask someone &ldquo;do you know how tokenization works?&rdquo;, there&rsquo;s a decent chance you’ll get an answer like: &ldquo;Yeah yeah, I know BPE.&rdquo;&quot;</p>
+<p>But there&rsquo;s this other tokenizer sitting right next to BPE in practice: UnigramLM
+(the SentencePiece &ldquo;unigram&rdquo; model). On paper it looks totally different. Instead of greedily merging pairs, it says: &ldquo;let&rsquo;s uncover latent tokens and treat tokenization like inference.&rdquo; At least to me, that framing feels a lot more linguistically sane (or, at minimum, less like we’re playing subword Tetris).
+Naturally, I figured I should actually understand the algorithm.
+So I did what everyone does: I went to the <a href="https://aclanthology.org/P18-1007/" target="_blank" rel="noopener">original 2018 paper</a>. That&hellip; didn&rsquo;t get me very far. So then I went to the SentencePiece repo, hoping I could reconstruct the missing pieces from the code. After a brief flashback while staring at the C++ implementation to the terror of my undergraduate CS classes, I bailed on that approach too. Then I thought maybe the missing explanation was hiding in the HuggingFace documentation — but let&rsquo;s just say that rabbit hole ended like this:</p>
+
+
+
+  
+  <blockquote class="border-l-4 border-neutral-300 dark:border-neutral-600 pl-4 italic text-neutral-600 dark:text-neutral-400 my-6">
+    <p><em>The HuggingFace documentation</em> [on UnigramLM] <em>describes a
+tokeniser that doesn’t exist. It should not be relied on as an
+explanation for UnigramLM, because it doesn’t even come close.</em><br>
+–Claude</p>
+
+  </blockquote>
+
+<p>The original UnigramLM paper gives a nice high-level story, and the code clearly works in practice, but I couldn&rsquo;t find a single place that actually spells out the full generative model, why the algorithm is mathematically sound, or how all the little &ldquo;engineering details&rdquo; (like pruning and vocabulary initialization) fit into that picture. At that point, I figured to myself, well this is a <em>unigram</em> model. How complicated can it be? I can definitely reason through the logic myself. Turns out that was a tad bit naive. But I&rsquo;m nothing if not stubborn, so here we are a few months later!</p>
+<p>This post is what I wanted at the start of my deep dive into UnigramLM&ndash;an approachable but rigorous walkthrough of UnigramLM as a probabilistic model, showing why EM is a reasonable tool here, what the posterior over segmentations actually looks like, and how the SentencePiece-style implementation approximates all of this in practice. If you&rsquo;ve ever felt that UnigramLM is &ldquo;clear enough to use, but not clear enough to explain on a whiteboard,&rdquo; my hope is that this takes you the rest of the way to really understanding it, and maybe even extending it. Because at least I think its a pretty cool algorithm that deserves some of BPE&rsquo;s limelight.</p>
+<h1 id="sec:background">Tokenization Background and Notation</h1>
+<p>So that we&rsquo;re on the same page, let&rsquo;s start with a formal definition of tokenization.</p>
+<p>Let ${\mathbf{{s}}}=\langle{s}_{1},{s}_2,\dots\rangle$ be a string&mdash;a
+sequence of characters (or bytes) such that ${s}_{t}\in{\Sigma}$ for a
+base alphabet ${\Sigma}$. Let ${\mathcal{V}}$ be a finite set, where
+each ${v}\in{\mathcal{V}}$ consists of a sequence of symbols from
+${\Sigma}\cup{\Gamma}$, where ${\Gamma}$ denotes a finite set of
+reserved symbols (e.g., whitespace markers, start/end tokens, etc.); we
+refer to ${\mathcal{V}}$ as our <strong>vocabulary</strong> and to ${v}$ as
+<strong>pieces</strong>.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> During tokenization, we wish to convert the sequence of
+characters/bytes ${\mathbf{{s}}}$ into a sequence of tokens
+${\mathbf{{v}}}=\langle {v}_{1},\dots,{v}_{{m}}\rangle$, each of which
+is a piece in the set ${\mathcal{V}}$. We refer to this token sequence
+as a <strong>segmentation</strong> of ${\mathbf{{s}}}$, and it can informally be seen
+as just a different way of representing the original string.</p>
+<p>A tokenization algorithm defines a mapping
+${h}: {\Sigma}^* \rightarrow {\mathcal{V}}^*$ and the method for
+learning the parameters of this mapping. The application of ${h}$ (which
+we&rsquo;ll call our <strong>tokenization function</strong> here) to a string is sometimes
+referred to as inference, although perhaps more commonly people just
+call this process &ldquo;tokenizing a string.&rdquo; For example, the byte-pair
+encoding (BPE) algorithm defines a ${h}$ that is parameterized by a list
+of <em>merge</em> pairs
+$\boldsymbol{\mu}=\langle({v}_1, {v}_1'),({v}_2, {v}_2'), \dots \rangle$
+and the algorithm for learning $\boldsymbol{\mu}$. At inference,
+starting from the representation of ${\mathbf{{s}}}$ as just a sequence
+of symbols from the base vocabulary ${\Sigma}$,
+${h}_{\boldsymbol{\mu}}$ goes through the text
+$i=1, \dots |\boldsymbol{\mu}|$ times. At step $i$, it replaces all
+co-occurrences of the pair $({v}_i, {v}_i')$ with a new merged token
+(typically, of the form ${v}_i\circ{v}_i'$).<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup></p>
+<p>Importantly, we assume that ${\mathbf{{s}}}$ can be reconstructed from
+${\mathbf{{v}}}$ via a <strong>detokenization function</strong>
+${g}: {\mathcal{V}}^* \rightarrow {\Sigma}^*$; often ${g}:$ is a
+simple mapping like string concatenation with some special symbol
+handling, e.g.,
+${g}({\mathbf{{v}}}) = {v}_{1}\circ\dots \circ {v}_{{m}}$. In what
+follows, we consider ${g}$ fixed and treat it as part of the model
+specification. All probabilities over strings and segmentations are
+defined with respect to this fixed choice of ${g}$. Notably, given just
+the vocabulary ${\mathcal{V}}$, there are often multiple valid
+${\mathbf{{v}}}$ for which the application of our simple detokenization
+function ${g}$ would lead to the same ${\mathbf{{s}}}$. In other words,
+${g}$ is generally non-injective. We use
+${\mathcal{T}}_{\mathcal{V}}({\mathbf{{s}}}) \mathrel{\stackrel{\textnormal{ def}}{=}}{g}^{-1}({\mathbf{{s}}}) = \{{\mathbf{{v}}}\in{\mathcal{V}}^* : {g}({\mathbf{{v}}}) = {\mathbf{{s}}}\}$
+to refer to the set of all valid token sequences that produce
+${\mathbf{{s}}}$, i.e., the set-valued inverse of ${g}$.</p>
+<p><strong>Example 1</strong> (A concrete example of the non-injectivity of $g$.).
+<em>Consider a toy string ${\mathbf{{s}}}= hat$ and a small
+vocabulary ${\mathcal{V}}= \{\text{h},\text{a},\text{t},\text{ha},\text{at}\}$.
+Under our fixed detokenization function ${g}$ (simple concatenation of
+token symbol sequences), the set of all valid segmentations of
+${\mathbf{{s}}}$ is
+$$\begin{aligned}
+    {\mathcal{T}}_{\mathcal{V}}({\mathbf{{s}}})
+    =\{
+        \langle \text{h}, \text{a}, \text{t} \rangle,
+        \langle \text{ha}, \text{t} \rangle,
+        \langle \text{h}, \text{at} \rangle\}.
+\end{aligned}
+$$ where all three segmentations detokenize to the same
+string ${\mathbf{{s}}}= \text{hat}$ under ${g}$.</em></p>
+<p>While it might not seem notable, the non-injectivity of ${g}$ is
+actually an interesting property of most tokenization schemes. For one,
+it&rsquo;s motivated several variants of different tokenization algorithms in
+which the inference rule&mdash;the mapping
+${h}:{\Sigma}^*\rightarrow{\mathcal{V}}^*$ that selects a particular
+element of ${\mathcal{T}}_{\mathcal{V}}({\mathbf{{s}}})$&mdash;is replaced
+or redefined, for example by sampling from a posterior over
+segmentations (Kudo 2018) or by changing the inference
+objective to something like minimizing token sequence length
+(Hofmann et. al., 2022; Schmidt et. al. 2024). It
+It also means that we should distinguish between the <strong>canonical tokenization</strong>
+of ${\mathbf{{s}}}$, which is ${h}({\mathbf{{s}}})$, and any other valid segmentation
+${\mathbf{{v}}}\in {\mathcal{T}}_{\mathcal{V}}({\mathbf{{s}}})$ with
+${\mathbf{{v}}}\neq {h}({\mathbf{{s}}})$,
+which are typically called <strong>non-canonical tokenizations</strong>.
+The existence of non-canonical
+tokenizations has implications for how one should actually compute the
+probability of a string under a language model using a given vocabulary.
+See Cao and Rimell (2021) for a more detailed discussion of
+non-canonical tokenizations and why they matter in practice.</p>
+<h1 id="what-you-came-here-for-unigramlm">What you came here for: UnigramLM</h1>
+<p>The UnigramLM tokenization algorithm (Kudo 2018) takes a
+probabilistic-modeling approach to string tokenization. It defines an
+${h}$, together with an algorithm for learning its parameters, by
+treating tokenization as inference in a latent-variable generative model
+over strings&mdash;in particular, a unigram generative model.</p>
+<h2 id="sec:gen_model">Generative model</h2>
+<p>The UnigramLM tokenization algorithm assumes that each observed string
+${\mathbf{{s}}}$ arises from a latent sequence of tokens
+${\mathbf{{v}}}$, where tokens are drawn independently from a fixed
+probability distribution, i.e., from a unigram distribution over a fixed
+vocabulary. The data-generating distribution can thus be defined in
+terms of the unigram probabilities
+${\boldsymbol{\phi}}\in \Delta^{|{\mathcal{V}}| - 1}$. Before we get to
+the definition of the data-generating distribution though, we have to
+establish some other definitions.</p>
+<p><strong>Warning about notation:</strong> To reduce the number of nested subscripts
+(and other similarly offensive notational choices), I&rsquo;m going to
+primarily use random variables to describe this problem. Don&rsquo;t worry,
+you&rsquo;ll still get a nice sprinkling of nested subscripts even with the
+random variables! Just fewer than without. Sorry... As is standard,
+uppercase letters will denote random variables (e.g., $X$, $Z$), and
+bold uppercase letters will denote sequences of them (e.g., $\mathbf X$,
+$\mathbf Z$).</p>
+<p>Formally, let ${V}$ be our token-valued random variable: a categorical
+random variable on ${\mathcal{V}}$ with
+$\sum_{{v}\in{{\mathcal{V}}}}{P({V}={v};{\boldsymbol{\phi}})}=1$.
+Occasionally for shorthand, we&rsquo;ll use
+${\phi_{v}}= {P({V}={v};{\boldsymbol{\phi}})}$ to refer to the unigram
+probability of the piece ${v}$. Let ${\mathbf{V}}$ be a random variable
+taking values in the space of token <em>sequences</em>
+${\mathbf{{v}}}\in {\mathcal{V}}^*$. For the distribution of
+${\mathbf{V}}$ to be a valid probability distribution on
+${\mathcal{V}}^*$, we must specify a length prior, i.e., a random
+variable ${M}$ on $\mathbb{N}$ with
+$\sum_{{m}=0}^\infty P({M}={m})=1$.<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup> The UnigramLM algorithm then
+assumes token sequence
+${\mathbf{{v}}}=\langle{v}_1,\dots,{v}_{m}\rangle$ are generated as
+</p>
+$$
+    {m}\sim {M},\quad {v}_{t}\stackrel{\text{i.i.d.}}{\sim} {\small\mathrm{Categorical}}({\boldsymbol{\phi}}) (t=1,\dots,{m})
+\tag{1}
+$$<p>We can thus define the distribution of ${\mathbf{V}}$ as
+</p>
+$$
+    P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}}) \mathrel{\stackrel{\textnormal{ def}}{=}} P({M}=|{\mathbf{{v}}}|)\prod_{t=1}^{|{\mathbf{{v}}}|}{P({V}={v}_{{t}};{\boldsymbol{\phi}})}
+\tag{2}
+$$<p>
+The likelihood of a sequence conditional on a given length ${m}$ is then
+simply the product of its piece probabilities, i.e.,
+Eq. (2) where the length prior term cancels out:
+</p>
+$$
+   P({\mathbf{V}}={\mathbf{{v}}}\mid {M}={m};{\boldsymbol{\phi}}) = \prod_{{t}=1}^{{m}} {P({V}={v}_{t};{\boldsymbol{\phi}})},
+\tag{3}
+$$<p>
+One thing to note is that the parameters of
+${P({V};{\boldsymbol{\phi}})}{\cdot}$ are completely specified by
+${\boldsymbol{\phi}}$. This isn&rsquo;t the case with
+$P({\mathbf{V}};{\boldsymbol{\phi}})$, for which the parameters of ${M}$
+must also be known to fully specify the distribution. We won&rsquo;t add any
+additional notation to $P({\mathbf{V}};{\boldsymbol{\phi}})$ to specify
+the parameters of ${M}$, though, since ${M}$ is pretty much always
+ignored. Rather, in yet another moment of &rsquo;engineering convenience'
+winning out over &rsquo;theoretical elegance&rsquo;, most people just compute token
+sequence probabilities in UnigramLM using Eq. 3.</p>
+<p>Given the deterministic mapping ${g}$ from tokens to strings, we can
+derive the distribution over strings&mdash;our data-generating
+distribution&mdash;as a pushforward of the distribution over tokens. Let
+${\mathbf{S}}$ be a random variable on ${\Sigma}^*$. The following
+relationship holds: </p>
+$$
+\begin{aligned}
+    P({\mathbf{S}}={\mathbf{{s}}};{\boldsymbol{\phi}}) \mathrel{\stackrel{\textnormal{ def}}{=}}\sum_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})} P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})
+\end{aligned}
+\tag{4}
+$$<h4 id="some-useful-relationships-between--and-">Some useful relationships between ${\mathbf{V}}$ and ${\mathbf{S}}$.</h4>
+<p>We can see from
+Eq. (4) that distribution of ${\mathbf{S}}$ is
+simply the marginal probability distribution over valid segmentations of
+${\mathbf{{s}}}$ under ${\mathcal{V}}$. Applying Bayes&rsquo; rule then gives
+us the posterior over segmentations for a fixed ${\mathbf{{s}}}$:
+</p>
+$$
+P({\mathbf{V}}={\mathbf{{v}}}\mid {\mathbf{S}}={\mathbf{{s}}}; {\boldsymbol{\phi}}) = 
+\begin{cases}
+    &\frac{P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})}{P({\mathbf{S}}={\mathbf{{s}}};{\boldsymbol{\phi}})} \quad \text{if } {\mathbf{{v}}}\in{\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})\\\ &0 \quad \quad \text{ otherwise.}
+\end{cases}
+\tag{5}
+$$<p> By just moving some terms in
+Eq. (5) around, we also get the definition of the
+joint distribution over strings and token sequences:
+</p>
+$$P({\mathbf{S}}={\mathbf{{s}}}, {\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}}) = P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})\mathbb{1}\\{{\mathbf{{v}}}\in{\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})\\},
+$$<p>For the moment, let&rsquo;s assume that we know ${\boldsymbol{\phi}}$, or at
+least have estimates for these parameters. At inference time (i.e., when
+segmenting text into tokens), the UnigramLM tokenization algorithm aims
+to find the most likely segmentation of ${\mathbf{{s}}}$ into tokens
+${\mathbf{{v}}}= \langle {v}_1, {v}_2, \dots\rangle$ under the
+generative model (defined above) with these parameters. To this end, it
+uses a Viterbi-style algorithm: </p>
+$$
+\begin{aligned}
+{{h}_{{\boldsymbol{\phi}}}({\mathbf{{s}}})}&= \arg\max_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})} P({\mathbf{V}}={\mathbf{{v}}}\mid {\mathbf{S}}={\mathbf{{s}}}; {\boldsymbol{\phi}})\\\ 
+&= \arg\max_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})} P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})\\\ 
+&= \arg\max_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})} P({M}=|{\mathbf{{v}}}|)\prod_{t=1}^{|{\mathbf{{v}}}|}{P({V}={v}_{t};{\boldsymbol{\phi}})}\\\ 
+&\overset{?}{=} \arg\max_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})} \prod_{t=1}^{|{\mathbf{{v}}}|}{P({V}={v}_{t};{\boldsymbol{\phi}})}
+\end{aligned}
+\tag{6}
+$$<p> where
+the second line follows from the relationship in
+Eq. (5)
+($P({\mathbf{S}}={\mathbf{{s}}};{\boldsymbol{\phi}})$ does not depend on
+${\mathbf{{v}}}$ and so it doesn&rsquo;t affect the argmax). As we can see in
+Eq. 6, the length prior (${M}$) is part of the
+posterior distribution and should thus affect the Viterbi segmentation;
+intuitively speaking, it biases the distribution towards token sequences
+of certain lengths.</p>
+<p><strong>Example 2</strong> (Effect of the length prior on Viterbi segmentation).
+<em>Suppose a string ${\mathbf{{s}}}$ admits two valid segmentations
+${\mathbf{{v}}}^{(1)}$ and ${\mathbf{{v}}}^{(2)}$ under ${\mathcal{V}}$,
+with lengths $|{\mathbf{{v}}}^{(1)}| = 1$ and
+$|{\mathbf{{v}}}^{(2)}| = 3$. Assume that the unigram probabilities are
+such that
+$$
+\prod_{{t}=1}^{|{\mathbf{{v}}}^{(1)}|} {P({V}={v}^{(1)}_{t};{\boldsymbol{\phi}})}
+    =
+    \prod_{{t}=1}^{|{\mathbf{{v}}}^{(2)}|} {P({V}={v}^{(2)}_{t};{\boldsymbol{\phi}})}
+$$
+so the two segmentations tie if we ignore the length prior. Now let the
+length prior favor shorter sequences, e.g. $$
+P({M}=1) = 0.9,
+    \qquad
+    P({M}=3) = 0.1
+$$ Then the full sequence probabilities become
+$$
+\begin{aligned}
+    P({\mathbf{V}}={\mathbf{{v}}}^{(1)};{\boldsymbol{\phi}})
+    &= P({M}=1) \prod_{{t}=1}^{|{\mathbf{{v}}}^{(1)}|} {P({V}={v}^{(1)}_{t};{\boldsymbol{\phi}})}
+     = 0.9 \cdot C,\\\ 
+    P({\mathbf{V}}={\mathbf{{v}}}^{(2)};{\boldsymbol{\phi}})
+    &= P({M}=3) \prod_{{t}=1}^{|{\mathbf{{v}}}^{(2)}|} {P({V}={v}^{(2)}_{t};{\boldsymbol{\phi}})}
+     = 0.1 \cdot C,
+\end{aligned}
+$$ for some common factor $C$. The Viterbi segmentation
+under the full model (including the length prior) is therefore
+${\mathbf{{v}}}^{(1)}$, while under the approximation that drops
+$P({M}=\cdot)$, the two segmentations are equally probable. This
+illustrates that the length prior can in principle have a non-trivial
+affect on the inference result.</em>
+:::</p>
+<p>For example, if $P({M}=3) \gg P({M}=1)$, the product of three piece
+probabilities (which should be fairly small) could win out over the
+probability of a single piece probability even if the product was
+originally much smaller. Consequently, a theoretically sound
+implementation of the method would define and keep this prior for
+inference, as in Eq. 6. Typically, though, this term is ignored (or at
+least sequence length probabilities are assumed to be constant for all
+valid lengths). Unless
+otherwise specified, when talking about inference, we will assume use of
+no length term is used for faithfulness to the original
+algorithm. It could potentially be interesting to look into the effects
+of this design choice!</p>
+<p>The true parameters of the generative process ${\boldsymbol{\phi}}$ are
+unknown, however; this includes both the piece probabilities
+${\phi_{v}}$ and the underlying vocabulary ${\mathcal{V}}$ over which
+they are defined. The UnigramLM tokenization algorithm (described next)
+proposes a method for coming up with an estimate of these parameters
+from text data.</p>
+<h2 id="learning-model-parameters">Learning Model Parameters</h2>
+<p>Maximum likelihood estimation (MLE)&mdash;a standard approach to estimating
+model parameters&mdash;aims to find the model parameters that maximize the
+log-likelihood of our data. Under the UnigramLM assumptions about the
+generative process of strings, our &ldquo;complete&rdquo; dataset actually consists
+of $({\mathbf{{s}}},{\mathbf{{v}}})$ pairs, i.e., strings and the
+sequence of tokens that produced them. Thus, our complete dataset looks
+like $\mathcal{X} = \{({\mathbf{{s}}}_i,{\mathbf{{v}}}_i)\}_{i=1}^K$
+and the complete-data log likelihood is defined as: </p>
+$$
+\begin{aligned}
+    {\mathcal{L}}(\mathcal{X}; {\boldsymbol{\phi}}) &\mathrel{\stackrel{\textnormal{ def}}{=}}\log\prod_{i=1}^KP({\mathbf{S}}={\mathbf{{s}}}_i, {\mathbf{V}}={\mathbf{{v}}}_i;{\boldsymbol{\phi}})\\\ 
+    &= \sum_{i=1}^K\log P({\mathbf{S}}={\mathbf{{s}}}_i, {\mathbf{V}}={\mathbf{{v}}}_i;{\boldsymbol{\phi}})
+\end{aligned}
+\tag{7}
+$$<p>
+Eq. 7 is typically referred to as the
+<em>complete</em> data log-likelihood. If we actually had this complete data
+(and we knew ${\mathcal{V}}$), we would simply find the
+${\boldsymbol{\phi}}$ that maximizes
+Eq. (7), which would be a fairly clean
+problem that is easy to solve given our assumptions about the underlying
+distributions. However, we only see the &ldquo;post-processed&rdquo; strings
+${\mathbf{{s}}}= {g}({\mathbf{{v}}})$; the exact underlying pieces that
+form that string are unknown (can be any in
+${\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})$ and we don&rsquo;t even know
+${\mathcal{V}}$!). So, we can instead try to maximize our <em>observed</em>
+data log-likelihood, i.e., the likelihood of just our strings under our
+data-generating distribution defined in
+Eq. (4). Given our relationships from earlier, we can define this likelihood in terms of
+${\boldsymbol{\phi}}$: </p>
+$$
+\begin{aligned}
+    {\mathcal{L}}({\mathcal{C}}; {\boldsymbol{\phi}}) &\mathrel{\stackrel{\textnormal{ def}}{=}}\log\prod_{i=1}^KP({\mathbf{S}}={\mathbf{{s}}}_i;{\boldsymbol{\phi}})\\\ 
+    &= \log\prod_{i=1}^K\sum_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}}_i)} P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})
+    %& \text{\color{gray}{Sub def in \cref{eq:pushforward}}}
+    \\\ 
+    &= \sum_{i=1}^K \log\sum_{{\mathbf{{v}}}\in{\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}}_i)} P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})
+   % \\\ &= \sum_{i=1}^K \log\sum_{\tokens\in\allsegmentations_{\vocab}(\str_i)} \qprior{|\tokens|}\prod_\tokindex \unigramdist{\token_\tokindex}
+\end{aligned}
+\tag{8}
+$$<p> where
+${\mathcal{C}}= \{{\mathbf{{s}}}\mid {\mathbf{{s}}}, \_ \in \mathcal{X} \}$
+is simply our observed set of strings, i.e., our corpus. Unfortunately,
+Eq. (8) is a difficult quantity to maximize
+directly due to the log&ndash;sum structure. Luckily, the
+expectation-maximization (EM) algorithm provides us a route for working
+with this situation.</p>
+<h3 id="sec:unigram_em">Expectation-Maximization</h3>
+<p>EM was designed for exactly the use case where wish to get MLE estimates
+for a data-generating process in which only part of the data is
+unobserved. Formally, the EM algorithm uses Jensen&rsquo;s inequality to
+relate the <em>expected value</em> of the complete data log-likelihood to the
+<em>observed</em> data log-likelihood, i.e., relating the expected value of
+Eq. (7) to
+Eq. (8). This is exactly the connection made
+by Kudo (2018) (even if not explicitly) when introducing their
+algorithm for approximating the parameters ${\boldsymbol{\phi}}$.</p>
+<h4 id="expected-complete-data-log-likelihood-under-observed-data-and-current-parameters">Expected complete-data log-likelihood under observed data and current parameters.</h4>
+<p>Let ${{\boldsymbol{\phi}}^{(n)}}$ denote our current belief about what
+the unigram parameters might be (more discussion on how we can
+initialize this distribution coming up!). For now, we will assume that
+the vocabulary is fixed. These random variables adhere to our original
+definitions from earlier. Note that when we use simply
+${\boldsymbol{\phi}}$, we are referring to the distributions (and
+corresponding random variables) induced by a generic
+${\boldsymbol{\phi}}$; these are the entities for which our parameters
+are free variables that we are optimizing.</p>
+<p>The expected complete data log-likelihood under
+${{\boldsymbol{\phi}}^{(n)}}$&mdash;which we denote as
+${\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})$&mdash;follows
+simply from taking the expectated value of
+Eq. (7), given our observed data
+${\mathcal{C}}$ and our current model parameters
+${{\boldsymbol{\phi}}^{(n)}}$, i.e., the expected value under the
+posterior ${\mathbf{V}}\mid {\mathbf{S}};{{\boldsymbol{\phi}}^{(n)}}$.
+</p>
+$$
+\begin{aligned}
+{\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})
+&\mathrel{\stackrel{\textnormal{ def}}{=}} \mathop{\mathrm{\mathbb{E}}}
+\big[{\mathcal{L}}(\mathcal{X}; {\boldsymbol{\phi}}) \mid {\mathcal{C}}, {{\boldsymbol{\phi}}^{(n)}}\big]\\\ 
+&= \underset{ {\mathbf{V}}\mid {\mathbf{S}};{{\boldsymbol{\phi}}^{(n)}}}{\mathop{\mathrm{\mathbb{E}}}}\big[\sum_{i=1}^K \log P({\mathbf{S}}, {\mathbf{V}};{\boldsymbol{\phi}})\mid {\mathcal{C}}\big]\\\ 
+    &= \sum_{i=1}^K\underset{{\mathbf{{v}}}\sim{\mathbf{V}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}}}{\mathop{\mathrm{\mathbb{E}}}}\big[\log P({\mathbf{S}}={\mathbf{{s}}}_i, {\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})\big]
+\end{aligned}
+$$<p> In words, we can think of
+${\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})$ as the
+expected complete data log-likelihood where the (latent) segmentations
+are induced by the posterior with parameters
+${{\boldsymbol{\phi}}^{(n)}}$, while the log-likelihood inside is
+evaluated using the candidate parameters ${\boldsymbol{\phi}}$.</p>
+<p>Now we will show how this quantity relates to the observed data
+log-likelihood.</p>
+<h4 id="observed-data-log-likelihood-and-jensens-inequality">Observed data log-likelihood and Jensen&rsquo;s inequality.</h4>
+<p>We start with a reminder of Jensen&rsquo;s inequality, applied to our
+definition of $P({\mathbf{S}}={\mathbf{{s}}};{\boldsymbol{\phi}})$. For
+any valid distribution probability $P({\mathbf{V}}={\mathbf{{v}}})$,
+Jensen&rsquo;s inequality tells us </p>
+$$
+\begin{aligned}
+\log P({\mathbf{S}}={\mathbf{{s}}};{\boldsymbol{\phi}})
+&= \log \sum_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})} P({\mathbf{V}}={\mathbf{{v}}})\frac{P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})}{P({\mathbf{V}}={\mathbf{{v}}})}\\\ 
+&\ge \sum_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})} P({\mathbf{V}}={\mathbf{{v}}})\log \frac{P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})}{P({\mathbf{V}}={\mathbf{{v}}})}
+\end{aligned}
+$$<p> If we choose $P({\mathbf{V}}={\mathbf{{v}}})$ to be
+$P({\mathbf{V}}={\mathbf{{v}}}\mid {\mathbf{S}}= {\mathbf{{s}}};{{\boldsymbol{\phi}}^{(n)}})$&mdash;the
+posterior under our current parameter beliefs for a fixed ${\mathbf{{s}}}$&mdash;and apply
+this to our definition of the observed data log-likelihood from
+Eq. (8), we get </p>
+$$
+\begin{aligned}
+{\mathcal{L}}&({\mathcal{C}};{\boldsymbol{\phi}})= \sum_{i=1}^K \log\sum_{{\mathbf{{v}}}\in{\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}}_i)} P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})\\\ 
+&\ge \sum_{i=1}^K\sum_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}}_i)}P({\mathbf{V}}={\mathbf{{v}}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}})
+\big[\log P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})-\log P({\mathbf{V}}={\mathbf{{v}}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}})\big]\\\ 
+&= \sum_{i=1}^K\sum_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}}_i)}P({\mathbf{V}}={\mathbf{{v}}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}})
+\log P({\mathbf{S}}={\mathbf{{s}}}_i, {\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})\nonumber\\\ 
+& \qquad\qquad\qquad\qquad-\sum_{i=1}^K\sum_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}}_i)}P({\mathbf{V}}={\mathbf{{v}}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}})\log P({\mathbf{V}}={\mathbf{{v}}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}})\\\ 
+&= \underbrace{\sum_{i=1}^K\underset{{\mathbf{{v}}}\sim {\mathbf{V}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}}}{\mathop{\mathrm{\mathbb{E}}}}\big[\log P({\mathbf{S}}={\mathbf{{s}}}_i, {\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})\big]}_{{\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})}
++\sum_{i=1}^K{\mathrm{H}}\big({\mathbf{V}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}}\big)
+\\\ 
+&\geq {\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})
+\end{aligned}
+\tag{9}
+$$<p> Note that when going from the second to third lines in
+Eq. (9), we make use of the fact that for any
+${\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}}_i)$ we
+have
+$P({\mathbf{S}}={\mathbf{{s}}}_i, {\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}}) = P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})$
+by definition. Then, we&rsquo;re simply using the equivalence of these
+values with the definitions of expected values and (Shannon) entropy,
+respectively.</p>
+<p>Eq. (9) is typically referred to as the evidence lower
+bound (ELBO)&mdash;a proxy objective that is often used in machine learning.
+For example, it&rsquo;s used for training variational autoencoders, where it
+provides a tractable lower bound on the intractable log-likelihood of
+the data under a latent-variable model. In the case of EM, we go one
+step further and use one of the components of the ELBO as our proxy
+objective for observed data log-likelihood: the expected complete data
+log-likelihood
+${\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})$. And
+this is the basis the EM algorithm, which iteratively updates
+${\boldsymbol{\phi}}$ by choosing the value of it that maximizes
+${\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})$ until
+convergence.</p>
+<p>So now that we&rsquo;ve gone through all the parts, here&rsquo;s a quick recap of
+the EM algorithm: it&rsquo;s an iterative algorithm for approximating MLE
+estimates. The E step computes the expected complete data log-likelihood
+under current beliefs about model parameters (in our case,
+${{\boldsymbol{\phi}}^{(n)}}$); this quantity is standing in for
+observed data log-likelihood, which is a much more difficult quantity to
+compute. The M step then solves for the free parameters (in our case,
+${\boldsymbol{\phi}}$) that maximize this quantity, and then updates our
+current beliefs to the new quantity. I&rsquo;ll omit the proof of why this
+should converge (for a fixed ${\mathcal{V}}$) since, well, it&rsquo;s in a lot
+of ML textbooks (you know, those ones we all swear we&rsquo;ll read
+cover-to-cover someday...)</p>
+<h3 id="the-unigramlm-algorithm">The UnigramLM Algorithm</h3>
+<p>The UnigramLM algorithm is typically seen as a &ldquo;simple&rdquo; application of
+EM. This, however, is not exactly the case. Importantly, EM assumes that
+the support of the distribution whose parameters we&rsquo;re trying to
+estimate is known (and fixed), i.e., that we know ${\mathcal{V}}$. But,
+as discussed earlier, we don&rsquo;t know ${\mathcal{V}}$! The UnigramLM
+algorithm addresses this by beginning with an intentionally overcomplete
+initial vocabulary and progressively reducing it through a heuristic
+pruning step, which is done <em>after</em> an iteration of the standard E-step
+and M-step, throughout which ${\mathcal{V}}$ is held fixed. In short, as
+the algorithm iteratively re-estimates the model parameters, it
+gradually shrinks ${\mathcal{V}}$ toward the desired final size by
+removing pieces that are seemingly unimportant for achieving good corpus
+log-likelihood. You can think of this as putting your vocabulary on a
+strict likelihood-based diet: pieces that don&rsquo;t contribute enough to
+explaining the data get gently but firmly removed.</p>
+<p>Where its necessary, to make this dependence explicit, we will use
+${{\mathcal{V}}_{{n}}}$ to denote the current vocabulary. To reduce
+notational clutter, in defining the below algorithm, we&rsquo;ll use just
+${\mathcal{V}}$; at step $n$ of the algorithm, you can assume
+${\mathcal{V}}={{\mathcal{V}}_{{n}}}$ (and that all random variables
+are defined over ${{\mathcal{V}}_{{n}}}$) unless otherwise stated.</p>
+<ol>
+<li>
+<p><strong>Initialization:</strong> Define an initial vocabulary ${\mathcal{V}}_0$.
+This could be something like all possible substrings of
+${\mathcal{C}}$, subject to a maximum length constraint.<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup>
+Initialize ${\boldsymbol{\phi}}^{(0)}$ by some heuristic: the
+simplest would be uniform initialization, i.e., all pieces are
+assigned probability $1/|{\mathcal{V}}_0|$.</p>
+</li>
+<li>
+<p><strong>Perform EM for $n=1, \dots N$ iterations or until piece
+probability estimates converge:</strong></p>
+<p>i.  <strong>E-step</strong> (Expected data log-likelihood computation): The
+E-step in EM is for computing the expected complete data
+log-likelihood under our current parameter beliefs
+${\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})$.
+It turns out that expected token counts are a sufficient
+statistic for the M-step objective in this case, and so our
+problem boils down to computing expected token counts under
+${{\boldsymbol{\phi}}^{(n)}}$. To see why this is the case&hellip; First, we define the count function on token sequences as
+</p>
+$$c_{{v}}({\mathbf{{v}}}) \mathrel{\stackrel{\textnormal{ def}}{=}}\sum_{t=1}^{|{\mathbf{{v}}}|}\mathbb{1}\\{{v}_{t}= {v}\\} \tag{10}$$<p>
+Then, note that for any valid ${\mathbf{{s}}},{\mathbf{{v}}}$
+such that
+${\mathbf{{v}}}\in{\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})$,
+we can write </p>
+$$
+\begin{aligned}
+        \log P({\mathbf{S}}={\mathbf{{s}}}, {\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})&=\log P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})\\\ 
+        &=\log P({M}=|{\mathbf{{v}}}|)+\sum_{t=1}^{|{\mathbf{{v}}}|}\log {P({V}={v}_{t};{\boldsymbol{\phi}})}\\\ 
+        &=\log P({M}=|{\mathbf{{v}}}|)+ \sum_{{v}\in{\mathcal{V}}} c_{{v}}({\mathbf{{v}}})\log {P({V}={v};{\boldsymbol{\phi}})}
+        \end{aligned}
+$$<p> Substituting these relationships into our definition of
+${\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})$
+and using the linearity of
+expectations rule, we get
+</p>
+$$\begin{aligned}
+          {\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})
+          = \underbrace{\sum_{i=1}^K\underset{{\mathbf{{v}}}\sim {\mathbf{V}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}}}{\mathop{\mathrm{\mathbb{E}}}}[\log P({M}=|{\mathbf{{v}}}|)]}_{\text{constant in }{\boldsymbol{\phi}}}
+          +\sum_{i=1}^K\sum_{{v}\in{\mathcal{V}}}
+          \underbrace{\underset{{\mathbf{{v}}}\sim {\mathbf{V}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}}}{\mathop{\mathrm{\mathbb{E}}}\left[ c_{{v}}({\mathbf{{v}}})\right]}}_{\mathrel{\stackrel{\textnormal{ def}}{=}}\widetilde{c}_{{v}}({\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}})}\log {P({V}={v};{\boldsymbol{\phi}})}
+          \end{aligned}
+  \tag{11}
+  $$<p> where
+$\widetilde{c}_{{v}}({\mathbf{{s}}};{{\boldsymbol{\phi}}^{(n)}})$
+are simply expected token counts under unigram model parameters
+${{\boldsymbol{\phi}}^{(n)}}$, which can be computed as
+$\widetilde{c}_{{v}}({\mathbf{{s}}};{{\boldsymbol{\phi}}^{(n)}})= \sum_{{\mathbf{{v}}}\in{\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})} c_{{v}}({\mathbf{{v}}}) P({\mathbf{V}}={\mathbf{{v}}}\mid {\mathbf{S}}={\mathbf{{s}}};{{\boldsymbol{\phi}}^{(n)}})$. Lastly, if we define the corpus-level expected counts as
+</p>
+$$
+          \widehat{c}_{{v}}({\mathcal{C}};{\boldsymbol{\phi}}) \mathrel{\stackrel{\textnormal{ def}}{=}} \sum_{{\mathbf{{s}}}\in{\mathcal{C}}} \widetilde{c}_{{v}}({\mathbf{{s}}};{\boldsymbol{\phi}})
+  \tag{12}
+  $$<p> and substitute them into our expansion in
+Eq. 11, then the equality reduces to
+</p>
+$$
+          {\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})
+          = \text{const} + \underbrace{\sum_{{v}\in{\mathcal{V}}}\widehat{c}_{{v}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})\log {P({V}={v};{\boldsymbol{\phi}})}}_{\mathrel{\stackrel{\textnormal{ def}}{=}}\bar{{\mathcal{Q}}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})}
+  \tag{13}
+  $$<p>
+where we have added the definition of $\bar{{\mathcal{Q}}}$
+(simply ${\mathcal{Q}}$ without the &ldquo;$\mathrm{const}$&rdquo; term)
+since it will be useful later. From the above, we can see that
+the posterior expected counts are sufficient statistics for the
+M-step objective
+${\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})$.
+In practice, the per-string expected counts
+$\widetilde{c}_{{v}}({\mathbf{{s}}};{\boldsymbol{\phi}})$ can
+be computed efficiently using a forward&ndash;backward dynamic
+program defined over the segmentation lattice induced by
+${\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})$. In words, this
+lattice forms a directed acyclic graph: nodes correspond to
+positions in the string and edges originating from the nodes
+correspond to tokens ${v}\in
+          {\mathcal{V}}$ that can begin at that position and end at
+another (i.e., pieces whose symbol sequences match the
+substring). Each edge is weighted by the token&rsquo;s probability
+under the current parameters, ${\phi^{(n)}_{v}}$. Valid paths
+in this graph correspond to a valid segmentation of
+${\mathbf{{s}}}$. The forward&ndash;backward algorithm then
+marginalizes over all valid paths in this graph to compute the
+posterior probability of each token&rsquo;s occurrence, from which the
+expected counts follow.
+A somewhat interesting observation is that this method of
+getting counts uses an inference procedure that is different
+from what is done when actually tokenizing text. In the latter
+case, only the maximum probability segmentation is ultimately
+used. Here, though, we consider all
+segmentations of a ${\mathbf{{s}}}$ that have non-zero
+probability, weighting the token counts from this segmentation
+(token sequence) by the probability of the segmentation under
+our current parameters ${{\boldsymbol{\phi}}^{(n)}}$. Also of
+note is that this is where a length prior <em>could</em> have an effect
+on the model parameters we learn. But the term is often never
+actually used in the model definition.</p>
+<p>ii.  <strong>M-step</strong> (maximize ${\boldsymbol{\phi}}$ and update
+${{\boldsymbol{\phi}}^{(n)}}$): In the M-step, we want to
+maximize
+${\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})$
+with respect to ${\boldsymbol{\phi}}$ subject to these
+parameters giving us a valid probability distribution, i.e.,
+$\sum_{{v}\in{\mathcal{V}}}{\phi_{v}}=1$ and
+${\phi_{v}}\ge 0$. Subbing in the relationship established in
+Eq. 13, this actually boils down to a
+relatively simple problem: finding the ${\boldsymbol{\phi}}$
+that maximizes the probability of having observed the expected
+counts that we got from the segmenting the corpus according to
+our prior model parameter beliefs: </p>
+$$
+\begin{aligned}
+        \max_{{\boldsymbol{\phi}}}&\sum_{{v}\in{{\mathcal{V}}}}\widehat{c}_{{v}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})\log {P({V}={v};{\boldsymbol{\phi}})}\\\ 
+        &\text{s.t.}\quad
+        \sum_{{v}\in{\mathcal{V}}}{\phi_{v}}=1,{\phi_{v}}\ge 0
+        \end{aligned}
+$$<p> The solution (normalized expected counts) is
+very recognizable, as it is essentially the same as the MLE for
+a standard multinomial distribution, albeit using expected
+counts rather than pure counts: </p>
+$$
+        {\phi^{(n+1)}_{v}}
+        =
+        \frac{\widehat{c}_{{v}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})}
+        {\sum_{{v}'\in{{\mathcal{V}}}}\widehat{c}_{{v}'}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})}.
+\tag{14}
+$$<p>
+The length-prior term is constant in ${\boldsymbol{\phi}}$ and
+does not alter the update (for fixed ${\mathcal{V}}$).</p>
+<p>iii.  <strong>Pruning:</strong> After applying the above steps, the vocabulary
+itself will not have changed (only the per-piece probabilities
+are updated). We can optionally prune some subset of pieces,
+creating a new ${\mathcal{V}}_{n+1}$. For example, if the the
+initial vocabulary consists of 100 pieces and our desired final
+vocabulary size is 30 pieces, one might remove the 10 least
+&ldquo;important&rdquo; pieces after each of the first seven EM iterations.
+Following pruning, the remaining probabilities in
+${\boldsymbol{\phi}}^{(n+1)}$ are renormalized to form a valid
+distribution over ${\mathcal{V}}_{n+1}$. We elaborate more on
+this process (and how we determine token &ldquo;importance&rdquo;) below.</p>
+</li>
+</ol>
+<h4 id="sec:unigram_pruning">Strategies for pruning tokens.</h4>
+<p>Because the initial vocabulary ${\mathcal{V}}_0$ is typically
+over-complete (often $|{\mathcal{V}}_0| \gg |{\mathcal{V}}|$),
+UnigramLM applies a pruning step <em>within</em> the EM iterations to gradually
+reduce vocabulary size. At iteration $n$, after we&rsquo;ve determined our
+updated parameters ${\boldsymbol{\phi}}^{(n+1)}$, the algorithm removes
+tokens whose absence leads to the smallest decrease in (our proxy for)
+observed data log-likelihood. Intuitively, we prune tokens that
+contribute least to explaining the data under the current model.</p>
+<p>Formally, let
+$\bar{{\mathcal{Q}}}({\boldsymbol{\phi}}^{(n+1)};{{\boldsymbol{\phi}}^{(n)}})$
+be our expected complete data log-likelihood under updated model
+parameters (albeit still under the segmentations according to
+${{\boldsymbol{\phi}}^{(n)}}$). We define the contribution (or &ldquo;loss&rdquo;)
+associated with token ${v}$ as the change (typically a decrease) in the
+corpus log-likelihood when ${v}$ is removed from the model:
+</p>
+$$
+    {L}({v})
+    \mathrel{\stackrel{\textnormal{ def}}{=}}
+    \bar{{\mathcal{Q}}}({\boldsymbol{\phi}}^{(n+1)};{{\boldsymbol{\phi}}^{(n)}}) 
+    -
+    \bar{{\mathcal{Q}}}({\boldsymbol{\phi}}^{(n+1)}_{-{v}};{{\boldsymbol{\phi}}^{(n)}_{-{v}}}),
+\tag{15}
+$$<p>The notation ${{\boldsymbol{\phi}}^{(n)}_{-{v}}}$ in
+Eq. (15) refers to the unigram distribution obtained
+from ${{\boldsymbol{\phi}}^{(n)}}$ by removing ${v}$ from its support
+and renormalizing the remaining probabilities. The corresponding
+string-level distribution is thus identical to the one induced by
+${{\boldsymbol{\phi}}^{(n)}}$, except that all segmentations containing
+${v}$ are assigned zero probability and individual piece probabilities
+are renormalized over ${\mathcal{V}}\setminus \{{v}\}$ (this logic also
+applies to ${\boldsymbol{\phi}}^{(n+1)}_{-{v}}$).</p>
+<p>Computing
+$\bar{{\mathcal{Q}}}({\boldsymbol{\phi}}^{(n+1)}_{-{v}};{{\boldsymbol{\phi}}^{(n)}_{-{v}}})$
+in Eq. 15 for a given ${v}$ generally requires a
+separate forward&ndash;backward pass over the corpus. This is because
+disallowing the use of ${v}$ in segmentations changes both the set of
+valid paths and the total probability of those paths. <sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup> The new
+per-string marginal probabilities (and expected token counts) under
+${\boldsymbol{\phi}}^{(n+1)}_{-{v}}$. cannot, in general, be recovered
+from forward/backward marginals computed under
+${{\boldsymbol{\phi}}^{(n)}}$. Hence, we would need a fresh
+forward&ndash;backward evaluation on the pruned lattice to obtain the exact
+$\bar{{\mathcal{Q}}}({\boldsymbol{\phi}}^{(n+1)}_{-{v}};{{\boldsymbol{\phi}}^{(n)}_{-{v}}})$.</p>
+<p>Performing a separate forward&ndash;backward pass for each piece in the
+vocabulary whenever we want to prune is impractical for vocabularies of
+any reasonable size. For example, if our initial vocabulary is a mere
+100$k$, then computing per-piece losses would require 100$k$ forward
+passes of the corpus on its own. In practice, approximations that reuse
+the statistics computed from the current EM iteration are done. We
+discuss those next.</p>
+<p>After computing ${L}({v})$ for all ${v}\in {\mathcal{V}}_n$, we remove
+the $k_n$ tokens with the smallest losses. Intuitively, this can be
+seen as removing the tokens whose removal incurs the <em>least</em> penalty on
+the corpus log-likelihood. The pruning rate $k_n$ is a hyperparameter
+of the algorithm. It is often chosen such that the target vocabulary
+size $|{\mathcal{V}}|$ is reached after a fixed number of pruning
+iterations $J$, e.g., </p>
+$$
+    k_n = \min\left(
+        \frac{1}{J}\bigl(|{\mathcal{V}}_0| - |{\mathcal{V}}|\bigr),
+         \max\bigl(0, |{\mathcal{V}}_n| - |{\mathcal{V}}|\bigr)
+    \right).
+\tag{16}
+$$<h4 id="approximations-of-">Approximations of ${L}$.</h4>
+<p>To avoid the need to resegment the corpus to compute each ${v}$&rsquo;s loss,
+several approximations can be used to compute per-piece losses. A simple
+approximation would be to use the log-likelihood contribution of a token
+as its loss, i.e., $\widehat{L}({v}) \approx
+\widehat{c}_{{v}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})\log {P({V}={v};{{\boldsymbol{\phi}}^{(n)}})}$.
+An arguably more sound approximation (and the one used by the original
+implementation of UnigramLM found in the SentencePiece library) is to
+look at the change in corpus log-likelihood when simply replacing ${v}$
+by the best alternative segmentation of that piece, i.e., the best
+alternative segmentation of the string ${g}({v})$ when ${v}$ is not in
+the vocabulary.</p>
+<p>Formally, let
+${\mathbf{{v}}}' = {h}_{{{\boldsymbol{\phi}}^{(n)}_{-{v}}}}({g}({v}))$
+be the best segmentation of the string ${\mathbf{{s}}}= {g}({v})$ under
+${{\boldsymbol{\phi}}^{(n)}_{-{v}}}$.<sup id="fnref:6"><a href="#fn:6" class="footnote-ref" role="doc-noteref">6</a></sup> The approximate loss is then
+the change to corpus log-likelihood when replacing every use of
+${P({V}={v};{{\boldsymbol{\phi}}^{(n)}})}$ with
+$\prod_{{t}=1}^{|{\mathbf{{v}}}'|}{P({V}={v}'_{t}; {{\boldsymbol{\phi}}^{(n)}_{-{v}}})}$
+under the new renormalized unigram probabilities
+${{\boldsymbol{\phi}}^{(n)}_{-{v}}}$. This loss can be computed
+concisely as:
+</p>
+$$
+\widehat{L}({v})\approx \widehat{c}_{{v}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})\left[\log {P({V}={v};{{\boldsymbol{\phi}}^{(n)}})} - \log \prod_{{t}=1}^{|{\mathbf{{v}}}'|}{P({V}={v}'_{t}; {{\boldsymbol{\phi}}^{(n)}_{-{v}}})}\right]
+$$<p><strong>Example 3</strong> (Toy pruning example). <em>Suppose our corpus contains the
+string ${\mathbf{{s}}}= \text{``internationalization''}$</em></p>
+<p><em>and our vocabulary includes the tokens $$
+\{
+    \text{international},\quad
+    \text{inter},\quad
+    \text{national},\quad
+    \text{ization},\quad
+    \text{al},\ldots
+\}
+$$ Assume that under the current parameters
+${{\boldsymbol{\phi}}^{(n)}}$, the posterior expected corpus-level
+counts are
+$$
+\widehat{c}_{\text{international}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})
+    \ll
+    \widehat{c}_{\text{inter}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}}),
+    \widehat{c}_{\text{national}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}}),
+    \widehat{c}_{\text{ization}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})
+$$</em></p>
+<p><em>To approximate the contribution of ${v}_{\text{international}}$, we
+consider its best alternative segmentation when it is removed from the
+vocabulary. Let
+$$
+{\mathbf{{v}}}' = \langle \text{inter}, \text{national} \rangle
+$$ be
+the Viterbi segmentation of the string ${g}(\text{international})$ under
+the renormalized distribution ${{\boldsymbol{\phi}}^{(n)}_{-{v}}}$. The
+approximate loss associated with pruning $\text{international}$ is then
+$$
+\begin{aligned}
+    \widehat{L}(\text{international};{{\boldsymbol{\phi}}^{(n)}})
+    &\approx
+    \widehat{c}_{\text{international}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})
+    \log \frac{
+        {P({V}=\text{international};{{\boldsymbol{\phi}}^{(n)}})}
+    }{
+        {P({V}=\text{inter}; {{\boldsymbol{\phi}}^{(n)}_{-{v}}})}
+        \cdot
+        {P({V}=\text{national}; {{\boldsymbol{\phi}}^{(n)}_{-{v}}})}
+    }.
+\end{aligned}
+$$ Intuitively, if ${v}_{\text{international}}$ is both
+rare (small
+$\widehat{c}_{\text{international}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})$)
+and easily replaced by a segmentation whose product of probabilities is
+similar to ${P({V}=\text{international};{{\boldsymbol{\phi}}^{(n)}})}$,
+then its (approximate) loss will be small, making it a good candidate
+for pruning.</em></p>
+<p>While this approximation does not account for changes in other valid
+paths&rsquo; probabilities that might happen as a result of removing ${v}$
+from the vocabulary, it seems to work fairly well in practice as a
+pruning heuristic (although I don&rsquo;t believe that anyone has actually
+tried to run the algorithm with the real, brute-force loss computation).</p>
+<h3 id="implementation-in-the-sentencepiece-library">Implementation in the SentencePiece library</h3>
+<p>In practice, the UnigramLM algorithm as we know it is largely defined by
+the public SentencePiece implementation, since Kudo (2018) give
+only a high-level description and leave many engineering choices
+under-specified. The library makes a number of concrete design decisions
+that go beyond the abstract EM + pruning picture above. Importantly, some of these
+actually change the underlying model described earlier.</p>
+<p>First, SentencePiece runs a fixed EM+prune schedule rather than
+iterating EM to convergence on a fixed vocabulary. Each outer iteration
+consists of a small fixed number of EM &ldquo;sub-iterations&rdquo; (typically two),
+after which the vocabulary is pruned by a fixed shrinking factor, and
+training stops once the target vocabulary size is reached. Second, the
+seed vocabulary is not &ldquo;all substrings up to length $L$&rdquo;: SentencePiece
+uses an Enhanced (Extended) Suffix Array procedure to mine a large
+lexicon of frequent substrings from the corpus (on the order of $10^6$
+pieces by default), subject to length and frequency thresholds. Pruning
+is performed as described above in the approximations section, i.e., a
+piece&rsquo;s loss is approximated by assuming that the removed piece&rsquo;s
+probability mass transfers to its best alternative Viterbi segmentation. Third,
+SentencePiece does not use the plain MLE
+M-step update from
+Eq. (14). Instead, it adopts a Variational Bayesian
+approach with a Dirichlet prior, replacing expected counts with their
+<a href="https://github.com/google/sentencepiece/blob/336900241c4943ae1e5f844b18292f532b3a21c7/src/unigram_model_trainer.cc#L390" target="_blank" rel="noopener">digamma-transformed counterparts</a>:
+${\phi^{(n+1)}_{v}}\propto\exp(\Psi(\widehat{c}_{{v}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})+\alpha_{v}))$.
+This update is implicitly calculating the geometric mean of the
+posterior Dirichlet distribution, where $\alpha_{v}$ can be seen as the
+prior belief about the counts we should observe for token ${v}$.
+Notably, SentencePiece uses an improper Haldane prior ($\alpha_{v}= 0$
+for all ${v}\in{\mathcal{V}}$). This choice essentially has the opposite
+effect of performing standard additive smoothing: it&rsquo;s always the case
+that $\exp(\psi(x)) < x$, however, for small $x$ (rare tokens), the
+relative &ldquo;discount&rdquo; is significantly larger. It thus acts as a
+regularizer that disproportionately penalizes tokens with low expected
+counts, sending their assigned probability mass closer to zero.  This is done on top of a <a href="https://github.com/google/sentencepiece/blob/336900241c4943ae1e5f844b18292f532b3a21c7/src/unigram_model_trainer.cc#L381" target="_blank" rel="noopener">pre-pruning step</a> for tokens whose expected counts are below a certain threshold.</p>
+<p>Arguably some of the more critical design choices to be aware of are
+those pertaining to normalization and pretokenization, as these change
+which segmentations are feasible. By default it applies NFKC
+normalization, collapses whitespace, inserts a dummy-prefix marker, and
+treats whitespace (and often script/number boundaries) as explicit
+segmentation cues, i.e., as markers that can be suffixes or prefixes of
+pieces, but that pieces cannot cross. Most of these behaviors can be
+disabled via training flags but the fact that they&rsquo;re used is not well
+advertised.</p>
+<p>Taken together, these implementation details instantiate one particular,
+very specific version of the abstract UnigramLM model described above,
+albeit the one that people are typically referring to (rather than an
+implementation-free mathematical ideal) when talking about &ldquo;the
+UnigramLM tokenization algorithm.&rdquo;</p>
+<!-- ##### _Acknowledgments_
+
+As with pretty much any technical work I've written, Tiago Pimentel provided critical commentary and recommendations for this blogpost. Thanks, PhD sibling :)  -->
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>${v}$ are also sometimes called subwords; we avoid this naming
+because ${v}$ need not align with orthographic words, in their
+typical definition.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p>$\circ$ denotes string concatenation and when applied to tokens,
+indicates the pieces&rsquo; symbols are concatenated together (perhaps
+with some special formatting if symbols from ${\Gamma}$ are present
+in the piece).&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3">
+<p>The distribution can also be made proper with the use of an EOS
+symbol, which is the more common way of specifying a language model.
+The use of ${M}$ in this situation (a non-autoregressive model) is a
+bit more general (if the distribution of ${M}$ follows a power law,
+then our distribution over token sequences could equivalently be
+represented using an EOS symbol). The use of ${M}$ though allows us
+to handle sequence length without adding a special token to our
+vocabulary.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:4">
+<p>There are several ways that this seed vocabulary can be created. The Enhanced Suffix Array is one of the more common algorithms. Often, pretokenization is performed on the corpus and one of the more common pretokenization rules splits on whitespace, preventing pieces from crossing whitespace boundaries, although that&rsquo;s kind of an arbitrary rule&hellip;&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:5">
+<p>Explicitly, relative to the original model, two coupled changes
+occur when removing ${v}$ from ${{\mathcal{V}}_{{n}}}$: (i) the
+feasible set of paths shrinks from
+${\mathcal{T}}_{{{\mathcal{V}}_{{n}}}}({\mathbf{{s}}})$ to
+${\mathcal{T}}_{{\mathcal{V}}_{n+1}}({\mathbf{{s}}})$ (all
+segmentations using ${v}$ are removed); (ii) the per-edge weights
+change after the renormalization of ${{\boldsymbol{\phi}}^{(n)}}$
+and the marginal probabilities of remaining paths must be
+recomputed.&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:6">
+<p>This segmentation may need to include an UNK token depending on
+the base vocabulary.&#160;<a href="#fnref:6" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+
+      </article>
+    </div>
+
+    
+    <div class="hidden lg:block lg:col-span-1">
+      <div class="sticky top-24 p-6 border-l border-gray-200 dark:border-gray-700">
+        <h2 class="text-lg font-bold mb-4 uppercase tracking-wider text-gray-600 dark:text-gray-400">
+          On this page
+        </h2>
+        
+        <nav id="TableOfContents">
+          <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#intro-and-origins-of-this-blog-post">Intro and origins of this blog post</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#sec:background">Tokenization Background and Notation</a></li>
+    <li><a href="#what-you-came-here-for-unigramlm">What you came here for: UnigramLM</a>
+      <ul>
+        <li><a href="#sec:gen_model">Generative model</a>
+          <ul>
+            <li>
+              <ul>
+                <li><a href="#some-useful-relationships-between--and-">Some useful relationships between  and .</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#learning-model-parameters">Learning Model Parameters</a>
+          <ul>
+            <li><a href="#sec:unigram_em">Expectation-Maximization</a>
+              <ul>
+                <li><a href="#expected-complete-data-log-likelihood-under-observed-data-and-current-parameters">Expected complete-data log-likelihood under observed data and current parameters.</a></li>
+                <li><a href="#observed-data-log-likelihood-and-jensens-inequality">Observed data log-likelihood and Jensen&rsquo;s inequality.</a></li>
+              </ul>
+            </li>
+            <li><a href="#the-unigramlm-algorithm">The UnigramLM Algorithm</a>
+              <ul>
+                <li><a href="#sec:unigram_pruning">Strategies for pruning tokens.</a></li>
+                <li><a href="#approximations-of-">Approximations of .</a></li>
+              </ul>
+            </li>
+            <li><a href="#implementation-in-the-sentencepiece-library">Implementation in the SentencePiece library</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+        </nav>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+    </div>
+    <div class="page-footer">
+      <footer class="container mx-auto flex flex-col justify-items-center text-sm leading-6 mt-24 mb-4 text-slate-700 dark:text-slate-200">
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+
+  
+  
+    
+  
+  
+    
+  
+
+  
+
+  
+
+  <p class="powered-by footer-license-icons">
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0" rel="noopener noreferrer" target="_blank" aria-label="Creative Commons">
+      <i class="fab fa-creative-commons fa-2x" aria-hidden="true"></i>
+      <i class="fab fa-creative-commons-by fa-2x" aria-hidden="true"></i>
+      
+        <i class="fab fa-creative-commons-nc fa-2x" aria-hidden="true"></i>
+      
+      
+        <i class="fab fa-creative-commons-nd fa-2x" aria-hidden="true"></i>
+      
+    </a>
+  </p>
+
+
+
+
+
+  
+    
+    
+      
+      
+        
+        
+      
+    
+
+    <p class="powered-by text-center text-sm opacity-80 py-1">
+      
+      
+      
+      
+      
+        
+      
+      
+      
+      
+      
+      Made with <a class="underline hover:opacity-100" href="https://hugoblox.com?utm_source=site_footer&utm_medium=referral&utm_campaign=poweredby_oss&utm_content=brand_academic-cv" target="_blank" rel="noopener" data-hbx="poweredby_brand">Hugo Blox</a>.
+      <a class="inline-flex items-center rounded px-2 py-0.5 border border-current ms-2 text-xs hover:opacity-100"
+         href="https://hugoblox.com/templates/academic-cv/start?utm_source=site_footer&amp;utm_medium=referral&amp;utm_campaign=poweredby_oss&amp;utm_content=cta_academic-cv" target="_blank" rel="noopener" data-hbx="poweredby_cta">Duplicate this template →</a>
+    </p></footer>
+
+    </div>
+
+    
+    
+
+
+<div id="hb-notification-container" class="fixed top-20 right-4 z-[9999] pointer-events-none" aria-live="polite" aria-atomic="true"></div>
+
+
+    
+    
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+    
+    
+    
+  </body>
+</html>
