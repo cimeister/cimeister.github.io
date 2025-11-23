@@ -1,116 +1,46 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Clara Meister</title>
-    <link>https://cimeister.github.io/</link>
-      <atom:link href="https://cimeister.github.io/index.xml" rel="self" type="application/rss+xml" />
-    <description>Clara Meister</description>
-    <generator>Hugo Blox Builder (https://hugoblox.com)</generator><language>en-us</language><lastBuildDate>Mon, 24 Oct 2022 00:00:00 +0000</lastBuildDate>
-    <image>
-      <url>https://cimeister.github.io/media/icon_hu_982c5d63a71b2961.png</url>
-      <title>Clara Meister</title>
-      <link>https://cimeister.github.io/</link>
-    </image>
-    
-    <item>
-      <title>Example Talk</title>
-      <link>https://cimeister.github.io/events/example/</link>
-      <pubDate>Sat, 01 Jun 2030 13:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/events/example/</guid>
-      <description>
-
-
-  
-  
-  
-  
-  
-
-
-
-
-
-  
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-  
-  
-
-
-&lt;div class=&#34;callout flex px-4 py-3 mb-6 rounded-md border-l-4 bg-blue-100 dark:bg-blue-900 border-blue-500&#34; 
-     data-callout=&#34;note&#34; 
-     data-callout-metadata=&#34;&#34;&gt;
-  &lt;span class=&#34;callout-icon pr-3 pt-1 text-blue-600 dark:text-blue-300&#34;&gt;
-    &lt;svg height=&#34;24&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34; viewBox=&#34;0 0 24 24&#34;&gt;&lt;path fill=&#34;none&#34; stroke=&#34;currentColor&#34; stroke-linecap=&#34;round&#34; stroke-linejoin=&#34;round&#34; stroke-width=&#34;1.5&#34; d=&#34;m16.862 4.487l1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8l.8-2.685a4.5 4.5 0 0 1 1.13-1.897zm0 0L19.5 7.125&#34;/&gt;&lt;/svg&gt;
-  &lt;/span&gt;
-  &lt;div class=&#34;callout-content dark:text-neutral-300&#34;&gt;
-    &lt;div class=&#34;callout-title font-semibold mb-1&#34;&gt;Note&lt;/div&gt;
-    &lt;div class=&#34;callout-body&#34;&gt;&lt;p&gt;Click on the &lt;strong&gt;Slides&lt;/strong&gt; button above to view the built-in slides feature.&lt;/p&gt;&lt;/div&gt;
-  &lt;/div&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Clara Meister</title><link>https://cimeister.github.io/</link><atom:link href="https://cimeister.github.io/index.xml" rel="self" type="application/rss+xml"/><description>Clara Meister</description><generator>Hugo Blox Builder (https://hugoblox.com)</generator><language>en-us</language><lastBuildDate>Mon, 24 Oct 2022 00:00:00 +0000</lastBuildDate><image><url>https://cimeister.github.io/media/icon_hu_982c5d63a71b2961.png</url><title>Clara Meister</title><link>https://cimeister.github.io/</link></image><item><title>Example Talk</title><link>https://cimeister.github.io/events/example/</link><pubDate>Sat, 01 Jun 2030 13:00:00 +0000</pubDate><guid>https://cimeister.github.io/events/example/</guid><description>
+&lt;div class="callout flex px-4 py-3 mb-6 rounded-md border-l-4 bg-blue-100 dark:bg-blue-900 border-blue-500"
+data-callout="note"
+data-callout-metadata=""&gt;
+&lt;span class="callout-icon pr-3 pt-1 text-blue-600 dark:text-blue-300"&gt;
+&lt;svg height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"&gt;&lt;path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m16.862 4.487l1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8l.8-2.685a4.5 4.5 0 0 1 1.13-1.897zm0 0L19.5 7.125"/&gt;&lt;/svg&gt;
+&lt;/span&gt;
+&lt;div class="callout-content dark:text-neutral-300"&gt;
+&lt;div class="callout-title font-semibold mb-1"&gt;Note&lt;/div&gt;
+&lt;div class="callout-body"&gt;&lt;p&gt;Click on the &lt;strong&gt;Slides&lt;/strong&gt; button above to view the built-in slides feature.&lt;/p&gt;&lt;/div&gt;
 &lt;/div&gt;
-
+&lt;/div&gt;
 &lt;p&gt;Slides can be added in a few ways:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Create&lt;/strong&gt; slides using Hugo Blox Builder&amp;rsquo;s 
- feature and link using the &lt;code&gt;slides&lt;/code&gt; parameter in the front matter of the talk file&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Create&lt;/strong&gt; slides using Hugo Blox Builder&amp;rsquo;s
+feature and link using the &lt;code&gt;slides&lt;/code&gt; parameter in the front matter of the talk file&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Upload&lt;/strong&gt; an existing slide deck to this page bundle and link it using &lt;code&gt;links: [{ type: slides, url: path/to/file } ]&lt;/code&gt; in front matter&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Embed&lt;/strong&gt; your slides (e.g. Google Slides) or presentation video on this page using 
+&lt;li&gt;&lt;strong&gt;Embed&lt;/strong&gt; your slides (e.g. Google Slides) or presentation video on this page using
 .&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Further event details, including 
- such as image galleries, can be added to the body of this page.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>UnigramLM: An Attempt at Writing The Missing Manual</title>
-      <link>https://cimeister.github.io/blog/unigramlm/</link>
-      <pubDate>Wed, 19 Nov 2025 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/blog/unigramlm/</guid>
-      <description>&lt;p&gt;&lt;strong&gt;TL;DR&lt;/strong&gt;:  This post is my attempt to write down the UnigramLM tokenization algorithm cleanly and explicitly because
+&lt;p&gt;Further event details, including
+such as image galleries, can be added to the body of this page.&lt;/p&gt;</description></item><item><title>UnigramLM: An Attempt at Writing The Missing Manual</title><link>https://cimeister.github.io/blog/unigramlm/</link><pubDate>Wed, 19 Nov 2025 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/blog/unigramlm/</guid><description>&lt;p&gt;&lt;strong&gt;TL;DR&lt;/strong&gt;: This post is my attempt to write down the UnigramLM tokenization algorithm cleanly and explicitly because
 the original paper does not provide such a derivation. Rather, anyone that wants to deeply understand UnigramLM is forced to make odds and ends of the C++ code in the SentencePiece library. In this post, we&amp;rsquo;ll formalize the unigram generative
 model, derive the EM updates, explain why pruning is needed (and how it&amp;rsquo;s done), and point out the
 spots where the practical implementation quietly diverges (and the implications that has for the mathematical models). Hopefully, by the end, you&amp;rsquo;ll think the UnigramLM algorithm is just as cool as I do.&lt;/p&gt;
-&lt;h3 id=&#34;intro-and-origins-of-this-blog-post&#34;&gt;Intro and origins of this blog post&lt;/h3&gt;
-&lt;p&gt;&lt;em&gt;(feel free to 
- this section)&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id="intro-and-origins-of-this-blog-post"&gt;Intro and origins of this blog post&lt;/h3&gt;
+&lt;p&gt;&lt;em&gt;(feel free to
+this section)&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;These days, tokenization is basically syonymous with Byte-pair Encoding (BPE). If you ask someone &amp;ldquo;do you know how tokenization works?&amp;rdquo;, there&amp;rsquo;s a decent chance you’ll get an answer like: &amp;ldquo;Yeah yeah, I know BPE.&amp;rdquo;&amp;quot;&lt;/p&gt;
 &lt;p&gt;But there&amp;rsquo;s this other tokenizer sitting right next to BPE in practice: UnigramLM
 (the SentencePiece &amp;ldquo;unigram&amp;rdquo; model). On paper it looks totally different. Instead of greedily merging pairs, it says: &amp;ldquo;let&amp;rsquo;s uncover latent tokens and treat tokenization like inference.&amp;rdquo; At least to me, that framing feels a lot more linguistically sane (or, at minimum, less like we’re playing subword Tetris).
 Naturally, I figured I should actually understand the algorithm.
-So I did what everyone does: I went to the 
+So I did what everyone does: I went to the
 . That&amp;hellip; didn&amp;rsquo;t get me very far. So then I went to the SentencePiece repo, hoping I could reconstruct the missing pieces from the code. After a brief flashback while staring at the C++ implementation to the terror of my undergraduate CS classes, I bailed on that approach too. Then I thought maybe the missing explanation was hiding in the HuggingFace documentation — but let&amp;rsquo;s just say that rabbit hole ended like this:&lt;/p&gt;
-
-
-
-  
-  &lt;blockquote class=&#34;border-l-4 border-neutral-300 dark:border-neutral-600 pl-4 italic text-neutral-600 dark:text-neutral-400 my-6&#34;&gt;
-    &lt;p&gt;&lt;em&gt;The HuggingFace documentation&lt;/em&gt; [on UnigramLM] &lt;em&gt;describes a
+&lt;blockquote class="border-l-4 border-neutral-300 dark:border-neutral-600 pl-4 italic text-neutral-600 dark:text-neutral-400 my-6"&gt;
+&lt;p&gt;&lt;em&gt;The HuggingFace documentation&lt;/em&gt; [on UnigramLM] &lt;em&gt;describes a
 tokeniser that doesn’t exist. It should not be relied on as an
 explanation for UnigramLM, because it doesn’t even come close.&lt;/em&gt;&lt;br&gt;
 –Claude&lt;/p&gt;
-
-  &lt;/blockquote&gt;
-
+&lt;/blockquote&gt;
 &lt;p&gt;The original UnigramLM paper gives a nice high-level story, and the code clearly works in practice, but I couldn&amp;rsquo;t find a single place that actually spells out the full generative model, why the algorithm is mathematically sound, or how all the little &amp;ldquo;engineering details&amp;rdquo; (like pruning and vocabulary initialization) fit into that picture. At that point, I figured to myself, well this is a &lt;em&gt;unigram&lt;/em&gt; model. How complicated can it be? I can definitely reason through the logic myself. Turns out that was a tad bit naive. But I&amp;rsquo;m nothing if not stubborn, so here we are a few months later!&lt;/p&gt;
 &lt;p&gt;This post is what I wanted at the start of my deep dive into UnigramLM&amp;ndash;an approachable but rigorous walkthrough of UnigramLM as a probabilistic model, showing why EM is a reasonable tool here, what the posterior over segmentations actually looks like, and how the SentencePiece-style implementation approximates all of this in practice. If you&amp;rsquo;ve ever felt that UnigramLM is &amp;ldquo;clear enough to use, but not clear enough to explain on a whiteboard,&amp;rdquo; my hope is that this takes you the rest of the way to really understanding it, and maybe even extending it. Because at least I think its a pretty cool algorithm that deserves some of BPE&amp;rsquo;s limelight.&lt;/p&gt;
-&lt;h1 id=&#34;sec:background&#34;&gt;Tokenization Background and Notation&lt;/h1&gt;
+&lt;h1 id="sec:background"&gt;Tokenization Background and Notation&lt;/h1&gt;
 &lt;p&gt;So that we&amp;rsquo;re on the same page, let&amp;rsquo;s start with a formal definition of tokenization.&lt;/p&gt;
 &lt;p&gt;Let ${\mathbf{{s}}}=\langle{s}_{1},{s}_2,\dots\rangle$ be a string&amp;mdash;a
 sequence of characters (or bytes) such that ${s}_{t}\in{\Sigma}$ for a
@@ -119,7 +49,7 @@ each ${v}\in{\mathcal{V}}$ consists of a sequence of symbols from
 ${\Sigma}\cup{\Gamma}$, where ${\Gamma}$ denotes a finite set of
 reserved symbols (e.g., whitespace markers, start/end tokens, etc.); we
 refer to ${\mathcal{V}}$ as our &lt;strong&gt;vocabulary&lt;/strong&gt; and to ${v}$ as
-&lt;strong&gt;pieces&lt;/strong&gt;.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; During tokenization, we wish to convert the sequence of
+&lt;strong&gt;pieces&lt;/strong&gt;.&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt; During tokenization, we wish to convert the sequence of
 characters/bytes ${\mathbf{{s}}}$ into a sequence of tokens
 ${\mathbf{{v}}}=\langle {v}_{1},\dots,{v}_{{m}}\rangle$, each of which
 is a piece in the set ${\mathcal{V}}$. We refer to this token sequence
@@ -133,14 +63,14 @@ referred to as inference, although perhaps more commonly people just
 call this process &amp;ldquo;tokenizing a string.&amp;rdquo; For example, the byte-pair
 encoding (BPE) algorithm defines a ${h}$ that is parameterized by a list
 of &lt;em&gt;merge&lt;/em&gt; pairs
-$\boldsymbol{\mu}=\langle({v}_1, {v}_1&#39;),({v}_2, {v}_2&#39;), \dots \rangle$
+$\boldsymbol{\mu}=\langle({v}_1, {v}_1'),({v}_2, {v}_2'), \dots \rangle$
 and the algorithm for learning $\boldsymbol{\mu}$. At inference,
 starting from the representation of ${\mathbf{{s}}}$ as just a sequence
 of symbols from the base vocabulary ${\Sigma}$,
 ${h}_{\boldsymbol{\mu}}$ goes through the text
 $i=1, \dots |\boldsymbol{\mu}|$ times. At step $i$, it replaces all
-co-occurrences of the pair $({v}_i, {v}_i&#39;)$ with a new merged token
-(typically, of the form ${v}_i\circ{v}_i&#39;$).&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+co-occurrences of the pair $({v}_i, {v}_i')$ with a new merged token
+(typically, of the form ${v}_i\circ{v}_i'$).&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 &lt;p&gt;Importantly, we assume that ${\mathbf{{s}}}$ can be reconstructed from
 ${\mathbf{{v}}}$ via a &lt;strong&gt;detokenization function&lt;/strong&gt;
 ${g}: {\mathcal{V}}^* \rightarrow {\Sigma}^*$; often ${g}:$ is a
@@ -164,11 +94,11 @@ Under our fixed detokenization function ${g}$ (simple concatenation of
 token symbol sequences), the set of all valid segmentations of
 ${\mathbf{{s}}}$ is
 $$\begin{aligned}
-    {\mathcal{T}}_{\mathcal{V}}({\mathbf{{s}}})
-    =\{
-        \langle \text{h}, \text{a}, \text{t} \rangle,
-        \langle \text{ha}, \text{t} \rangle,
-        \langle \text{h}, \text{at} \rangle\}.
+{\mathcal{T}}_{\mathcal{V}}({\mathbf{{s}}})
+=\{
+\langle \text{h}, \text{a}, \text{t} \rangle,
+\langle \text{ha}, \text{t} \rangle,
+\langle \text{h}, \text{at} \rangle\}.
 \end{aligned}
 $$ where all three segmentations detokenize to the same
 string ${\mathbf{{s}}}= \text{hat}$ under ${g}$.&lt;/em&gt;&lt;/p&gt;
@@ -192,13 +122,13 @@ tokenizations has implications for how one should actually compute the
 probability of a string under a language model using a given vocabulary.
 See Cao and Rimell (2021) for a more detailed discussion of
 non-canonical tokenizations and why they matter in practice.&lt;/p&gt;
-&lt;h1 id=&#34;what-you-came-here-for-unigramlm&#34;&gt;What you came here for: UnigramLM&lt;/h1&gt;
+&lt;h1 id="what-you-came-here-for-unigramlm"&gt;What you came here for: UnigramLM&lt;/h1&gt;
 &lt;p&gt;The UnigramLM tokenization algorithm (Kudo 2018) takes a
 probabilistic-modeling approach to string tokenization. It defines an
 ${h}$, together with an algorithm for learning its parameters, by
 treating tokenization as inference in a latent-variable generative model
 over strings&amp;mdash;in particular, a unigram generative model.&lt;/p&gt;
-&lt;h2 id=&#34;sec:gen_model&#34;&gt;Generative model&lt;/h2&gt;
+&lt;h2 id="sec:gen_model"&gt;Generative model&lt;/h2&gt;
 &lt;p&gt;The UnigramLM tokenization algorithm assumes that each observed string
 ${\mathbf{{s}}}$ arises from a latent sequence of tokens
 ${\mathbf{{v}}}$, where tokens are drawn independently from a fixed
@@ -227,17 +157,17 @@ ${\mathbf{{v}}}\in {\mathcal{V}}^*$. For the distribution of
 ${\mathbf{V}}$ to be a valid probability distribution on
 ${\mathcal{V}}^*$, we must specify a length prior, i.e., a random
 variable ${M}$ on $\mathbb{N}$ with
-$\sum_{{m}=0}^\infty P({M}={m})=1$.&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt; The UnigramLM algorithm then
+$\sum_{{m}=0}^\infty P({M}={m})=1$.&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt; The UnigramLM algorithm then
 assumes token sequence
 ${\mathbf{{v}}}=\langle{v}_1,\dots,{v}_{m}\rangle$ are generated as
 &lt;/p&gt;
 $$
-    {m}\sim {M},\quad {v}_{t}\stackrel{\text{i.i.d.}}{\sim} {\small\mathrm{Categorical}}({\boldsymbol{\phi}}) (t=1,\dots,{m})
+{m}\sim {M},\quad {v}_{t}\stackrel{\text{i.i.d.}}{\sim} {\small\mathrm{Categorical}}({\boldsymbol{\phi}}) (t=1,\dots,{m})
 \tag{1}
 $$&lt;p&gt;We can thus define the distribution of ${\mathbf{V}}$ as
 &lt;/p&gt;
 $$
-    P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}}) \mathrel{\stackrel{\textnormal{ def}}{=}} P({M}=|{\mathbf{{v}}}|)\prod_{t=1}^{|{\mathbf{{v}}}|}{P({V}={v}_{{t}};{\boldsymbol{\phi}})}
+P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}}) \mathrel{\stackrel{\textnormal{ def}}{=}} P({M}=|{\mathbf{{v}}}|)\prod_{t=1}^{|{\mathbf{{v}}}|}{P({V}={v}_{{t}};{\boldsymbol{\phi}})}
 \tag{2}
 $$&lt;p&gt;
 The likelihood of a sequence conditional on a given length ${m}$ is then
@@ -245,7 +175,7 @@ simply the product of its piece probabilities, i.e.,
 Eq. (2) where the length prior term cancels out:
 &lt;/p&gt;
 $$
-   P({\mathbf{V}}={\mathbf{{v}}}\mid {M}={m};{\boldsymbol{\phi}}) = \prod_{{t}=1}^{{m}} {P({V}={v}_{t};{\boldsymbol{\phi}})},
+P({\mathbf{V}}={\mathbf{{v}}}\mid {M}={m};{\boldsymbol{\phi}}) = \prod_{{t}=1}^{{m}} {P({V}={v}_{t};{\boldsymbol{\phi}})},
 \tag{3}
 $$&lt;p&gt;
 One thing to note is that the parameters of
@@ -255,7 +185,7 @@ $P({\mathbf{V}};{\boldsymbol{\phi}})$, for which the parameters of ${M}$
 must also be known to fully specify the distribution. We won&amp;rsquo;t add any
 additional notation to $P({\mathbf{V}};{\boldsymbol{\phi}})$ to specify
 the parameters of ${M}$, though, since ${M}$ is pretty much always
-ignored. Rather, in yet another moment of &amp;rsquo;engineering convenience&#39;
+ignored. Rather, in yet another moment of &amp;rsquo;engineering convenience'
 winning out over &amp;rsquo;theoretical elegance&amp;rsquo;, most people just compute token
 sequence probabilities in UnigramLM using Eq. 3.&lt;/p&gt;
 &lt;p&gt;Given the deterministic mapping ${g}$ from tokens to strings, we can
@@ -265,10 +195,10 @@ ${\mathbf{S}}$ be a random variable on ${\Sigma}^*$. The following
 relationship holds: &lt;/p&gt;
 $$
 \begin{aligned}
-    P({\mathbf{S}}={\mathbf{{s}}};{\boldsymbol{\phi}}) \mathrel{\stackrel{\textnormal{ def}}{=}}\sum_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})} P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})
+P({\mathbf{S}}={\mathbf{{s}}};{\boldsymbol{\phi}}) \mathrel{\stackrel{\textnormal{ def}}{=}}\sum_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})} P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})
 \end{aligned}
 \tag{4}
-$$&lt;h4 id=&#34;some-useful-relationships-between--and-&#34;&gt;Some useful relationships between ${\mathbf{V}}$ and ${\mathbf{S}}$.&lt;/h4&gt;
+$$&lt;h4 id="some-useful-relationships-between--and-"&gt;Some useful relationships between ${\mathbf{V}}$ and ${\mathbf{S}}$.&lt;/h4&gt;
 &lt;p&gt;We can see from
 Eq. (4) that distribution of ${\mathbf{S}}$ is
 simply the marginal probability distribution over valid segmentations of
@@ -276,9 +206,9 @@ ${\mathbf{{s}}}$ under ${\mathcal{V}}$. Applying Bayes&amp;rsquo; rule then give
 us the posterior over segmentations for a fixed ${\mathbf{{s}}}$:
 &lt;/p&gt;
 $$
-P({\mathbf{V}}={\mathbf{{v}}}\mid {\mathbf{S}}={\mathbf{{s}}}; {\boldsymbol{\phi}}) = 
+P({\mathbf{V}}={\mathbf{{v}}}\mid {\mathbf{S}}={\mathbf{{s}}}; {\boldsymbol{\phi}}) =
 \begin{cases}
-    &amp;\frac{P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})}{P({\mathbf{S}}={\mathbf{{s}}};{\boldsymbol{\phi}})} \quad \text{if } {\mathbf{{v}}}\in{\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})\\\ &amp;0 \quad \quad \text{ otherwise.}
+&amp;\frac{P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})}{P({\mathbf{S}}={\mathbf{{s}}};{\boldsymbol{\phi}})} \quad \text{if } {\mathbf{{v}}}\in{\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})\\\ &amp;0 \quad \quad \text{ otherwise.}
 \end{cases}
 \tag{5}
 $$&lt;p&gt; By just moving some terms in
@@ -295,9 +225,9 @@ generative model (defined above) with these parameters. To this end, it
 uses a Viterbi-style algorithm: &lt;/p&gt;
 $$
 \begin{aligned}
-{{h}_{{\boldsymbol{\phi}}}({\mathbf{{s}}})}&amp;= \arg\max_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})} P({\mathbf{V}}={\mathbf{{v}}}\mid {\mathbf{S}}={\mathbf{{s}}}; {\boldsymbol{\phi}})\\\ 
-&amp;= \arg\max_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})} P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})\\\ 
-&amp;= \arg\max_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})} P({M}=|{\mathbf{{v}}}|)\prod_{t=1}^{|{\mathbf{{v}}}|}{P({V}={v}_{t};{\boldsymbol{\phi}})}\\\ 
+{{h}_{{\boldsymbol{\phi}}}({\mathbf{{s}}})}&amp;= \arg\max_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})} P({\mathbf{V}}={\mathbf{{v}}}\mid {\mathbf{S}}={\mathbf{{s}}}; {\boldsymbol{\phi}})\\\
+&amp;= \arg\max_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})} P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})\\\
+&amp;= \arg\max_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})} P({M}=|{\mathbf{{v}}}|)\prod_{t=1}^{|{\mathbf{{v}}}|}{P({V}={v}_{t};{\boldsymbol{\phi}})}\\\
 &amp;\overset{?}{=} \arg\max_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})} \prod_{t=1}^{|{\mathbf{{v}}}|}{P({V}={v}_{t};{\boldsymbol{\phi}})}
 \end{aligned}
 \tag{6}
@@ -318,23 +248,23 @@ $|{\mathbf{{v}}}^{(2)}| = 3$. Assume that the unigram probabilities are
 such that
 $$
 \prod_{{t}=1}^{|{\mathbf{{v}}}^{(1)}|} {P({V}={v}^{(1)}_{t};{\boldsymbol{\phi}})}
-    =
-    \prod_{{t}=1}^{|{\mathbf{{v}}}^{(2)}|} {P({V}={v}^{(2)}_{t};{\boldsymbol{\phi}})}
+=
+\prod_{{t}=1}^{|{\mathbf{{v}}}^{(2)}|} {P({V}={v}^{(2)}_{t};{\boldsymbol{\phi}})}
 $$
 so the two segmentations tie if we ignore the length prior. Now let the
 length prior favor shorter sequences, e.g. $$
 P({M}=1) = 0.9,
-    \qquad
-    P({M}=3) = 0.1
+\qquad
+P({M}=3) = 0.1
 $$ Then the full sequence probabilities become
 $$
 \begin{aligned}
-    P({\mathbf{V}}={\mathbf{{v}}}^{(1)};{\boldsymbol{\phi}})
-    &amp;= P({M}=1) \prod_{{t}=1}^{|{\mathbf{{v}}}^{(1)}|} {P({V}={v}^{(1)}_{t};{\boldsymbol{\phi}})}
-     = 0.9 \cdot C,\\\ 
-    P({\mathbf{V}}={\mathbf{{v}}}^{(2)};{\boldsymbol{\phi}})
-    &amp;= P({M}=3) \prod_{{t}=1}^{|{\mathbf{{v}}}^{(2)}|} {P({V}={v}^{(2)}_{t};{\boldsymbol{\phi}})}
-     = 0.1 \cdot C,
+P({\mathbf{V}}={\mathbf{{v}}}^{(1)};{\boldsymbol{\phi}})
+&amp;= P({M}=1) \prod_{{t}=1}^{|{\mathbf{{v}}}^{(1)}|} {P({V}={v}^{(1)}_{t};{\boldsymbol{\phi}})}
+= 0.9 \cdot C,\\\
+P({\mathbf{V}}={\mathbf{{v}}}^{(2)};{\boldsymbol{\phi}})
+&amp;= P({M}=3) \prod_{{t}=1}^{|{\mathbf{{v}}}^{(2)}|} {P({V}={v}^{(2)}_{t};{\boldsymbol{\phi}})}
+= 0.1 \cdot C,
 \end{aligned}
 $$ for some common factor $C$. The Viterbi segmentation
 under the full model (including the length prior) is therefore
@@ -361,7 +291,7 @@ ${\phi_{v}}$ and the underlying vocabulary ${\mathcal{V}}$ over which
 they are defined. The UnigramLM tokenization algorithm (described next)
 proposes a method for coming up with an estimate of these parameters
 from text data.&lt;/p&gt;
-&lt;h2 id=&#34;learning-model-parameters&#34;&gt;Learning Model Parameters&lt;/h2&gt;
+&lt;h2 id="learning-model-parameters"&gt;Learning Model Parameters&lt;/h2&gt;
 &lt;p&gt;Maximum likelihood estimation (MLE)&amp;mdash;a standard approach to estimating
 model parameters&amp;mdash;aims to find the model parameters that maximize the
 log-likelihood of our data. Under the UnigramLM assumptions about the
@@ -372,8 +302,8 @@ like $\mathcal{X} = \{({\mathbf{{s}}}_i,{\mathbf{{v}}}_i)\}_{i=1}^K$
 and the complete-data log likelihood is defined as: &lt;/p&gt;
 $$
 \begin{aligned}
-    {\mathcal{L}}(\mathcal{X}; {\boldsymbol{\phi}}) &amp;\mathrel{\stackrel{\textnormal{ def}}{=}}\log\prod_{i=1}^KP({\mathbf{S}}={\mathbf{{s}}}_i, {\mathbf{V}}={\mathbf{{v}}}_i;{\boldsymbol{\phi}})\\\ 
-    &amp;= \sum_{i=1}^K\log P({\mathbf{S}}={\mathbf{{s}}}_i, {\mathbf{V}}={\mathbf{{v}}}_i;{\boldsymbol{\phi}})
+{\mathcal{L}}(\mathcal{X}; {\boldsymbol{\phi}}) &amp;\mathrel{\stackrel{\textnormal{ def}}{=}}\log\prod_{i=1}^KP({\mathbf{S}}={\mathbf{{s}}}_i, {\mathbf{V}}={\mathbf{{v}}}_i;{\boldsymbol{\phi}})\\\
+&amp;= \sum_{i=1}^K\log P({\mathbf{S}}={\mathbf{{s}}}_i, {\mathbf{V}}={\mathbf{{v}}}_i;{\boldsymbol{\phi}})
 \end{aligned}
 \tag{7}
 $$&lt;p&gt;
@@ -394,12 +324,12 @@ Eq. (4). Given our relationships from earlier, we can define this likelihood in 
 ${\boldsymbol{\phi}}$: &lt;/p&gt;
 $$
 \begin{aligned}
-    {\mathcal{L}}({\mathcal{C}}; {\boldsymbol{\phi}}) &amp;\mathrel{\stackrel{\textnormal{ def}}{=}}\log\prod_{i=1}^KP({\mathbf{S}}={\mathbf{{s}}}_i;{\boldsymbol{\phi}})\\\ 
-    &amp;= \log\prod_{i=1}^K\sum_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}}_i)} P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})
-    %&amp; \text{\color{gray}{Sub def in \cref{eq:pushforward}}}
-    \\\ 
-    &amp;= \sum_{i=1}^K \log\sum_{{\mathbf{{v}}}\in{\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}}_i)} P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})
-   % \\\ &amp;= \sum_{i=1}^K \log\sum_{\tokens\in\allsegmentations_{\vocab}(\str_i)} \qprior{|\tokens|}\prod_\tokindex \unigramdist{\token_\tokindex}
+{\mathcal{L}}({\mathcal{C}}; {\boldsymbol{\phi}}) &amp;\mathrel{\stackrel{\textnormal{ def}}{=}}\log\prod_{i=1}^KP({\mathbf{S}}={\mathbf{{s}}}_i;{\boldsymbol{\phi}})\\\
+&amp;= \log\prod_{i=1}^K\sum_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}}_i)} P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})
+%&amp; \text{\color{gray}{Sub def in \cref{eq:pushforward}}}
+\\\
+&amp;= \sum_{i=1}^K \log\sum_{{\mathbf{{v}}}\in{\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}}_i)} P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})
+% \\\ &amp;= \sum_{i=1}^K \log\sum_{\tokens\in\allsegmentations_{\vocab}(\str_i)} \qprior{|\tokens|}\prod_\tokindex \unigramdist{\token_\tokindex}
 \end{aligned}
 \tag{8}
 $$&lt;p&gt; where
@@ -409,7 +339,7 @@ Eq. (8) is a difficult quantity to maximize
 directly due to the log&amp;ndash;sum structure. Luckily, the
 expectation-maximization (EM) algorithm provides us a route for working
 with this situation.&lt;/p&gt;
-&lt;h3 id=&#34;sec:unigram_em&#34;&gt;Expectation-Maximization&lt;/h3&gt;
+&lt;h3 id="sec:unigram_em"&gt;Expectation-Maximization&lt;/h3&gt;
 &lt;p&gt;EM was designed for exactly the use case where wish to get MLE estimates
 for a data-generating process in which only part of the data is
 unobserved. Formally, the EM algorithm uses Jensen&amp;rsquo;s inequality to
@@ -419,7 +349,7 @@ Eq. (7) to
 Eq. (8). This is exactly the connection made
 by Kudo (2018) (even if not explicitly) when introducing their
 algorithm for approximating the parameters ${\boldsymbol{\phi}}$.&lt;/p&gt;
-&lt;h4 id=&#34;expected-complete-data-log-likelihood-under-observed-data-and-current-parameters&#34;&gt;Expected complete-data log-likelihood under observed data and current parameters.&lt;/h4&gt;
+&lt;h4 id="expected-complete-data-log-likelihood-under-observed-data-and-current-parameters"&gt;Expected complete-data log-likelihood under observed data and current parameters.&lt;/h4&gt;
 &lt;p&gt;Let ${{\boldsymbol{\phi}}^{(n)}}$ denote our current belief about what
 the unigram parameters might be (more discussion on how we can
 initialize this distribution coming up!). For now, we will assume that
@@ -442,9 +372,9 @@ $$
 \begin{aligned}
 {\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})
 &amp;\mathrel{\stackrel{\textnormal{ def}}{=}} \mathop{\mathrm{\mathbb{E}}}
-\big[{\mathcal{L}}(\mathcal{X}; {\boldsymbol{\phi}}) \mid {\mathcal{C}}, {{\boldsymbol{\phi}}^{(n)}}\big]\\\ 
-&amp;= \underset{ {\mathbf{V}}\mid {\mathbf{S}};{{\boldsymbol{\phi}}^{(n)}}}{\mathop{\mathrm{\mathbb{E}}}}\big[\sum_{i=1}^K \log P({\mathbf{S}}, {\mathbf{V}};{\boldsymbol{\phi}})\mid {\mathcal{C}}\big]\\\ 
-    &amp;= \sum_{i=1}^K\underset{{\mathbf{{v}}}\sim{\mathbf{V}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}}}{\mathop{\mathrm{\mathbb{E}}}}\big[\log P({\mathbf{S}}={\mathbf{{s}}}_i, {\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})\big]
+\big[{\mathcal{L}}(\mathcal{X}; {\boldsymbol{\phi}}) \mid {\mathcal{C}}, {{\boldsymbol{\phi}}^{(n)}}\big]\\\
+&amp;= \underset{ {\mathbf{V}}\mid {\mathbf{S}};{{\boldsymbol{\phi}}^{(n)}}}{\mathop{\mathrm{\mathbb{E}}}}\big[\sum_{i=1}^K \log P({\mathbf{S}}, {\mathbf{V}};{\boldsymbol{\phi}})\mid {\mathcal{C}}\big]\\\
+&amp;= \sum_{i=1}^K\underset{{\mathbf{{v}}}\sim{\mathbf{V}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}}}{\mathop{\mathrm{\mathbb{E}}}}\big[\log P({\mathbf{S}}={\mathbf{{s}}}_i, {\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})\big]
 \end{aligned}
 $$&lt;p&gt; In words, we can think of
 ${\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})$ as the
@@ -454,7 +384,7 @@ ${{\boldsymbol{\phi}}^{(n)}}$, while the log-likelihood inside is
 evaluated using the candidate parameters ${\boldsymbol{\phi}}$.&lt;/p&gt;
 &lt;p&gt;Now we will show how this quantity relates to the observed data
 log-likelihood.&lt;/p&gt;
-&lt;h4 id=&#34;observed-data-log-likelihood-and-jensens-inequality&#34;&gt;Observed data log-likelihood and Jensen&amp;rsquo;s inequality.&lt;/h4&gt;
+&lt;h4 id="observed-data-log-likelihood-and-jensens-inequality"&gt;Observed data log-likelihood and Jensen&amp;rsquo;s inequality.&lt;/h4&gt;
 &lt;p&gt;We start with a reminder of Jensen&amp;rsquo;s inequality, applied to our
 definition of $P({\mathbf{S}}={\mathbf{{s}}};{\boldsymbol{\phi}})$. For
 any valid distribution probability $P({\mathbf{V}}={\mathbf{{v}}})$,
@@ -462,7 +392,7 @@ Jensen&amp;rsquo;s inequality tells us &lt;/p&gt;
 $$
 \begin{aligned}
 \log P({\mathbf{S}}={\mathbf{{s}}};{\boldsymbol{\phi}})
-&amp;= \log \sum_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})} P({\mathbf{V}}={\mathbf{{v}}})\frac{P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})}{P({\mathbf{V}}={\mathbf{{v}}})}\\\ 
+&amp;= \log \sum_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})} P({\mathbf{V}}={\mathbf{{v}}})\frac{P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})}{P({\mathbf{V}}={\mathbf{{v}}})}\\\
 &amp;\ge \sum_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})} P({\mathbf{V}}={\mathbf{{v}}})\log \frac{P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})}{P({\mathbf{V}}={\mathbf{{v}}})}
 \end{aligned}
 $$&lt;p&gt; If we choose $P({\mathbf{V}}={\mathbf{{v}}})$ to be
@@ -472,15 +402,15 @@ this to our definition of the observed data log-likelihood from
 Eq. (8), we get &lt;/p&gt;
 $$
 \begin{aligned}
-{\mathcal{L}}&amp;({\mathcal{C}};{\boldsymbol{\phi}})= \sum_{i=1}^K \log\sum_{{\mathbf{{v}}}\in{\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}}_i)} P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})\\\ 
+{\mathcal{L}}&amp;({\mathcal{C}};{\boldsymbol{\phi}})= \sum_{i=1}^K \log\sum_{{\mathbf{{v}}}\in{\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}}_i)} P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})\\\
 &amp;\ge \sum_{i=1}^K\sum_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}}_i)}P({\mathbf{V}}={\mathbf{{v}}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}})
-\big[\log P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})-\log P({\mathbf{V}}={\mathbf{{v}}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}})\big]\\\ 
+\big[\log P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})-\log P({\mathbf{V}}={\mathbf{{v}}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}})\big]\\\
 &amp;= \sum_{i=1}^K\sum_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}}_i)}P({\mathbf{V}}={\mathbf{{v}}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}})
-\log P({\mathbf{S}}={\mathbf{{s}}}_i, {\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})\nonumber\\\ 
-&amp; \qquad\qquad\qquad\qquad-\sum_{i=1}^K\sum_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}}_i)}P({\mathbf{V}}={\mathbf{{v}}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}})\log P({\mathbf{V}}={\mathbf{{v}}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}})\\\ 
+\log P({\mathbf{S}}={\mathbf{{s}}}_i, {\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})\nonumber\\\
+&amp; \qquad\qquad\qquad\qquad-\sum_{i=1}^K\sum_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}}_i)}P({\mathbf{V}}={\mathbf{{v}}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}})\log P({\mathbf{V}}={\mathbf{{v}}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}})\\\
 &amp;= \underbrace{\sum_{i=1}^K\underset{{\mathbf{{v}}}\sim {\mathbf{V}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}}}{\mathop{\mathrm{\mathbb{E}}}}\big[\log P({\mathbf{S}}={\mathbf{{s}}}_i, {\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})\big]}_{{\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})}
 +\sum_{i=1}^K{\mathrm{H}}\big({\mathbf{V}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}}\big)
-\\\ 
+\\\
 &amp;\geq {\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})
 \end{aligned}
 \tag{9}
@@ -517,7 +447,7 @@ current beliefs to the new quantity. I&amp;rsquo;ll omit the proof of why this
 should converge (for a fixed ${\mathcal{V}}$) since, well, it&amp;rsquo;s in a lot
 of ML textbooks (you know, those ones we all swear we&amp;rsquo;ll read
 cover-to-cover someday...)&lt;/p&gt;
-&lt;h3 id=&#34;the-unigramlm-algorithm&#34;&gt;The UnigramLM Algorithm&lt;/h3&gt;
+&lt;h3 id="the-unigramlm-algorithm"&gt;The UnigramLM Algorithm&lt;/h3&gt;
 &lt;p&gt;The UnigramLM algorithm is typically seen as a &amp;ldquo;simple&amp;rdquo; application of
 EM. This, however, is not exactly the case. Importantly, EM assumes that
 the support of the distribution whose parameters we&amp;rsquo;re trying to
@@ -543,7 +473,7 @@ are defined over ${{\mathcal{V}}_{{n}}}$) unless otherwise stated.&lt;/p&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;Initialization:&lt;/strong&gt; Define an initial vocabulary ${\mathcal{V}}_0$.
 This could be something like all possible substrings of
-${\mathcal{C}}$, subject to a maximum length constraint.&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;
+${\mathcal{C}}$, subject to a maximum length constraint.&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt;
 Initialize ${\boldsymbol{\phi}}^{(0)}$ by some heuristic: the
 simplest would be uniform initialization, i.e., all pieces are
 assigned probability $1/|{\mathcal{V}}_0|$.&lt;/p&gt;
@@ -551,7 +481,7 @@ assigned probability $1/|{\mathcal{V}}_0|$.&lt;/p&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;Perform EM for $n=1, \dots N$ iterations or until piece
 probability estimates converge:&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;i.  &lt;strong&gt;E-step&lt;/strong&gt; (Expected data log-likelihood computation): The
+&lt;p&gt;i. &lt;strong&gt;E-step&lt;/strong&gt; (Expected data log-likelihood computation): The
 E-step in EM is for computing the expected complete data
 log-likelihood under our current parameter beliefs
 ${\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})$.
@@ -567,39 +497,39 @@ ${\mathbf{{v}}}\in{\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})$,
 we can write &lt;/p&gt;
 $$
 \begin{aligned}
-        \log P({\mathbf{S}}={\mathbf{{s}}}, {\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})&amp;=\log P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})\\\ 
-        &amp;=\log P({M}=|{\mathbf{{v}}}|)+\sum_{t=1}^{|{\mathbf{{v}}}|}\log {P({V}={v}_{t};{\boldsymbol{\phi}})}\\\ 
-        &amp;=\log P({M}=|{\mathbf{{v}}}|)+ \sum_{{v}\in{\mathcal{V}}} c_{{v}}({\mathbf{{v}}})\log {P({V}={v};{\boldsymbol{\phi}})}
-        \end{aligned}
+\log P({\mathbf{S}}={\mathbf{{s}}}, {\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})&amp;=\log P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})\\\
+&amp;=\log P({M}=|{\mathbf{{v}}}|)+\sum_{t=1}^{|{\mathbf{{v}}}|}\log {P({V}={v}_{t};{\boldsymbol{\phi}})}\\\
+&amp;=\log P({M}=|{\mathbf{{v}}}|)+ \sum_{{v}\in{\mathcal{V}}} c_{{v}}({\mathbf{{v}}})\log {P({V}={v};{\boldsymbol{\phi}})}
+\end{aligned}
 $$&lt;p&gt; Substituting these relationships into our definition of
 ${\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})$
 and using the linearity of
 expectations rule, we get
 &lt;/p&gt;
 $$\begin{aligned}
-          {\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})
-          = \underbrace{\sum_{i=1}^K\underset{{\mathbf{{v}}}\sim {\mathbf{V}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}}}{\mathop{\mathrm{\mathbb{E}}}}[\log P({M}=|{\mathbf{{v}}}|)]}_{\text{constant in }{\boldsymbol{\phi}}}
-          +\sum_{i=1}^K\sum_{{v}\in{\mathcal{V}}}
-          \underbrace{\underset{{\mathbf{{v}}}\sim {\mathbf{V}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}}}{\mathop{\mathrm{\mathbb{E}}}\left[ c_{{v}}({\mathbf{{v}}})\right]}}_{\mathrel{\stackrel{\textnormal{ def}}{=}}\widetilde{c}_{{v}}({\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}})}\log {P({V}={v};{\boldsymbol{\phi}})}
-          \end{aligned}
-  \tag{11}
-  $$&lt;p&gt; where
+{\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})
+= \underbrace{\sum_{i=1}^K\underset{{\mathbf{{v}}}\sim {\mathbf{V}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}}}{\mathop{\mathrm{\mathbb{E}}}}[\log P({M}=|{\mathbf{{v}}}|)]}_{\text{constant in }{\boldsymbol{\phi}}}
++\sum_{i=1}^K\sum_{{v}\in{\mathcal{V}}}
+\underbrace{\underset{{\mathbf{{v}}}\sim {\mathbf{V}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}}}{\mathop{\mathrm{\mathbb{E}}}\left[ c_{{v}}({\mathbf{{v}}})\right]}}_{\mathrel{\stackrel{\textnormal{ def}}{=}}\widetilde{c}_{{v}}({\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}})}\log {P({V}={v};{\boldsymbol{\phi}})}
+\end{aligned}
+\tag{11}
+$$&lt;p&gt; where
 $\widetilde{c}_{{v}}({\mathbf{{s}}};{{\boldsymbol{\phi}}^{(n)}})$
 are simply expected token counts under unigram model parameters
 ${{\boldsymbol{\phi}}^{(n)}}$, which can be computed as
 $\widetilde{c}_{{v}}({\mathbf{{s}}};{{\boldsymbol{\phi}}^{(n)}})= \sum_{{\mathbf{{v}}}\in{\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})} c_{{v}}({\mathbf{{v}}}) P({\mathbf{V}}={\mathbf{{v}}}\mid {\mathbf{S}}={\mathbf{{s}}};{{\boldsymbol{\phi}}^{(n)}})$. Lastly, if we define the corpus-level expected counts as
 &lt;/p&gt;
 $$
-          \widehat{c}_{{v}}({\mathcal{C}};{\boldsymbol{\phi}}) \mathrel{\stackrel{\textnormal{ def}}{=}} \sum_{{\mathbf{{s}}}\in{\mathcal{C}}} \widetilde{c}_{{v}}({\mathbf{{s}}};{\boldsymbol{\phi}})
-  \tag{12}
-  $$&lt;p&gt; and substitute them into our expansion in
+\widehat{c}_{{v}}({\mathcal{C}};{\boldsymbol{\phi}}) \mathrel{\stackrel{\textnormal{ def}}{=}} \sum_{{\mathbf{{s}}}\in{\mathcal{C}}} \widetilde{c}_{{v}}({\mathbf{{s}}};{\boldsymbol{\phi}})
+\tag{12}
+$$&lt;p&gt; and substitute them into our expansion in
 Eq. 11, then the equality reduces to
 &lt;/p&gt;
 $$
-          {\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})
-          = \text{const} + \underbrace{\sum_{{v}\in{\mathcal{V}}}\widehat{c}_{{v}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})\log {P({V}={v};{\boldsymbol{\phi}})}}_{\mathrel{\stackrel{\textnormal{ def}}{=}}\bar{{\mathcal{Q}}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})}
-  \tag{13}
-  $$&lt;p&gt;
+{\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})
+= \text{const} + \underbrace{\sum_{{v}\in{\mathcal{V}}}\widehat{c}_{{v}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})\log {P({V}={v};{\boldsymbol{\phi}})}}_{\mathrel{\stackrel{\textnormal{ def}}{=}}\bar{{\mathcal{Q}}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})}
+\tag{13}
+$$&lt;p&gt;
 where we have added the definition of $\bar{{\mathcal{Q}}}$
 (simply ${\mathcal{Q}}$ without the &amp;ldquo;$\mathrm{const}$&amp;rdquo; term)
 since it will be useful later. From the above, we can see that
@@ -614,7 +544,7 @@ ${\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})$. In words, this
 lattice forms a directed acyclic graph: nodes correspond to
 positions in the string and edges originating from the nodes
 correspond to tokens ${v}\in
-          {\mathcal{V}}$ that can begin at that position and end at
+{\mathcal{V}}$ that can begin at that position and end at
 another (i.e., pieces whose symbol sequences match the
 substring). Each edge is weighted by the token&amp;rsquo;s probability
 under the current parameters, ${\phi^{(n)}_{v}}$. Valid paths
@@ -635,7 +565,7 @@ our current parameters ${{\boldsymbol{\phi}}^{(n)}}$. Also of
 note is that this is where a length prior &lt;em&gt;could&lt;/em&gt; have an effect
 on the model parameters we learn. But the term is often never
 actually used in the model definition.&lt;/p&gt;
-&lt;p&gt;ii.  &lt;strong&gt;M-step&lt;/strong&gt; (maximize ${\boldsymbol{\phi}}$ and update
+&lt;p&gt;ii. &lt;strong&gt;M-step&lt;/strong&gt; (maximize ${\boldsymbol{\phi}}$ and update
 ${{\boldsymbol{\phi}}^{(n)}}$): In the M-step, we want to
 maximize
 ${\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})$
@@ -650,24 +580,24 @@ counts that we got from the segmenting the corpus according to
 our prior model parameter beliefs: &lt;/p&gt;
 $$
 \begin{aligned}
-        \max_{{\boldsymbol{\phi}}}&amp;\sum_{{v}\in{{\mathcal{V}}}}\widehat{c}_{{v}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})\log {P({V}={v};{\boldsymbol{\phi}})}\\\ 
-        &amp;\text{s.t.}\quad
-        \sum_{{v}\in{\mathcal{V}}}{\phi_{v}}=1,{\phi_{v}}\ge 0
-        \end{aligned}
+\max_{{\boldsymbol{\phi}}}&amp;\sum_{{v}\in{{\mathcal{V}}}}\widehat{c}_{{v}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})\log {P({V}={v};{\boldsymbol{\phi}})}\\\
+&amp;\text{s.t.}\quad
+\sum_{{v}\in{\mathcal{V}}}{\phi_{v}}=1,{\phi_{v}}\ge 0
+\end{aligned}
 $$&lt;p&gt; The solution (normalized expected counts) is
 very recognizable, as it is essentially the same as the MLE for
 a standard multinomial distribution, albeit using expected
 counts rather than pure counts: &lt;/p&gt;
 $$
-        {\phi^{(n+1)}_{v}}
-        =
-        \frac{\widehat{c}_{{v}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})}
-        {\sum_{{v}&#39;\in{{\mathcal{V}}}}\widehat{c}_{{v}&#39;}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})}.
+{\phi^{(n+1)}_{v}}
+=
+\frac{\widehat{c}_{{v}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})}
+{\sum_{{v}'\in{{\mathcal{V}}}}\widehat{c}_{{v}'}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})}.
 \tag{14}
 $$&lt;p&gt;
 The length-prior term is constant in ${\boldsymbol{\phi}}$ and
 does not alter the update (for fixed ${\mathcal{V}}$).&lt;/p&gt;
-&lt;p&gt;iii.  &lt;strong&gt;Pruning:&lt;/strong&gt; After applying the above steps, the vocabulary
+&lt;p&gt;iii. &lt;strong&gt;Pruning:&lt;/strong&gt; After applying the above steps, the vocabulary
 itself will not have changed (only the per-piece probabilities
 are updated). We can optionally prune some subset of pieces,
 creating a new ${\mathcal{V}}_{n+1}$. For example, if the the
@@ -680,7 +610,7 @@ distribution over ${\mathcal{V}}_{n+1}$. We elaborate more on
 this process (and how we determine token &amp;ldquo;importance&amp;rdquo;) below.&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;h4 id=&#34;sec:unigram_pruning&#34;&gt;Strategies for pruning tokens.&lt;/h4&gt;
+&lt;h4 id="sec:unigram_pruning"&gt;Strategies for pruning tokens.&lt;/h4&gt;
 &lt;p&gt;Because the initial vocabulary ${\mathcal{V}}_0$ is typically
 over-complete (often $|{\mathcal{V}}_0| \gg |{\mathcal{V}}|$),
 UnigramLM applies a pruning step &lt;em&gt;within&lt;/em&gt; the EM iterations to gradually
@@ -698,11 +628,11 @@ associated with token ${v}$ as the change (typically a decrease) in the
 corpus log-likelihood when ${v}$ is removed from the model:
 &lt;/p&gt;
 $$
-    {L}({v})
-    \mathrel{\stackrel{\textnormal{ def}}{=}}
-    \bar{{\mathcal{Q}}}({\boldsymbol{\phi}}^{(n+1)};{{\boldsymbol{\phi}}^{(n)}}) 
-    -
-    \bar{{\mathcal{Q}}}({\boldsymbol{\phi}}^{(n+1)}_{-{v}};{{\boldsymbol{\phi}}^{(n)}_{-{v}}}),
+{L}({v})
+\mathrel{\stackrel{\textnormal{ def}}{=}}
+\bar{{\mathcal{Q}}}({\boldsymbol{\phi}}^{(n+1)};{{\boldsymbol{\phi}}^{(n)}})
+-
+\bar{{\mathcal{Q}}}({\boldsymbol{\phi}}^{(n+1)}_{-{v}};{{\boldsymbol{\phi}}^{(n)}_{-{v}}}),
 \tag{15}
 $$&lt;p&gt;The notation ${{\boldsymbol{\phi}}^{(n)}_{-{v}}}$ in
 Eq. (15) refers to the unigram distribution obtained
@@ -718,7 +648,7 @@ $\bar{{\mathcal{Q}}}({\boldsymbol{\phi}}^{(n+1)}_{-{v}};{{\boldsymbol{\phi}}^{(n
 in Eq. 15 for a given ${v}$ generally requires a
 separate forward&amp;ndash;backward pass over the corpus. This is because
 disallowing the use of ${v}$ in segmentations changes both the set of
-valid paths and the total probability of those paths. &lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt; The new
+valid paths and the total probability of those paths. &lt;sup id="fnref:5"&gt;&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref"&gt;5&lt;/a&gt;&lt;/sup&gt; The new
 per-string marginal probabilities (and expected token counts) under
 ${\boldsymbol{\phi}}^{(n+1)}_{-{v}}$. cannot, in general, be recovered
 from forward/backward marginals computed under
@@ -740,12 +670,12 @@ of the algorithm. It is often chosen such that the target vocabulary
 size $|{\mathcal{V}}|$ is reached after a fixed number of pruning
 iterations $J$, e.g., &lt;/p&gt;
 $$
-    k_n = \min\left(
-        \frac{1}{J}\bigl(|{\mathcal{V}}_0| - |{\mathcal{V}}|\bigr),
-         \max\bigl(0, |{\mathcal{V}}_n| - |{\mathcal{V}}|\bigr)
-    \right).
+k_n = \min\left(
+\frac{1}{J}\bigl(|{\mathcal{V}}_0| - |{\mathcal{V}}|\bigr),
+\max\bigl(0, |{\mathcal{V}}_n| - |{\mathcal{V}}|\bigr)
+\right).
 \tag{16}
-$$&lt;h4 id=&#34;approximations-of-&#34;&gt;Approximations of ${L}$.&lt;/h4&gt;
+$$&lt;h4 id="approximations-of-"&gt;Approximations of ${L}$.&lt;/h4&gt;
 &lt;p&gt;To avoid the need to resegment the corpus to compute each ${v}$&amp;rsquo;s loss,
 several approximations can be used to compute per-piece losses. A simple
 approximation would be to use the log-likelihood contribution of a token
@@ -758,59 +688,59 @@ by the best alternative segmentation of that piece, i.e., the best
 alternative segmentation of the string ${g}({v})$ when ${v}$ is not in
 the vocabulary.&lt;/p&gt;
 &lt;p&gt;Formally, let
-${\mathbf{{v}}}&#39; = {h}_{{{\boldsymbol{\phi}}^{(n)}_{-{v}}}}({g}({v}))$
+${\mathbf{{v}}}' = {h}_{{{\boldsymbol{\phi}}^{(n)}_{-{v}}}}({g}({v}))$
 be the best segmentation of the string ${\mathbf{{s}}}= {g}({v})$ under
-${{\boldsymbol{\phi}}^{(n)}_{-{v}}}$.&lt;sup id=&#34;fnref:6&#34;&gt;&lt;a href=&#34;#fn:6&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;6&lt;/a&gt;&lt;/sup&gt; The approximate loss is then
+${{\boldsymbol{\phi}}^{(n)}_{-{v}}}$.&lt;sup id="fnref:6"&gt;&lt;a href="#fn:6" class="footnote-ref" role="doc-noteref"&gt;6&lt;/a&gt;&lt;/sup&gt; The approximate loss is then
 the change to corpus log-likelihood when replacing every use of
 ${P({V}={v};{{\boldsymbol{\phi}}^{(n)}})}$ with
-$\prod_{{t}=1}^{|{\mathbf{{v}}}&#39;|}{P({V}={v}&#39;_{t}; {{\boldsymbol{\phi}}^{(n)}_{-{v}}})}$
+$\prod_{{t}=1}^{|{\mathbf{{v}}}'|}{P({V}={v}'_{t}; {{\boldsymbol{\phi}}^{(n)}_{-{v}}})}$
 under the new renormalized unigram probabilities
 ${{\boldsymbol{\phi}}^{(n)}_{-{v}}}$. This loss can be computed
 concisely as:
 &lt;/p&gt;
 $$
-\widehat{L}({v})\approx \widehat{c}_{{v}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})\left[\log {P({V}={v};{{\boldsymbol{\phi}}^{(n)}})} - \log \prod_{{t}=1}^{|{\mathbf{{v}}}&#39;|}{P({V}={v}&#39;_{t}; {{\boldsymbol{\phi}}^{(n)}_{-{v}}})}\right]
+\widehat{L}({v})\approx \widehat{c}_{{v}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})\left[\log {P({V}={v};{{\boldsymbol{\phi}}^{(n)}})} - \log \prod_{{t}=1}^{|{\mathbf{{v}}}'|}{P({V}={v}'_{t}; {{\boldsymbol{\phi}}^{(n)}_{-{v}}})}\right]
 $$&lt;p&gt;&lt;strong&gt;Example 3&lt;/strong&gt; (Toy pruning example). &lt;em&gt;Suppose our corpus contains the
-string ${\mathbf{{s}}}= \text{``internationalization&#39;&#39;}$&lt;/em&gt;&lt;/p&gt;
+string ${\mathbf{{s}}}= \text{``internationalization''}$&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;and our vocabulary includes the tokens $$
 \{
-    \text{international},\quad
-    \text{inter},\quad
-    \text{national},\quad
-    \text{ization},\quad
-    \text{al},\ldots
+\text{international},\quad
+\text{inter},\quad
+\text{national},\quad
+\text{ization},\quad
+\text{al},\ldots
 \}
 $$ Assume that under the current parameters
 ${{\boldsymbol{\phi}}^{(n)}}$, the posterior expected corpus-level
 counts are
 $$
 \widehat{c}_{\text{international}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})
-    \ll
-    \widehat{c}_{\text{inter}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}}),
-    \widehat{c}_{\text{national}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}}),
-    \widehat{c}_{\text{ization}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})
+\ll
+\widehat{c}_{\text{inter}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}}),
+\widehat{c}_{\text{national}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}}),
+\widehat{c}_{\text{ization}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})
 $$&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;To approximate the contribution of ${v}_{\text{international}}$, we
 consider its best alternative segmentation when it is removed from the
 vocabulary. Let
 $$
-{\mathbf{{v}}}&#39; = \langle \text{inter}, \text{national} \rangle
+{\mathbf{{v}}}' = \langle \text{inter}, \text{national} \rangle
 $$ be
 the Viterbi segmentation of the string ${g}(\text{international})$ under
 the renormalized distribution ${{\boldsymbol{\phi}}^{(n)}_{-{v}}}$. The
 approximate loss associated with pruning $\text{international}$ is then
 $$
 \begin{aligned}
-    \widehat{L}(\text{international};{{\boldsymbol{\phi}}^{(n)}})
-    &amp;\approx
-    \widehat{c}_{\text{international}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})
-    \log \frac{
-        {P({V}=\text{international};{{\boldsymbol{\phi}}^{(n)}})}
-    }{
-        {P({V}=\text{inter}; {{\boldsymbol{\phi}}^{(n)}_{-{v}}})}
-        \cdot
-        {P({V}=\text{national}; {{\boldsymbol{\phi}}^{(n)}_{-{v}}})}
-    }.
+\widehat{L}(\text{international};{{\boldsymbol{\phi}}^{(n)}})
+&amp;\approx
+\widehat{c}_{\text{international}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})
+\log \frac{
+{P({V}=\text{international};{{\boldsymbol{\phi}}^{(n)}})}
+}{
+{P({V}=\text{inter}; {{\boldsymbol{\phi}}^{(n)}_{-{v}}})}
+\cdot
+{P({V}=\text{national}; {{\boldsymbol{\phi}}^{(n)}_{-{v}}})}
+}.
 \end{aligned}
 $$ Intuitively, if ${v}_{\text{international}}$ is both
 rare (small
@@ -824,7 +754,7 @@ paths&amp;rsquo; probabilities that might happen as a result of removing ${v}$
 from the vocabulary, it seems to work fairly well in practice as a
 pruning heuristic (although I don&amp;rsquo;t believe that anyone has actually
 tried to run the algorithm with the real, brute-force loss computation).&lt;/p&gt;
-&lt;h3 id=&#34;implementation-in-the-sentencepiece-library&#34;&gt;Implementation in the SentencePiece library&lt;/h3&gt;
+&lt;h3 id="implementation-in-the-sentencepiece-library"&gt;Implementation in the SentencePiece library&lt;/h3&gt;
 &lt;p&gt;In practice, the UnigramLM algorithm as we know it is largely defined by
 the public SentencePiece implementation, since Kudo (2018) give
 only a high-level description and leave many engineering choices
@@ -847,7 +777,6 @@ SentencePiece does not use the plain MLE
 M-step update from
 Eq. (14). Instead, it adopts a Variational Bayesian
 approach with a Dirichlet prior, replacing expected counts with their
-
 :
 ${\phi^{(n+1)}_{v}}\propto\exp(\Psi(\widehat{c}_{{v}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})+\alpha_{v}))$.
 This update is implicitly calculating the geometric mean of the
@@ -859,8 +788,8 @@ effect of performing standard additive smoothing: it&amp;rsquo;s always the case
 that $\exp(\psi(x)) &lt; x$, however, for small $x$ (rare tokens), the
 relative &amp;ldquo;discount&amp;rdquo; is significantly larger. It thus acts as a
 regularizer that disproportionately penalizes tokens with low expected
-counts, sending their assigned probability mass closer to zero.  This is done on top of a 
- for tokens whose expected counts are below a certain threshold.&lt;/p&gt;
+counts, sending their assigned probability mass closer to zero. This is done on top of a
+for tokens whose expected counts are below a certain threshold.&lt;/p&gt;
 &lt;p&gt;Arguably some of the more critical design choices to be aware of are
 those pertaining to normalization and pretokenization, as these change
 which segmentations are feasible. By default it applies NFKC
@@ -876,23 +805,22 @@ albeit the one that people are typically referring to (rather than an
 implementation-free mathematical ideal) when talking about &amp;ldquo;the
 UnigramLM tokenization algorithm.&amp;rdquo;&lt;/p&gt;
 &lt;!-- ##### _Acknowledgments_
-
-As with pretty much any technical work I&#39;ve written, Tiago Pimentel provided critical commentary and recommendations for this blogpost. Thanks, PhD sibling :)  --&gt;
-&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+As with pretty much any technical work I've written, Tiago Pimentel provided critical commentary and recommendations for this blogpost. Thanks, PhD sibling :) --&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
 &lt;hr&gt;
 &lt;ol&gt;
-&lt;li id=&#34;fn:1&#34;&gt;
+&lt;li id="fn:1"&gt;
 &lt;p&gt;${v}$ are also sometimes called subwords; we avoid this naming
 because ${v}$ need not align with orthographic words, in their
-typical definition.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+typical definition.&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
-&lt;li id=&#34;fn:2&#34;&gt;
+&lt;li id="fn:2"&gt;
 &lt;p&gt;$\circ$ denotes string concatenation and when applied to tokens,
 indicates the pieces&amp;rsquo; symbols are concatenated together (perhaps
 with some special formatting if symbols from ${\Gamma}$ are present
-in the piece).&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+in the piece).&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
-&lt;li id=&#34;fn:3&#34;&gt;
+&lt;li id="fn:3"&gt;
 &lt;p&gt;The distribution can also be made proper with the use of an EOS
 symbol, which is the more common way of specifying a language model.
 The use of ${M}$ in this situation (a non-autoregressive model) is a
@@ -900,12 +828,12 @@ bit more general (if the distribution of ${M}$ follows a power law,
 then our distribution over token sequences could equivalently be
 represented using an EOS symbol). The use of ${M}$ though allows us
 to handle sequence length without adding a special token to our
-vocabulary.&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+vocabulary.&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
-&lt;li id=&#34;fn:4&#34;&gt;
-&lt;p&gt;There are several ways that this seed vocabulary can be created. The Enhanced Suffix Array is one of the more common algorithms. Often, pretokenization is performed on the corpus and one of the more common pretokenization rules splits on whitespace, preventing pieces from crossing whitespace boundaries, although that&amp;rsquo;s kind of an arbitrary rule&amp;hellip;&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;li id="fn:4"&gt;
+&lt;p&gt;There are several ways that this seed vocabulary can be created. The Enhanced Suffix Array is one of the more common algorithms. Often, pretokenization is performed on the corpus and one of the more common pretokenization rules splits on whitespace, preventing pieces from crossing whitespace boundaries, although that&amp;rsquo;s kind of an arbitrary rule&amp;hellip;&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
-&lt;li id=&#34;fn:5&#34;&gt;
+&lt;li id="fn:5"&gt;
 &lt;p&gt;Explicitly, relative to the original model, two coupled changes
 occur when removing ${v}$ from ${{\mathcal{V}}_{{n}}}$: (i) the
 feasible set of paths shrinks from
@@ -914,272 +842,11 @@ ${\mathcal{T}}_{{\mathcal{V}}_{n+1}}({\mathbf{{s}}})$ (all
 segmentations using ${v}$ are removed); (ii) the per-edge weights
 change after the renormalization of ${{\boldsymbol{\phi}}^{(n)}}$
 and the marginal probabilities of remaining paths must be
-recomputed.&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+recomputed.&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
-&lt;li id=&#34;fn:6&#34;&gt;
+&lt;li id="fn:6"&gt;
 &lt;p&gt;This segmentation may need to include an UNK token depending on
-the base vocabulary.&amp;#160;&lt;a href=&#34;#fnref:6&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+the base vocabulary.&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Pandas</title>
-      <link>https://cimeister.github.io/projects/pandas/</link>
-      <pubDate>Thu, 26 Oct 2023 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/projects/pandas/</guid>
-      <description>&lt;p&gt;Flexible and powerful data analysis / manipulation library for Python, providing labeled data structures.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>PyTorch</title>
-      <link>https://cimeister.github.io/projects/pytorch/</link>
-      <pubDate>Thu, 26 Oct 2023 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/projects/pytorch/</guid>
-      <description>&lt;p&gt;PyTorch is a Python package that provides tensor computation (like NumPy) with strong GPU acceleration.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>scikit-learn</title>
-      <link>https://cimeister.github.io/projects/scikit/</link>
-      <pubDate>Thu, 26 Oct 2023 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/projects/scikit/</guid>
-      <description>&lt;p&gt;scikit-learn is a Python module for machine learning built on top of SciPy and is distributed under the 3-Clause BSD license.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>A Formal Perspective on Byte-Pair Encoding</title>
-      <link>https://cimeister.github.io/publications/zouharal-acl-findings-23/</link>
-      <pubDate>Sat, 01 Jul 2023 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/zouharal-acl-findings-23/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>A Measure-theoretic Characterzation of Tight Language Model</title>
-      <link>https://cimeister.github.io/publications/dual-acl-23-a/</link>
-      <pubDate>Sat, 01 Jul 2023 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/dual-acl-23-a/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>On the Efficacy of Sampling Adapters</title>
-      <link>https://cimeister.github.io/publications/meisteral-acl-23/</link>
-      <pubDate>Sat, 01 Jul 2023 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/meisteral-acl-23/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Tokenization and the Noiseless Channel</title>
-      <link>https://cimeister.github.io/publications/zouharal-acl-23/</link>
-      <pubDate>Sat, 01 Jul 2023 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/zouharal-acl-23/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>On the Usefulness of Embeddings, Clusters and Strings for Text Generation Evaluation</title>
-      <link>https://cimeister.github.io/publications/pimentelal-iclr-23/</link>
-      <pubDate>Mon, 01 May 2023 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/pimentelal-iclr-23/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Mutual Information and Hallucinations in Abstractive Summarization</title>
-      <link>https://cimeister.github.io/publications/vanderpoelal-emnlp-22/</link>
-      <pubDate>Thu, 01 Dec 2022 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/vanderpoelal-emnlp-22/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Analyzing Wrap-Up Effects through an Information-Theoretic Lens</title>
-      <link>https://cimeister.github.io/publications/meisteral-acl-22-b/</link>
-      <pubDate>Sun, 01 May 2022 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/meisteral-acl-22-b/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Estimating the Entropy of Linguistic Distributions</title>
-      <link>https://cimeister.github.io/publications/aroraal-acl-22/</link>
-      <pubDate>Sun, 01 May 2022 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/aroraal-acl-22/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>On the probability–quality paradox in language generation generation</title>
-      <link>https://cimeister.github.io/publications/meisteral-acl-22-a/</link>
-      <pubDate>Sun, 01 May 2022 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/meisteral-acl-22-a/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Cluster-based Evaluation of Automatically Generated Text</title>
-      <link>https://cimeister.github.io/publications/pimentelal-arxiv-22/</link>
-      <pubDate>Sat, 01 Jan 2022 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/pimentelal-arxiv-22/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Locally Typical Sampling</title>
-      <link>https://cimeister.github.io/publications/meisteral-pre-22/</link>
-      <pubDate>Sat, 01 Jan 2022 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/meisteral-pre-22/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Naturalistic Causal Probing for Morpho-Syntax</title>
-      <link>https://cimeister.github.io/publications/aminial-tacl-22/</link>
-      <pubDate>Sat, 01 Jan 2022 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/aminial-tacl-22/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>On Decoding Strategies for Neural Text Generators</title>
-      <link>https://cimeister.github.io/publications/wiheral-tacl-22/</link>
-      <pubDate>Sat, 01 Jan 2022 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/wiheral-tacl-22/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Conditional Poisson Stochastic Beams</title>
-      <link>https://cimeister.github.io/publications/meisteral-emnlp-2021-b/</link>
-      <pubDate>Mon, 01 Nov 2021 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/meisteral-emnlp-2021-b/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Keyword2Text: A Plug-and-Play Method for Controlled Text Generation</title>
-      <link>https://cimeister.github.io/publications/pascualal-emnlp-2021/</link>
-      <pubDate>Mon, 01 Nov 2021 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/pascualal-emnlp-2021/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>On Homophony and Rényi Entropy</title>
-      <link>https://cimeister.github.io/publications/pimentelal-emnlp-2021-b/</link>
-      <pubDate>Mon, 01 Nov 2021 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/pimentelal-emnlp-2021-b/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Phone-level Uniform Information Density across and within Languages</title>
-      <link>https://cimeister.github.io/publications/pimentelal-emnlp-2021-a/</link>
-      <pubDate>Mon, 01 Nov 2021 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/pimentelal-emnlp-2021-a/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Revisiting the Uniform Information Density Hypothesis</title>
-      <link>https://cimeister.github.io/publications/meisteral-emnlp-2021-a/</link>
-      <pubDate>Mon, 01 Nov 2021 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/meisteral-emnlp-2021-a/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Determinantal Beam Search</title>
-      <link>https://cimeister.github.io/publications/meisteral2-acl-21/</link>
-      <pubDate>Mon, 02 Aug 2021 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/meisteral2-acl-21/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Is Sparse Attention more Interpretable?</title>
-      <link>https://cimeister.github.io/publications/meisteral3-acl-21/</link>
-      <pubDate>Mon, 02 Aug 2021 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/meisteral3-acl-21/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Language Model Evaluation Beyond Perplexity</title>
-      <link>https://cimeister.github.io/publications/meisteral-acl-21/</link>
-      <pubDate>Mon, 02 Aug 2021 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/meisteral-acl-21/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>A Cognitive Regularizer for Language Modeling</title>
-      <link>https://cimeister.github.io/publications/weial-acl-21/</link>
-      <pubDate>Sun, 01 Aug 2021 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/weial-acl-21/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Testing Machine Translation via Referential Transparency</title>
-      <link>https://cimeister.github.io/publications/heal-icse-2021/</link>
-      <pubDate>Sun, 23 May 2021 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/heal-icse-2021/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Searching for Search Errors in Neural Morphological Inflection</title>
-      <link>https://cimeister.github.io/publications/forster-eacl-21/</link>
-      <pubDate>Mon, 19 Apr 2021 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/forster-eacl-21/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>If Beam Search is the Answer, What was the Question?</title>
-      <link>https://cimeister.github.io/publications/meisteral-emnlp-20/</link>
-      <pubDate>Sun, 01 Nov 2020 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/meisteral-emnlp-20/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Best-First Beam Search</title>
-      <link>https://cimeister.github.io/publications/meisteral-tacl-20/</link>
-      <pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/meisteral-tacl-20/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Machine Translation Testing via Pathological Invariance</title>
-      <link>https://cimeister.github.io/publications/guptaal-fse-2020/</link>
-      <pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/guptaal-fse-2020/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Structure-Invariant Testing for Machine Translation</title>
-      <link>https://cimeister.github.io/publications/heal-icse-2020/</link>
-      <pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/heal-icse-2020/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Generalized Entropy Regularization or: There&#39;s Nothing Special about Label Smoothing</title>
-      <link>https://cimeister.github.io/publications/meisteral-acl-20/</link>
-      <pubDate>Wed, 01 Jul 2020 00:00:00 +0000</pubDate>
-      <guid>https://cimeister.github.io/publications/meisteral-acl-20/</guid>
-      <description></description>
-    </item>
-    
-  </channel>
-</rss>
+&lt;/div&gt;</description></item><item><title>Pandas</title><link>https://cimeister.github.io/projects/pandas/</link><pubDate>Thu, 26 Oct 2023 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/projects/pandas/</guid><description>&lt;p&gt;Flexible and powerful data analysis / manipulation library for Python, providing labeled data structures.&lt;/p&gt;</description></item><item><title>PyTorch</title><link>https://cimeister.github.io/projects/pytorch/</link><pubDate>Thu, 26 Oct 2023 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/projects/pytorch/</guid><description>&lt;p&gt;PyTorch is a Python package that provides tensor computation (like NumPy) with strong GPU acceleration.&lt;/p&gt;</description></item><item><title>scikit-learn</title><link>https://cimeister.github.io/projects/scikit/</link><pubDate>Thu, 26 Oct 2023 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/projects/scikit/</guid><description>&lt;p&gt;scikit-learn is a Python module for machine learning built on top of SciPy and is distributed under the 3-Clause BSD license.&lt;/p&gt;</description></item><item><title>A Formal Perspective on Byte-Pair Encoding</title><link>https://cimeister.github.io/publications/zouharal-acl-findings-23/</link><pubDate>Sat, 01 Jul 2023 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/zouharal-acl-findings-23/</guid><description/></item><item><title>A Measure-theoretic Characterzation of Tight Language Model</title><link>https://cimeister.github.io/publications/dual-acl-23-a/</link><pubDate>Sat, 01 Jul 2023 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/dual-acl-23-a/</guid><description/></item><item><title>On the Efficacy of Sampling Adapters</title><link>https://cimeister.github.io/publications/meisteral-acl-23/</link><pubDate>Sat, 01 Jul 2023 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/meisteral-acl-23/</guid><description/></item><item><title>Tokenization and the Noiseless Channel</title><link>https://cimeister.github.io/publications/zouharal-acl-23/</link><pubDate>Sat, 01 Jul 2023 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/zouharal-acl-23/</guid><description/></item><item><title>On the Usefulness of Embeddings, Clusters and Strings for Text Generation Evaluation</title><link>https://cimeister.github.io/publications/pimentelal-iclr-23/</link><pubDate>Mon, 01 May 2023 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/pimentelal-iclr-23/</guid><description/></item><item><title>Mutual Information and Hallucinations in Abstractive Summarization</title><link>https://cimeister.github.io/publications/vanderpoelal-emnlp-22/</link><pubDate>Thu, 01 Dec 2022 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/vanderpoelal-emnlp-22/</guid><description/></item><item><title>Analyzing Wrap-Up Effects through an Information-Theoretic Lens</title><link>https://cimeister.github.io/publications/meisteral-acl-22-b/</link><pubDate>Sun, 01 May 2022 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/meisteral-acl-22-b/</guid><description/></item><item><title>Estimating the Entropy of Linguistic Distributions</title><link>https://cimeister.github.io/publications/aroraal-acl-22/</link><pubDate>Sun, 01 May 2022 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/aroraal-acl-22/</guid><description/></item><item><title>On the probability–quality paradox in language generation generation</title><link>https://cimeister.github.io/publications/meisteral-acl-22-a/</link><pubDate>Sun, 01 May 2022 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/meisteral-acl-22-a/</guid><description/></item><item><title>Cluster-based Evaluation of Automatically Generated Text</title><link>https://cimeister.github.io/publications/pimentelal-arxiv-22/</link><pubDate>Sat, 01 Jan 2022 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/pimentelal-arxiv-22/</guid><description/></item><item><title>Locally Typical Sampling</title><link>https://cimeister.github.io/publications/meisteral-pre-22/</link><pubDate>Sat, 01 Jan 2022 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/meisteral-pre-22/</guid><description/></item><item><title>Naturalistic Causal Probing for Morpho-Syntax</title><link>https://cimeister.github.io/publications/aminial-tacl-22/</link><pubDate>Sat, 01 Jan 2022 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/aminial-tacl-22/</guid><description/></item><item><title>On Decoding Strategies for Neural Text Generators</title><link>https://cimeister.github.io/publications/wiheral-tacl-22/</link><pubDate>Sat, 01 Jan 2022 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/wiheral-tacl-22/</guid><description/></item><item><title>Conditional Poisson Stochastic Beams</title><link>https://cimeister.github.io/publications/meisteral-emnlp-2021-b/</link><pubDate>Mon, 01 Nov 2021 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/meisteral-emnlp-2021-b/</guid><description/></item><item><title>Keyword2Text: A Plug-and-Play Method for Controlled Text Generation</title><link>https://cimeister.github.io/publications/pascualal-emnlp-2021/</link><pubDate>Mon, 01 Nov 2021 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/pascualal-emnlp-2021/</guid><description/></item><item><title>On Homophony and Rényi Entropy</title><link>https://cimeister.github.io/publications/pimentelal-emnlp-2021-b/</link><pubDate>Mon, 01 Nov 2021 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/pimentelal-emnlp-2021-b/</guid><description/></item><item><title>Phone-level Uniform Information Density across and within Languages</title><link>https://cimeister.github.io/publications/pimentelal-emnlp-2021-a/</link><pubDate>Mon, 01 Nov 2021 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/pimentelal-emnlp-2021-a/</guid><description/></item><item><title>Revisiting the Uniform Information Density Hypothesis</title><link>https://cimeister.github.io/publications/meisteral-emnlp-2021-a/</link><pubDate>Mon, 01 Nov 2021 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/meisteral-emnlp-2021-a/</guid><description/></item><item><title>Determinantal Beam Search</title><link>https://cimeister.github.io/publications/meisteral2-acl-21/</link><pubDate>Mon, 02 Aug 2021 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/meisteral2-acl-21/</guid><description/></item><item><title>Is Sparse Attention more Interpretable?</title><link>https://cimeister.github.io/publications/meisteral3-acl-21/</link><pubDate>Mon, 02 Aug 2021 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/meisteral3-acl-21/</guid><description/></item><item><title>Language Model Evaluation Beyond Perplexity</title><link>https://cimeister.github.io/publications/meisteral-acl-21/</link><pubDate>Mon, 02 Aug 2021 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/meisteral-acl-21/</guid><description/></item><item><title>A Cognitive Regularizer for Language Modeling</title><link>https://cimeister.github.io/publications/weial-acl-21/</link><pubDate>Sun, 01 Aug 2021 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/weial-acl-21/</guid><description/></item><item><title>Testing Machine Translation via Referential Transparency</title><link>https://cimeister.github.io/publications/heal-icse-2021/</link><pubDate>Sun, 23 May 2021 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/heal-icse-2021/</guid><description/></item><item><title>Searching for Search Errors in Neural Morphological Inflection</title><link>https://cimeister.github.io/publications/forster-eacl-21/</link><pubDate>Mon, 19 Apr 2021 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/forster-eacl-21/</guid><description/></item><item><title>If Beam Search is the Answer, What was the Question?</title><link>https://cimeister.github.io/publications/meisteral-emnlp-20/</link><pubDate>Sun, 01 Nov 2020 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/meisteral-emnlp-20/</guid><description/></item><item><title>Best-First Beam Search</title><link>https://cimeister.github.io/publications/meisteral-tacl-20/</link><pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/meisteral-tacl-20/</guid><description/></item><item><title>Machine Translation Testing via Pathological Invariance</title><link>https://cimeister.github.io/publications/guptaal-fse-2020/</link><pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/guptaal-fse-2020/</guid><description/></item><item><title>Structure-Invariant Testing for Machine Translation</title><link>https://cimeister.github.io/publications/heal-icse-2020/</link><pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/heal-icse-2020/</guid><description/></item><item><title>Generalized Entropy Regularization or: There's Nothing Special about Label Smoothing</title><link>https://cimeister.github.io/publications/meisteral-acl-20/</link><pubDate>Wed, 01 Jul 2020 00:00:00 +0000</pubDate><guid>https://cimeister.github.io/publications/meisteral-acl-20/</guid><description/></item></channel></rss>
