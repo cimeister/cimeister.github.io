@@ -1,6 +1,6 @@
 <!doctype html>
 <!-- This site was created with Hugo Blox. https://hugoblox.com -->
-<!-- Last Published: November 23, 2025 --><html lang="en-us" dir="ltr"
+<!-- Last Published: November 25, 2025 --><html lang="en-us" dir="ltr"
       data-wc-theme-default="system">
   
 <head>
@@ -1222,15 +1222,17 @@
 
         
         <p><strong>TL;DR</strong>:  This post is my attempt to write down the UnigramLM tokenization algorithm cleanly and explicitly because
-the original paper does not provide such a derivation. Rather, anyone that wants to deeply understand UnigramLM is forced to make odds and ends of the C++ code in the SentencePiece library. In this post, we&rsquo;ll formalize the unigram generative
+the original paper does not provide such a derivation and I believe there are  potentiall valuable insights from understanding the theoretical foundations of the method. In this post, we&rsquo;ll formalize the unigram generative
 model, derive the EM updates, explain why pruning is needed (and how it&rsquo;s done), and point out the
-spots where the practical implementation quietly diverges (and the implications that has for the mathematical models). Hopefully, by the end, you&rsquo;ll think the UnigramLM algorithm is just as cool as I do.</p>
+spots where the practical implementation quietly diverges (and the implications that has for the mathematical models).</p>
 <h3 id="intro-and-origins-of-this-blog-post">Intro and origins of this blog post</h3>
 <p><em>(feel free to <a href="#sec:background">skip</a> this section)</em></p>
-<p>These days, tokenization is basically syonymous with Byte-pair Encoding (BPE). If you ask someone &ldquo;do you know how tokenization works?&rdquo;, there&rsquo;s a decent chance you’ll get an answer like: &ldquo;Yeah yeah, I know BPE.&rdquo;&quot;</p>
-<p>But there&rsquo;s this other tokenizer sitting right next to BPE in practice: UnigramLM
-(the SentencePiece &ldquo;unigram&rdquo; model). On paper it looks totally different. Instead of greedily merging pairs, it says: &ldquo;let&rsquo;s uncover latent tokens and treat tokenization like inference.&rdquo; At least to me, that framing feels a lot more linguistically sane (or, at minimum, less like we’re playing subword Tetris).
-Naturally, I figured I should actually understand the algorithm.
+<p>These days, tokenization is basically synonymous with Byte-pair Encoding (BPE). If you ask someone &ldquo;do you know how tokenization works?&rdquo;, there&rsquo;s a decent chance you&rsquo;ll get an answer like: &ldquo;Yeah yeah, I know BPE.&rdquo;&quot;  But there&rsquo;s this other tokenizer sitting right next to BPE in practice: UnigramLM
+(the SentencePiece &ldquo;unigram&rdquo; model). On paper it looks totally different.</p>
+<h4 id="why-look-at-unigramlm-now-and-not-just-make-bpe-better">Why look at UnigramLM now (and not just &ldquo;make BPE better&rdquo;)?</h4>
+<p>Recent work keeps showing that tokenizers themselves can induce <a href="https://arxiv.org/abs/2305.15425" target="_blank" rel="noopener">unfairness</a> and <a href="https://arxiv.org/abs/2305.17179" target="_blank" rel="noopener">uneven performance</a> across languages, dialects, and writing systems. A lot of the community response has (reasonably!) focused on patching BPE: adding constraints, regularizers, or parity-aware merges. Those are valuable, but there&rsquo;s a risk in treating &ldquo;tokenization = BPE + tweaks&rdquo; as the whole design space. UnigramLM is a widely deployed alternative (T5, XLNet), and it comes from a fundamentally different modeling viewpoint. Instead of greedily merging pairs, it says: &ldquo;let&rsquo;s uncover latent tokens and treat tokenization like inference.&rdquo; At least to me, that framing feels a lot more linguistically sane (or, at minimum, less like we&rsquo;re playing subword Tetris). Taking that viewpoint seriously could open different and maybe cleaner directions for addressing tokenizer-induced unfairness — not by iterating on one algorithm forever, but by re-examining the assumptions we bake into tokenization in the first place.</p>
+<h4 id="why-this-blog-post">Why this blog post</h4>
+<p>With the above motivation in mind, I figured I should actually understand the algorithm.
 So I did what everyone does: I went to the <a href="https://aclanthology.org/P18-1007/" target="_blank" rel="noopener">original 2018 paper</a>. That&hellip; didn&rsquo;t get me very far. So then I went to the SentencePiece repo, hoping I could reconstruct the missing pieces from the code. After a brief flashback while staring at the C++ implementation to the terror of my undergraduate CS classes, I bailed on that approach too. Then I thought maybe the missing explanation was hiding in the HuggingFace documentation — but let&rsquo;s just say that rabbit hole ended like this:</p>
 
 
@@ -1244,9 +1246,8 @@ explanation for UnigramLM, because it doesn’t even come close.</em><br>
 
   </blockquote>
 
-<p>The original UnigramLM paper gives a nice high-level story, and the code clearly works in practice, but I couldn&rsquo;t find a single place that actually spells out the full generative model, why the algorithm is mathematically sound, or how all the little &ldquo;engineering details&rdquo; (like pruning and vocabulary initialization) fit into that picture. At that point, I figured to myself, well this is a <em>unigram</em> model. How complicated can it be? I can definitely reason through the logic myself. Turns out that was a tad bit naive. But I&rsquo;m nothing if not stubborn, so here we are a few months later!</p>
-<p>This post is what I wanted at the start of my deep dive into UnigramLM&ndash;an approachable but rigorous walkthrough of UnigramLM as a probabilistic model, showing why EM is a reasonable tool here, what the posterior over segmentations actually looks like, and how the SentencePiece-style implementation approximates all of this in practice. If you&rsquo;ve ever felt that UnigramLM is &ldquo;clear enough to use, but not clear enough to explain on a whiteboard,&rdquo; my hope is that this takes you the rest of the way to really understanding it, and maybe even extending it. Because at least I think its a pretty cool algorithm that deserves some of BPE&rsquo;s limelight.</p>
-<h1 id="sec:background">Tokenization Background and Notation</h1>
+<p>The original UnigramLM paper gives a nice high-level story, and the code clearly works in practice, but I couldn&rsquo;t find a single place that actually spells out the full generative model, why the algorithm is mathematically sound, or how all the little &ldquo;engineering details&rdquo; (like pruning and vocabulary initialization) fit into that picture. This post is my attempt to provide an approachable but rigorous walkthrough of UnigramLM as a probabilistic model, showing why EM is a reasonable tool here, what the posterior over segmentations actually looks like, and how the SentencePiece-style implementation approximates/diverges from all of this in practice. If you&rsquo;ve ever felt that UnigramLM is &ldquo;clear enough to use, but not clear enough to explain on a whiteboard,&rdquo; my hope is that this takes you the rest of the way to really understanding it, and maybe even extending it. Because at least I think its a pretty cool algorithm that deserves some of BPE&rsquo;s limelight.</p>
+<h2 id="sec:background">Tokenization Background and Notation</h2>
 <p>So that we&rsquo;re on the same page, let&rsquo;s start with a formal definition of tokenization.</p>
 <p>Let ${\mathbf{{s}}}=\langle{s}_{1},{s}_2,\dots\rangle$ be a string&mdash;a
 sequence of characters (or bytes) such that ${s}_{t}\in{\Sigma}$ for a
@@ -1328,13 +1329,14 @@ tokenizations has implications for how one should actually compute the
 probability of a string under a language model using a given vocabulary.
 See Cao and Rimell (2021) for a more detailed discussion of
 non-canonical tokenizations and why they matter in practice.</p>
-<h1 id="what-you-came-here-for-unigramlm">What you came here for: UnigramLM</h1>
+<h2 id="what-you-came-here-for-unigramlm">What you came here for: UnigramLM</h2>
 <p>The UnigramLM tokenization algorithm (Kudo 2018) takes a
 probabilistic-modeling approach to string tokenization. It defines an
 ${h}$, together with an algorithm for learning its parameters, by
 treating tokenization as inference in a latent-variable generative model
 over strings&mdash;in particular, a unigram generative model.</p>
-<h2 id="sec:gen_model">Generative model</h2>
+<p><strong>Few Sentence Description of UnigramLM</strong>: UnigramLM is basically what it sounds like: a unigram language model. The only parameters of the tokenization scheme are a unigram probability distribution. When learning the tokenizer, we learn both the vocabulary and piece probabilities of this unigram model that (approximately) maximize corpus log-likelihood. At inference time, given a string, UnigramLM chooses the segmentation (sequence of pieces) that has the highest probability under this learned unigram model. In contrast to BPE’s greedy merge story, UnigramLM’s behavior is really &ldquo;whichever segmentation makes the whole corpus most probable under this unigram model wins.&rdquo;</p>
+<h3 id="sec:gen_model">Generative model</h3>
 <p>The UnigramLM tokenization algorithm assumes that each observed string
 ${\mathbf{{s}}}$ arises from a latent sequence of tokens
 ${\mathbf{{v}}}$, where tokens are drawn independently from a fixed
@@ -1422,7 +1424,8 @@ Eq. (5) around, we also get the definition of the
 joint distribution over strings and token sequences:
 </p>
 $$P({\mathbf{S}}={\mathbf{{s}}}, {\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}}) = P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})\mathbb{1}\\{{\mathbf{{v}}}\in{\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}})\\},
-$$<p>For the moment, let&rsquo;s assume that we know ${\boldsymbol{\phi}}$, or at
+$$<h3 id="inference">Inference</h3>
+<p>For the moment, let&rsquo;s assume that we know ${\boldsymbol{\phi}}$, or at
 least have estimates for these parameters. At inference time (i.e., when
 segmenting text into tokens), the UnigramLM tokenization algorithm aims
 to find the most likely segmentation of ${\mathbf{{s}}}$ into tokens
@@ -1497,7 +1500,7 @@ ${\phi_{v}}$ and the underlying vocabulary ${\mathcal{V}}$ over which
 they are defined. The UnigramLM tokenization algorithm (described next)
 proposes a method for coming up with an estimate of these parameters
 from text data.</p>
-<h2 id="learning-model-parameters">Learning Model Parameters</h2>
+<h3 id="learning-model-parameters">Learning Model Parameters</h3>
 <p>Maximum likelihood estimation (MLE)&mdash;a standard approach to estimating
 model parameters&mdash;aims to find the model parameters that maximize the
 log-likelihood of our data. Under the UnigramLM assumptions about the
@@ -1545,7 +1548,7 @@ Eq. (8) is a difficult quantity to maximize
 directly due to the log&ndash;sum structure. Luckily, the
 expectation-maximization (EM) algorithm provides us a route for working
 with this situation.</p>
-<h3 id="sec:unigram_em">Expectation-Maximization</h3>
+<h4 id="sec:unigram_em">The Expectation-Maximization Algorithm in the Context of UnigramLM</h4>
 <p>EM was designed for exactly the use case where wish to get MLE estimates
 for a data-generating process in which only part of the data is
 unobserved. Formally, the EM algorithm uses Jensen&rsquo;s inequality to
@@ -1555,7 +1558,7 @@ Eq. (7) to
 Eq. (8). This is exactly the connection made
 by Kudo (2018) (even if not explicitly) when introducing their
 algorithm for approximating the parameters ${\boldsymbol{\phi}}$.</p>
-<h4 id="expected-complete-data-log-likelihood-under-observed-data-and-current-parameters">Expected complete-data log-likelihood under observed data and current parameters.</h4>
+<p><strong>Expected complete-data log-likelihood under observed data and current parameters.</strong></p>
 <p>Let ${{\boldsymbol{\phi}}^{(n)}}$ denote our current belief about what
 the unigram parameters might be (more discussion on how we can
 initialize this distribution coming up!). For now, we will assume that
@@ -1590,7 +1593,7 @@ ${{\boldsymbol{\phi}}^{(n)}}$, while the log-likelihood inside is
 evaluated using the candidate parameters ${\boldsymbol{\phi}}$.</p>
 <p>Now we will show how this quantity relates to the observed data
 log-likelihood.</p>
-<h4 id="observed-data-log-likelihood-and-jensens-inequality">Observed data log-likelihood and Jensen&rsquo;s inequality.</h4>
+<p><strong>Observed data log-likelihood and Jensen&rsquo;s inequality.</strong></p>
 <p>We start with a reminder of Jensen&rsquo;s inequality, applied to our
 definition of $P({\mathbf{S}}={\mathbf{{s}}};{\boldsymbol{\phi}})$. For
 any valid distribution probability $P({\mathbf{V}}={\mathbf{{v}}})$,
@@ -1675,6 +1678,7 @@ notational clutter, in defining the below algorithm, we&rsquo;ll use just
 ${\mathcal{V}}$; at step $n$ of the algorithm, you can assume
 ${\mathcal{V}}={{\mathcal{V}}_{{n}}}$ (and that all random variables
 are defined over ${{\mathcal{V}}_{{n}}}$) unless otherwise stated.</p>
+<p>If you&rsquo;d like to look at a trimmed down version of the pseudocode, you can <a href="#sec:pseudocode">skip to the end</a></p>
 <ol>
 <li>
 <p><strong>Initialization:</strong> Define an initial vocabulary ${\mathcal{V}}_0$.
@@ -1816,7 +1820,7 @@ distribution over ${\mathcal{V}}_{n+1}$. We elaborate more on
 this process (and how we determine token &ldquo;importance&rdquo;) below.</p>
 </li>
 </ol>
-<h4 id="sec:unigram_pruning">Strategies for pruning tokens.</h4>
+<p><strong>Strategies for pruning tokens.</strong> {#sec:unigram_pruning}</p>
 <p>Because the initial vocabulary ${\mathcal{V}}_0$ is typically
 over-complete (often $|{\mathcal{V}}_0| \gg |{\mathcal{V}}|$),
 UnigramLM applies a pruning step <em>within</em> the EM iterations to gradually
@@ -1881,7 +1885,7 @@ $$
          \max\bigl(0, |{\mathcal{V}}_n| - |{\mathcal{V}}|\bigr)
     \right).
 \tag{16}
-$$<h4 id="approximations-of-">Approximations of ${L}$.</h4>
+$$<p><strong>Approximations of ${L}$.</strong></p>
 <p>To avoid the need to resegment the corpus to compute each ${v}$&rsquo;s loss,
 several approximations can be used to compute per-piece losses. A simple
 approximation would be to use the log-likelihood contribution of a token
@@ -1960,7 +1964,38 @@ paths&rsquo; probabilities that might happen as a result of removing ${v}$
 from the vocabulary, it seems to work fairly well in practice as a
 pruning heuristic (although I don&rsquo;t believe that anyone has actually
 tried to run the algorithm with the real, brute-force loss computation).</p>
-<h3 id="implementation-in-the-sentencepiece-library">Implementation in the SentencePiece library</h3>
+<h4 id="sec:pseudocode">Concise Pseudocode</h4>
+<pre><code>Algorithm UnigramLM-Train(C, V_target_size, V0, phi0, k_n):
+    V   &lt;- V0
+    phi &lt;- phi0
+
+    while |V| &gt; V_target_size:
+
+        # ---- E-step ----
+        hat_c[v] &lt;- 0 for all v in V
+        for each string s in C:
+            lattice &lt;- build_lattice(s, V)
+            tilde_c &lt;- forward_backward_expected_counts(lattice, phi)
+            for each v in V:
+                hat_c[v] &lt;- hat_c[v] + tilde_c[v]
+
+        # ---- M-step ----
+        Z &lt;- sum_{v in V} hat_c[v]
+        for each v in V:
+            phi[v] &lt;- hat_c[v] / Z
+
+        # ---- Pruning (approx loss) ----
+        for each v in V:
+            v_alt &lt;- viterbi_best_segmentation(g(v), V \ {v}, phi)
+            alt_prob &lt;- product_{t in v_alt} phi[t]
+            Lhat[v] &lt;- hat_c[v] * ( log(phi[v]) - log(alt_prob) )
+
+        V &lt;- V \ bottom_k_tokens_by(Lhat, k_n)
+        phi &lt;- renormalize(phi over V)
+
+    return V, phi
+</code></pre>
+<h2 id="implementation-in-the-sentencepiece-library">Implementation in the SentencePiece library</h2>
 <p>In practice, the UnigramLM algorithm as we know it is largely defined by
 the public SentencePiece implementation, since Kudo (2018) give
 only a high-level description and leave many engineering choices
@@ -1985,9 +2020,10 @@ Eq. (14). Instead, it adopts a Variational Bayesian
 approach with a Dirichlet prior, replacing expected counts with their
 <a href="https://github.com/google/sentencepiece/blob/336900241c4943ae1e5f844b18292f532b3a21c7/src/unigram_model_trainer.cc#L390" target="_blank" rel="noopener">digamma-transformed counterparts</a>:
 ${\phi^{(n+1)}_{v}}\propto\exp(\Psi(\widehat{c}_{{v}}({\mathcal{C}};{{\boldsymbol{\phi}}^{(n)}})+\alpha_{v}))$.
-This update is implicitly calculating the geometric mean of the
-posterior Dirichlet distribution, where $\alpha_{v}$ can be seen as the
-prior belief about the counts we should observe for token ${v}$.
+While it might not seem like a large change to the original update rule, this choice is implicitly adding a
+prior belief about the the number of counts we should observe for each token.
+Explicitly, we&rsquo;re now calculating the geometric mean of a
+posterior Dirichlet distribution, where we&rsquo;re added in the belief token ${v}$ will be observed $\alpha_{v}$  times.
 Notably, SentencePiece uses an improper Haldane prior ($\alpha_{v}= 0$
 for all ${v}\in{\mathcal{V}}$). This choice essentially has the opposite
 effect of performing standard additive smoothing: it&rsquo;s always the case
@@ -2009,9 +2045,8 @@ very specific version of the abstract UnigramLM model described above,
 albeit the one that people are typically referring to (rather than an
 implementation-free mathematical ideal) when talking about &ldquo;the
 UnigramLM tokenization algorithm.&rdquo;</p>
-<!-- ##### _Acknowledgments_
-
-As with pretty much any technical work I've written, Tiago Pimentel provided critical commentary and recommendations for this blogpost. Thanks, PhD sibling :)  -->
+<h4 id="acknowledgments"><em>Acknowledgments</em></h4>
+<p>As with pretty much any technical work I&rsquo;ve written, Tiago Pimentel provided critical commentary and recommendations for this blogpost. Thanks, PhD sibling :)</p>
 <div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
@@ -2074,38 +2109,42 @@ the base vocabulary.&#160;<a href="#fnref:6" class="footnote-backref" role="doc-
       <ul>
         <li>
           <ul>
-            <li><a href="#intro-and-origins-of-this-blog-post">Intro and origins of this blog post</a></li>
+            <li><a href="#intro-and-origins-of-this-blog-post">Intro and origins of this blog post</a>
+              <ul>
+                <li><a href="#why-look-at-unigramlm-now-and-not-just-make-bpe-better">Why look at UnigramLM now (and not just &ldquo;make BPE better&rdquo;)?</a></li>
+                <li><a href="#why-this-blog-post">Why this blog post</a></li>
+              </ul>
+            </li>
           </ul>
         </li>
-      </ul>
-    </li>
-    <li><a href="#sec:background">Tokenization Background and Notation</a></li>
-    <li><a href="#what-you-came-here-for-unigramlm">What you came here for: UnigramLM</a>
-      <ul>
-        <li><a href="#sec:gen_model">Generative model</a>
+        <li><a href="#sec:background">Tokenization Background and Notation</a></li>
+        <li><a href="#what-you-came-here-for-unigramlm">What you came here for: UnigramLM</a>
           <ul>
-            <li>
+            <li><a href="#sec:gen_model">Generative model</a>
               <ul>
                 <li><a href="#some-useful-relationships-between--and-">Some useful relationships between  and .</a></li>
               </ul>
             </li>
-          </ul>
-        </li>
-        <li><a href="#learning-model-parameters">Learning Model Parameters</a>
-          <ul>
-            <li><a href="#sec:unigram_em">Expectation-Maximization</a>
+            <li><a href="#inference">Inference</a></li>
+            <li><a href="#learning-model-parameters">Learning Model Parameters</a>
               <ul>
-                <li><a href="#expected-complete-data-log-likelihood-under-observed-data-and-current-parameters">Expected complete-data log-likelihood under observed data and current parameters.</a></li>
-                <li><a href="#observed-data-log-likelihood-and-jensens-inequality">Observed data log-likelihood and Jensen&rsquo;s inequality.</a></li>
+                <li><a href="#sec:unigram_em">The Expectation-Maximization Algorithm in the Context of UnigramLM</a></li>
               </ul>
             </li>
             <li><a href="#the-unigramlm-algorithm">The UnigramLM Algorithm</a>
               <ul>
-                <li><a href="#sec:unigram_pruning">Strategies for pruning tokens.</a></li>
-                <li><a href="#approximations-of-">Approximations of .</a></li>
+                <li><a href="#sec:pseudocode">Concise Pseudocode</a></li>
               </ul>
             </li>
-            <li><a href="#implementation-in-the-sentencepiece-library">Implementation in the SentencePiece library</a></li>
+          </ul>
+        </li>
+        <li><a href="#implementation-in-the-sentencepiece-library">Implementation in the SentencePiece library</a>
+          <ul>
+            <li>
+              <ul>
+                <li><a href="#acknowledgments"><em>Acknowledgments</em></a></li>
+              </ul>
+            </li>
           </ul>
         </li>
       </ul>
