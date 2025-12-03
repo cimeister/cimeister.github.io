@@ -17,8 +17,8 @@
       <link>https://cimeister.github.io/blog/unigramlm/</link>
       <pubDate>Wed, 19 Nov 2025 00:00:00 +0000</pubDate>
       <guid>https://cimeister.github.io/blog/unigramlm/</guid>
-      <description>&lt;p&gt;&lt;strong&gt;TL;DR&lt;/strong&gt;:  This post is my attempt to write down the UnigramLM tokenization algorithm cleanly and explicitly because, well, I still haven&amp;rsquo;t found such a derivation and I think understanding the theory behind the method could help us make it better. I&amp;rsquo;ll formalize the generative model on which the algorithm&amp;rsquo;s assumptions [BETTER WORD/TERM] are based, derive the EM updates, explain why pruning is needed (and how it&amp;rsquo;s done), and point out the
-spots where the practical implementation defined by the SentencePiece library diverges from the pretty mathematical models. Hopefully, this post points out some interesting potential extensions/revisions to the current implementation.&lt;/p&gt;
+      <description>&lt;p&gt;&lt;strong&gt;TL;DR&lt;/strong&gt;:  This post is my attempt to write down the UnigramLM tokenization algorithm cleanly and explicitly because, well, I still haven&amp;rsquo;t found such a derivation and I think understanding the theory behind the method could help us make it better. I&amp;rsquo;ll formalize the generative model around which the algorithm is based, derive the EM updates, explain why pruning is needed (and how it&amp;rsquo;s done), and point out the
+spots where the practical implementation defined by the SentencePiece library diverges from the pretty mathematical models. I hope this post provides a new lens through which to look at the UnigramLM tokenization algorithim while pointing out some interesting potential extensions/revisions to the current implementation.&lt;/p&gt;
 &lt;h3 id=&#34;intro-and-origins-of-this-blog-post&#34;&gt;Intro and origins of this blog post&lt;/h3&gt;
 &lt;p&gt;&lt;em&gt;(feel free to 
  this section)&lt;/em&gt;&lt;/p&gt;
@@ -30,7 +30,7 @@ spots where the practical implementation defined by the SentencePiece library di
 &lt;h4 id=&#34;why-this-blog-post&#34;&gt;Why this blog post&lt;/h4&gt;
 &lt;p&gt;With the above motivation in mind, I figured I should actually understand the algorithm.
 So I did what everyone does: I went to the 
-. That&amp;hellip; didn&amp;rsquo;t get me very far. So then I went to the SentencePiece repo, hoping I could reconstruct the missing pieces from the code. After a brief flashback while staring at the C++ implementation to the terror of my undergraduate CS classes, I bailed on that approach too. Then I thought maybe the missing explanation was hiding in the HuggingFace documentation. But let&amp;rsquo;s just say that rabbit hole ended like this:&lt;/p&gt;
+. That&amp;hellip; didn&amp;rsquo;t get me very far. So then I went to the SentencePiece repo, hoping I could reconstruct the missing pieces from the code. After a brief flashback to the terror of my undergraduate CS classes while staring at the C++ implementation, I bailed on that approach too. Then I thought maybe the missing explanation was hiding in the HuggingFace documentation. But let&amp;rsquo;s just say that rabbit hole ended like this:&lt;/p&gt;
 
 
 
@@ -135,8 +135,7 @@ over strings&amp;mdash;in particular, a unigram generative model.&lt;/p&gt;
 &lt;p&gt;The UnigramLM tokenization algorithm assumes that each observed string
 ${\mathbf{{s}}}$ arises from a latent sequence of tokens
 ${\mathbf{{v}}}$, where tokens are drawn independently from a fixed
-probability distribution, i.e., from a unigram distribution over a fixed
-vocabulary. The data-generating distribution can thus be defined in
+probability distribution, i.e., token sequences are produced by a unigram language model. The data-generating distribution can thus be defined in
 terms of the unigram probabilities
 ${\boldsymbol{\phi}}\in \Delta^{|{\mathcal{V}}| - 1}$. Before we get to
 the definition of the data-generating distribution though, we have to
@@ -180,17 +179,30 @@ Eq. (2) where the length prior term cancels out:
 $$
    P({\mathbf{V}}={\mathbf{{v}}}\mid {M}={m};{\boldsymbol{\phi}}) = \prod_{{t}=1}^{{m}} {P({V}={v}_{t};{\boldsymbol{\phi}})},
 \tag{3}
-$$&lt;p&gt;
-One thing to note is that the parameters of
-${P({V};{\boldsymbol{\phi}})}{\cdot}$ are completely specified by
-${\boldsymbol{\phi}}$. This isn&amp;rsquo;t the case with
+$$&lt;h4 id=&#34;a-sidebar-on-the-length-prior&#34;&gt;A sidebar on the length prior.&lt;/h4&gt;
+&lt;p&gt;${M}$ is pretty much always ignored. I.e., people effectively assume the
+probability of a sequence being any particular length is constant across
+all valid lengths and compute token sequence probabilities using
+Eq. (3). This include the original version of
+the UnigramLM algorithm, so one could argue that the description given by
+the original paper and naming this thing &amp;quot;Unigram
+LM&amp;quot; is slightly misleading: it doesn&amp;rsquo;t define a valid language model
+over strings without the length prior. I&amp;rsquo;ll keep using the length prior
+in my definitions throughout this exposition so that you can get a sense
+for how it would have affected the algorithm. Small note: while the
+parameters of ${P({V};{\boldsymbol{\phi}})}{\cdot}$ are completely
+specified by ${\boldsymbol{\phi}}$, this isn&amp;rsquo;t the case with
 $P({\mathbf{V}};{\boldsymbol{\phi}})$, for which the parameters of ${M}$
-must also be known to fully specify the distribution. We won&amp;rsquo;t add any
-additional notation to $P({\mathbf{V}};{\boldsymbol{\phi}})$ to specify
-the parameters of ${M}$, though, since ${M}$ is pretty much always
-ignored. Rather, in yet another moment of &amp;rsquo;engineering convenience&#39;
-winning out over &amp;rsquo;theoretical elegance&amp;rsquo;, most people just compute token
-sequence probabilities in UnigramLM using Eq. 3.&lt;/p&gt;
+must also be known to fully specify an actual Unigram LM distribution. I
+won&amp;rsquo;t add any additional notation to
+$P({\mathbf{V}};{\boldsymbol{\phi}})$ to specify the parameters of
+${M}$, though, to avoid clutter and because it&amp;rsquo;s often ignored anyway.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Potential research direction: Exploring the effect of re-including the
+length prior in the UnigramLM model.&lt;/strong&gt; Given that compression is such a
+desirable property of tokenization, it seems to me that a parameter that
+influences the length of the chosen segmentation (we could use the
+length prior to bias segmentations towards shorter lengths) would be
+something worthwhile playing around with.&lt;/p&gt;
 &lt;p&gt;Given the deterministic mapping ${g}$ from tokens to strings, we can
 derive the distribution over strings&amp;mdash;our data-generating
 distribution&amp;mdash;as a pushforward of the distribution over tokens. Let
@@ -239,7 +251,9 @@ $$&lt;p&gt; where
 the second line follows from the relationship in
 Eq. (5)
 ($P({\mathbf{S}}={\mathbf{{s}}};{\boldsymbol{\phi}})$ does not depend on
-${\mathbf{{v}}}$ and so it doesn&amp;rsquo;t affect the argmax). As we can see in
+${\mathbf{{v}}}$ and so it doesn&amp;rsquo;t affect the argmax).&lt;/p&gt;
+&lt;h4 id=&#34;another-sidebar-on-the-length-prior&#34;&gt;Another sidebar on the length prior.&lt;/h4&gt;
+&lt;p&gt;As we can see in
 Eq. 6, the length prior (${M}$) is part of the
 posterior distribution and should thus affect the Viterbi segmentation;
 intuitively speaking, it biases the distribution towards token sequences
@@ -275,18 +289,8 @@ under the full model (including the length prior) is therefore
 ${\mathbf{{v}}}^{(1)}$, while under the approximation that drops
 $P({M}=\cdot)$, the two segmentations are equally probable. This
 illustrates that the length prior can in principle have a non-trivial
-affect on the inference result.&lt;/em&gt;
-:::&lt;/p&gt;
-&lt;p&gt;SentencePiece (and all other implementations of UnigramLM) effectively
-assume the length prior term is flat (i.e., sequence length
-probabilities are assumed to be constant for all valid lengths) and
-drops it, so in practice UnigramLM inference is usually done with the
-length-free objective (last line in Eq. 6). Unless otherwise specified, when
-talking about inference, we will assume use of
-this objective for faithfulness to the original
-algorithm. I&amp;rsquo;m spelling this out because it&amp;rsquo;s a silent approximation and
-it could potentially be interesting to look into the effects of this
-design choice!&lt;/p&gt;
+affect on the inference result.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;As hinted at earlier, SentencePiece (and all other implementations of UnigramLM that I&amp;rsquo;ve seen) drop the length prior term. Unless otherwise specified, when talking about inference, we will assume use of \cref{eq:approx-inference} for faithfulness to the original algorithm.&lt;/p&gt;
 &lt;p&gt;The true parameters of the generative process ${\boldsymbol{\phi}}$ are
 unknown, however; this includes both the piece probabilities
 ${\phi_{v}}$ and the underlying vocabulary ${\mathcal{V}}$ over which
@@ -448,16 +452,16 @@ ${\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})$. And
 this is the basis the EM algorithm, which iteratively updates
 ${\boldsymbol{\phi}}$ by choosing the value of it that maximizes
 ${\mathcal{Q}}({\boldsymbol{\phi}};{{\boldsymbol{\phi}}^{(n)}})$ until
-convergence. I&amp;rsquo;ll omit the proof of why EM should converge (for a fixed
-${\mathcal{V}}$) since, well, it&amp;rsquo;s in a lot of ML textbooks (you know,
-those ones we all swear we&amp;rsquo;ll read cover-to-cover someday...). But
-after all those derivations, I do think it&amp;rsquo;s helpful to look at our
+convergence.&lt;/p&gt;
+&lt;p&gt;After all those derivations, I do think it&amp;rsquo;s helpful to look at our
 ideal and actual objectives side-by-side, just to see what the
 difference is:&lt;/p&gt;
 $$
 \underbrace{\sum_{i=1}^K \log\sum_{{\mathbf{{v}}}\in{\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}}_i)} P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})}_{\text{objective we&#39;d ideally be maximizing }} \qquad\qquad \underbrace{\sum_{i=1}^K\sum_{{\mathbf{{v}}}\in {\mathcal{T}}_{{\mathcal{V}}}({\mathbf{{s}}}_i)}P({\mathbf{V}}={\mathbf{{v}}}\mid {\mathbf{S}}={\mathbf{{s}}}_i;{{\boldsymbol{\phi}}^{(n)}})
 \log P({\mathbf{V}}={\mathbf{{v}}};{\boldsymbol{\phi}})}_{\text{objective we maximize iteratively with EM}}
-$$&lt;h3 id=&#34;the-unigramlm-algorithm&#34;&gt;The UnigramLM Algorithm&lt;/h3&gt;
+$$&lt;p&gt;And while the solution given by EM should converge to the solution we&amp;rsquo;d get from maximizing our ideal object, this isn&amp;rsquo;t the case with the UnigramLM algorithm since it&amp;rsquo;s not pure EM in isolation. I explain this next.&lt;/p&gt;
+ &lt;!-- a(in which case, we should get the saI&#39;ll omit the proof of why EM should converge (for a fixed $$\mathcal{V}$$) since, well, it&#39;s in a lot of ML textbooks (you know, those ones we all swear we&#39;ll read cover-to-cover someday...). But --&gt;
+&lt;h3 id=&#34;the-unigramlm-algorithm&#34;&gt;The UnigramLM Algorithm&lt;/h3&gt;
 &lt;p&gt;The UnigramLM algorithm is typically seen as a &amp;ldquo;simple&amp;rdquo; application of
 EM. This, however, is not exactly the case. Importantly, EM assumes that
 the support of the distribution whose parameters we&amp;rsquo;re trying to
@@ -576,7 +580,24 @@ probability, weighting the token counts from this segmentation
 our current parameters ${{\boldsymbol{\phi}}^{(n)}}$. Also of
 note is that this is where a length prior &lt;em&gt;could&lt;/em&gt; have an effect
 on the model parameters we learn. But the term is often never
-actually used in the model definition.&lt;/p&gt;
+actually used in the model definition. &lt;strong&gt;Another sidebar on your
+favorite topic: the length prior.&lt;/strong&gt; This is where a length prior
+&lt;em&gt;could&lt;/em&gt; have an effect on the model parameters we learn, as it
+affects the probabilities of the segmentations.
+&lt;strong&gt;Potential research direction: Exploring effect of difference
+between segmentation during training and inference.&lt;/strong&gt; This
+method of getting counts considers all valid segmentations of
+${\mathbf{{s}}}$ that have non-zero probability under the
+current model parameters. In contrast, at inference, we only
+consider the maximum probability segmentation. The original
+UnigramLM paper actually proposes an inference strategy that&amp;rsquo;s
+much more aligned with training: sampling tokenizations from the
+posterior. But nowadays, everyone uses the Viterbi version of
+inference. Looking at the effects of this could be interesting.
+For example, soft/expected representations computed over the
+distribution of segmentations could give benefits similar to
+dropout or data augmentation, especially for low-resource
+languages or noisy text.&lt;/p&gt;
 &lt;p&gt;ii.  &lt;strong&gt;M-step&lt;/strong&gt; (maximize ${\boldsymbol{\phi}}$ and update
 ${{\boldsymbol{\phi}}^{(n)}}$): In the M-step, we want to
 maximize
@@ -666,9 +687,7 @@ following section.&lt;/p&gt;
 &lt;h4 id=&#34;approximations-of-&#34;&gt;Approximations of ${L}$.&lt;/h4&gt;
 &lt;p&gt;Computing
 $\bar{{\mathcal{Q}}}({\boldsymbol{\phi}}^{(n+1)}_{-{v}};{{\boldsymbol{\phi}}^{(n)}_{-{v}}})$
-in 
-{reference-type=&amp;ldquo;ref+label&amp;rdquo;
-reference=&amp;ldquo;eq:tokenloss&amp;rdquo;} for a given ${v}$ generally requires a
+in Eq. (15) for a given ${v}$ generally requires a
 separate forward&amp;ndash;backward pass over the corpus. This is because
 disallowing the use of ${v}$ in segmentations changes both the set of
 valid paths and the total probability of those paths.&lt;sup id=&#34;fnref:6&#34;&gt;&lt;a href=&#34;#fn:6&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;6&lt;/a&gt;&lt;/sup&gt; The new
@@ -796,11 +815,11 @@ tried to run the algorithm with the real, brute-force loss computation).&lt;/p&g
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h2 id=&#34;implementation-in-the-sentencepiece-library&#34;&gt;Implementation in the SentencePiece library&lt;/h2&gt;
 &lt;p&gt;In practice, the UnigramLM algorithm as we know it is largely defined by
-the public SentencePiece implementation, since @kudo-2018-subword give
+the public SentencePiece implementation, since Kudo (2018) give
 only a high-level description and leave many engineering choices
 under-specified. The library makes a number of concrete design decisions
 that go beyond the abstract EM + pruning picture above.&lt;/p&gt;
-&lt;h2 id=&#34;text-preprocessing&#34;&gt;Text Preprocessing.&lt;/h2&gt;
+&lt;h4 id=&#34;text-preprocessing&#34;&gt;Text Preprocessing.&lt;/h4&gt;
 &lt;p&gt;Arguably some of the more critical design choices to be aware of are
 those pertaining to normalization and pretokenization, as these change
 which segmentations are feasible. SentencePiece advertises that it does
@@ -842,8 +861,8 @@ smoothing: it&amp;rsquo;s always the case that $\exp(\psi(x)) &lt; x$, however, 
 small $x$ (rare tokens), the relative &amp;ldquo;discount&amp;rdquo; is significantly
 larger. It thus acts as a regularizer that disproportionately penalizes
 tokens with low expected counts, sending their assigned probability mass
-closer to zero. This is done on top of a 
- for tokens whose expected counts are below a certain threshold.&lt;/p&gt;
+closer to zero. This is done on top of a for tokens whose expected counts are below a certain threshold. &lt;strong&gt;Potential Research Direction: Exploring the effects of a sparse prior.&lt;/strong&gt;
+The Bayesian version of the M step (with the Haldane prior) over-penalizes low-count tokens relative to plain MLE. This is a modeling choice, not just an implementation detail. It raises a concrete question: for which settings (e.g., low-resource languages, morphologically rich languages) does this rare-token downweighting help, and where does it actually harm coverage or fairness?&lt;/p&gt;
 &lt;h4 id=&#34;pruning&#34;&gt;Pruning.&lt;/h4&gt;
 &lt;p&gt;Pruning is performed as described above in the approximations section,
 i.e., a piece&amp;rsquo;s loss is approximated by assuming that the removed
@@ -851,7 +870,8 @@ piece&amp;rsquo;s probability mass transfers to its best alternative Viterbi
 segmentation
 (${{h}_{{\boldsymbol{\phi}}}({\mathbf{{s}}})}_{{\mathcal{V}}_{{n}}}({v})$).
 Notably, pieces whose expected counts are below a fixed value (0.5) are
-pre-pruned. Also, not all pruning is done within the EM iterations;
+
+. Also, not all pruning is done within the EM iterations;
 there is a final pruning step that removes tokens with the lowest
 estimated probabilities in order to get to the final desired vocabulary
 size.&lt;/p&gt;
@@ -860,8 +880,10 @@ very specific version of the abstract UnigramLM model described above,
 albeit the one that people are typically referring to (rather than an
 implementation-free mathematical ideal) when talking about &amp;ldquo;the
 UnigramLM tokenization algorithm.&amp;rdquo;&lt;/p&gt;
+&lt;h2 id=&#34;conclusions&#34;&gt;Conclusions&lt;/h2&gt;
+&lt;p&gt;Tokenization shouldn&amp;rsquo;t be just a monolithic preprocessing step you fix once and forget; it quietly defines what your model even sees as input, and can have a huge effect on the behavior and fairness of the systems trained on top of it. If we take that seriously, we should treat tokenization as a full-blown modeling choice and explore the whole design space: priors (e.g., over length), supports (which segmentations are even allowed by pretokenization choices), and inference rules (Viterbi vs sampling vs marginalization). UnigramLM occupies just one corner of that space, but understanding it clearly is a step toward thinking about tokenizers as models we can design and question, not just as default settings we inherit.&lt;/p&gt;
 &lt;h4 id=&#34;acknowledgments&#34;&gt;&lt;em&gt;Acknowledgments&lt;/em&gt;&lt;/h4&gt;
-&lt;p&gt;As with pretty much any technical work I&amp;rsquo;ve written, Tiago Pimentel provided critical commentary and recommendations for this blogpost. Thanks, PhD sibling :)&lt;/p&gt;
+&lt;p&gt;As with pretty much any technical work I&amp;rsquo;ve written, Tiago Pimentel provided critical commentary and recommendations for this blogpost. Thanks, PhD sibling :) And thank you to Sander Land for catching my previous misunderstandings about the SentencePiece implentation.&lt;/p&gt;
 &lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
 &lt;hr&gt;
 &lt;ol&gt;
