@@ -1,6 +1,6 @@
 <!doctype html>
 <!-- This site was created with Hugo Blox. https://hugoblox.com -->
-<!-- Last Published: December 3, 2025 --><html lang="en-us" dir="ltr"
+<!-- Last Published: January 13, 2026 --><html lang="en-us" dir="ltr"
       data-wc-theme-default="system">
   
 <head>
@@ -2102,8 +2102,16 @@ UnigramLM tokenization algorithm.&rdquo;</p>
 <h2 id="conclusions">Conclusions</h2>
 <p>Tokenization shouldn&rsquo;t be just a monolithic preprocessing step you fix once and forget; it quietly defines what your model even sees as input, and can have a huge effect on the behavior and fairness of the systems trained on top of it. If we take that seriously, we should treat tokenization as a full-blown modeling choice and explore the whole design space: priors (e.g., over length), supports (which segmentations are even allowed by pretokenization choices), and inference rules (Viterbi vs sampling vs marginalization). UnigramLM occupies just one corner of that space, but understanding it clearly is a step toward thinking about tokenizers as models we can design and question, not just as default settings we inherit.</p>
 <h4 id="acknowledgments"><em>Acknowledgments</em></h4>
-<p>As with pretty much any technical work I&rsquo;ve written, Tiago Pimentel provided critical commentary and recommendations for this blogpost. Thanks, PhD sibling :) And thank you to Sander Land for catching my previous misunderstandings about the SentencePiece implentation.</p>
-<div class="footnotes" role="doc-endnotes">
+<p>As with pretty much any technical work I&rsquo;ve written, Tiago Pimentel provided critical commentary and recommendations for this blogpost. Thanks, PhD sibling :) And thank you to Sander Land for the thorough explanations of the SentencePiece implentation of UnigramLM.</p>
+<p>If you&rsquo;d like to cite this blogpost, here is the BibTex:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bibtex" data-lang="bibtex"><span class="line"><span class="cl"><span class="nc">@misc</span><span class="p">{</span><span class="nl">meister2025unigramlm</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="na">title</span>   <span class="p">=</span> <span class="s">{UnigramLM: An Attempt at Writing The Missing Manual}</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="na">author</span>  <span class="p">=</span> <span class="s">{Meister, Clara}</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="na">year</span>    <span class="p">=</span> <span class="s">{2025}</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="na">url</span>     <span class="p">=</span> <span class="s">{https://cimeister.github.io/blog/unigramlm/}</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="na">note</span>    <span class="p">=</span> <span class="s">{Blog post}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn:1">
