@@ -1,6 +1,6 @@
 <!doctype html>
 <!-- This site was created with Hugo Blox. https://hugoblox.com -->
-<!-- Last Published: January 13, 2026 --><html lang="en-us" dir="ltr"
+<!-- Last Published: March 17, 2026 --><html lang="en-us" dir="ltr"
       data-wc-theme-default="system">
   
 <head>
@@ -70,7 +70,7 @@
   
     
       
-        <link rel="stylesheet" href="/css/_entry.c78fe7cea04e84c410228db7a8ce1a42443615b59495fe3831481813859f6316.css" integrity="sha256-x4/nzqBOhMQQIo23qM4aQkQ2FbWUlf44MUgYE4WfYxY=" crossorigin="anonymous">
+        <link rel="stylesheet" href="/css/_entry.3f6f92a2fa09c1c97b42b9c9682e756467caa68ad97405607ab570dd281ca988.css" integrity="sha256-P2&#43;SovoJwcl7QrnJaC51ZGfKporZdAVgerVw3SgcqYg=" crossorigin="anonymous">
       
     
   
@@ -287,32 +287,9 @@
       
       
     
-      
-      
-      
-    
     
   
 
-  
-    
-    
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-    
   
     
     
@@ -1340,8 +1317,8 @@
           
           
             <p class="text-lg text-gray-700 dark:text-gray-300">
-              <a href="https://inf.ethz.ch" target="_blank" rel="noopener" class="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-              ETH Zürich
+              <a href="https://www.epfl.ch" target="_blank" rel="noopener" class="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+              EPFL
               </a>
             </p>
           
@@ -1359,7 +1336,7 @@
           
           
           
-          <a href="mailto:meistecl@inf.ethz.ch"  
+          <a href="mailto:clara.meister@epfl.ch"  
              aria-label="at-symbol"
               title="E-mail Me"
              class="w-12 h-12 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 
@@ -1379,7 +1356,7 @@
           
             
           
-          <a href="https://twitter.com/ClaraIsabelMei1" target="_blank" rel="noopener" 
+          <a href="https://x.com/clara__meister" target="_blank" rel="noopener" 
              aria-label="brands/x"
              
              class="w-12 h-12 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 
@@ -1448,8 +1425,10 @@
           </div>
           <div class="prose prose-lg dark:prose-invert text-gray-800 dark:text-gray-200 text-base sm:text-lg leading-relaxed">
             <div class="bio-text" >
-              <p>I&rsquo;m a postdoc at ETH Zürich in the computer science department, working with Prof. Bernd Gärtner to design a <a href="https://mas-aid.ethz.ch/" target="_blank" rel="noopener">Masters of Advanced Studies in AI and Data Technologies</a>.  Previously, I did my PhD at ETH supported by a Google PhD Fellowship in natural language processing. A large portion of my research in the last years has been on natural language generation&mdash;specifically, on decoding methods for probabilistic models. While my job is no longer research-related, I still occasionally work on research projects; see my <a href="https://scholar.google.com/citations?user=quJhNH8AAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a> page for an up-to-date list of publications. Lately, I&rsquo;m particularly interested in tokenization strategies for language models. Feel free to reach out if you&rsquo;d like to discuss research!</p>
-<!-- In my free time, I like to rock climb, trail run and drink wine.  -->
+              <p>I&rsquo;m a postdoc at <a href="https://www.epfl.ch" target="_blank" rel="noopener">EPFL</a> in <a href="https://nlp.epfl.ch" target="_blank" rel="noopener">Antoine Bosselut&rsquo;s NLP Lab</a>, working on tokenization and methods for multilingual language modeling, with a focus on low-resource settings. I also continue to lecture for the <a href="https://mas-aid.ethz.ch/" target="_blank" rel="noopener">MAS in AI and Digital Technology</a> continuing studies programme at ETH Zürich. Previously, I did my PhD at ETH, supported by a Google PhD Fellowship. A large portion of my research has been on natural language generation&mdash;specifically, on decoding methods for probabilistic models. Lately, I&rsquo;m particularly interested in tokenization strategies for language models and cross-lingual fairness in tokenization. See my <a href="https://scholar.google.com/citations?user=quJhNH8AAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a> page for an up-to-date list of publications. Feel free to reach out if you&rsquo;d like to discuss research!</p>
+<p>I&rsquo;m also a co-founder and organizer of <a href="https://www.zurichai.ch/" target="_blank" rel="noopener">Zürich AI</a>, Switzerland&rsquo;s largest machine learning meetup, which hosts regular events bridging industry and academia at the ETH AI Center.</p>
+<p>In my free time, I like to trail run, cook and drink wine (only the last two are done simultaneously).</p>
+<!--   -->
 <!-- I have had the privilege of serving as the advisor for several MSc students during the writing of their theses. Some of these theses have turned into published works.
 Gabriel/Wayne/UZH girl
 * **Luca Malagutti**: *Divergence functions for Natural Language Generation*
@@ -1725,13 +1704,13 @@ Gabriel/Wayne/UZH girl
   
   <div class="text-sm text-gray-500 dark:text-gray-400 mb-3">
     
-      November 19, 2025
+      March 16, 2026
     
   </div>
 
   
   <div class="text-gray-700 dark:text-gray-300 leading-relaxed">
-    Everything you didn&rsquo;t need to know about UnigramLM
+    This post is my attempt to write down the UnigramLM tokenization algorithm cleanly and explicitly because no such derivation appears to exist and I think understanding the theory behind the method …
   </div>
 </div>
 
@@ -2444,141 +2423,6 @@ Gabriel/Wayne/UZH girl
   </div>
 
 
-
-  </section>
-
-  
-
-  
-  
-    
-
-
-
-
-
-
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-  
-
-  
-  
-
-  
-
-  
-
-  
-  <section id="talks" class="relative  hbb-section blox-markdown  " >
-    
-    
-    <div class="home-section-bg " >
-      
-    </div>
-    
-
-
-
-
-
-
-
-
-
-<div class="flex flex-col items-center max-w-prose mx-auto gap-3 justify-center px-6">
-
-  <div class="mb-6 text-3xl font-bold text-gray-900 dark:text-white">
-    Recent &amp; Upcoming Talks
-  </div>
-
-  
-  <div class="prose prose-slate lg:prose-xl dark:prose-invert max-w-prose"><ul>
-<li>
-<p><strong>18/5/2023:</strong> Invited talk at Tel Aviv University&rsquo;s NLP Seminar</p>
-</li>
-<li>
-<p><strong>21/4/2023:</strong> Invited talk at University of Edinburgh ILCC Seminar</p>
-</li>
-<li>
-<p><strong>26/9/2022:</strong> Invited lecture at Johns Hopkins University Artificial Agents course</p>
-</li>
-<li>
-<p><strong>6/5/2022:</strong> Invited talk at Google Research Machine Translation Team Reading Group</p>
-</li>
-<li>
-<p><strong>14/3/2022:</strong> Invited talk at IST-Unbabel Seminar</p>
-</li>
-<li>
-<p><strong>10/8/2021:</strong> Invited talk at UT Austin&rsquo;s NLP Seminar</p>
-</li>
-<li>
-<p><strong>14/7/2021:</strong> Invited talk at Berkeley&rsquo;s NLP Seminar</p>
-</li>
-<li>
-<p><strong>16/6/2021:</strong> Invited talk at MIT&rsquo;s Computational Psycholinguistics Lab</p>
-</li>
-</ul>
-</div>
-</div>
 
   </section>
 
