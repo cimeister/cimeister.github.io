@@ -5,12 +5,20 @@
     <link>https://cimeister.github.io/blog/</link>
       <atom:link href="https://cimeister.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     <description>Blog</description>
-    <generator>Hugo Blox Builder (https://hugoblox.com)</generator><language>en-us</language><lastBuildDate>Mon, 16 Mar 2026 00:00:00 +0000</lastBuildDate>
+    <generator>Hugo Blox Builder (https://hugoblox.com)</generator><language>en-us</language><lastBuildDate>Mon, 07 Sep 2026 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://cimeister.github.io/media/icon_hu_982c5d63a71b2961.png</url>
       <title>Blog</title>
       <link>https://cimeister.github.io/blog/</link>
     </image>
+    
+    <item>
+      <title>Tokenizer Code Ablations</title>
+      <link>https://cimeister.github.io/blog/code_tokenizer_ablations/</link>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 +0000</pubDate>
+      <guid>https://cimeister.github.io/blog/code_tokenizer_ablations/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>UnigramLM: An Attempt at Writing The Missing Manual</title>
