@@ -17,7 +17,1034 @@
       <link>https://cimeister.github.io/blog/code_tokenizer_ablations/</link>
       <pubDate>Mon, 07 Sep 2026 00:00:00 +0000</pubDate>
       <guid>https://cimeister.github.io/blog/code_tokenizer_ablations/</guid>
-      <description></description>
+      <description>&lt;h1 id=&#34;mbpp-from-0000-to-0250-changing-only-the-tokenizer&#34;&gt;MBPP from 0.000 to 0.250, changing only the tokenizer&lt;/h1&gt;
+&lt;p&gt;&lt;em&gt;This is a companion post to the TokEval paper (
+).&lt;/em&gt;&lt;/p&gt;
+
+
+
+  
+  &lt;blockquote class=&#34;border-l-4 border-neutral-300 dark:border-neutral-600 pl-4 italic text-neutral-600 dark:text-neutral-400 my-6&#34;&gt;
+    &lt;p&gt;&lt;strong&gt;In brief.&lt;/strong&gt; We analyze 70 training runs of code-specialized language models that differ only in their tokenizer. We evaluate on MBPP and HumanEval, two widely-used Python coding benchmarks. Mean MBPP pass@1 across the 58 distinct tokenizers spans 0.000 to 0.248, and the highest single run reaches 0.250. The quantity that correlates most strongly with the score is the number of vocabulary entries that contain a line break. Two types of such entries are associated with low scores, and each has its own controlled comparison. Whether either type can form is fixed by the pretokenizer regex, before any tokenizer training starts. A second defect, unrelated to the regex, leaves out single byte entries from the vocabulary silently: one of our tokenizers cannot represent &lt;code&gt;{&lt;/code&gt; at all. Both defects are detectable from the tokenizer file alone, in seconds.&lt;/p&gt;
+
+  &lt;/blockquote&gt;
+
+&lt;p&gt;Each section starts with a summary box. A reader who wants the argument/takeaways and not the details can read the boxes alone.&lt;/p&gt;
+&lt;h2 id=&#34;background-and-preliminaries&#34;&gt;Background and preliminaries&lt;/h2&gt;
+
+
+
+  
+  &lt;blockquote class=&#34;border-l-4 border-neutral-300 dark:border-neutral-600 pl-4 italic text-neutral-600 dark:text-neutral-400 my-6&#34;&gt;
+    &lt;p&gt;&lt;strong&gt;In brief.&lt;/strong&gt; A regex splits text into pretokens before the vocabulary-learning algorithm runs, and no vocabulary entry crosses a pretoken boundary, so the regex fixes which character sequences can become vocabulary entries. (One algorithm below, SuperBPE, switches partway through training to a second regex that draws fewer boundaries; the rule still holds under whichever boundaries are in force.) Five vocabulary-learning algorithms appear in this post: BPE, Unigram, SuperBPE, parity-aware BPE, and MinGram. The 70 training runs cover 58 distinct tokenizers and are identical in every other respect. MBPP requires the model to generate every formatting character in its answer, and HumanEval does not. A reader who already knows all of this can resume at 
+.&lt;/p&gt;
+
+  &lt;/blockquote&gt;
+
+&lt;h3 id=&#34;how-a-tokenizer-is-built&#34;&gt;How a tokenizer is built&lt;/h3&gt;
+&lt;h4 id=&#34;pretokenization&#34;&gt;Pretokenization&lt;/h4&gt;
+&lt;p&gt;A modern tokenizer does not run its vocabulary-learning algorithm on raw text. &lt;strong&gt;Pretokenization&lt;/strong&gt; runs first: the breaking up of strings into &lt;strong&gt;pretokens&lt;/strong&gt;, which are basically just substrings. The vocabulary-learning algorithm then operates within pretokens only: in BPE, no merge ever crosses a pretoken boundary, and in algorithms that prune down an initial set rather than merge them, no candidate entry in the initial set ever crosses one. Pretokenization therefore fixes which character sequences can become vocabulary entries, before any learning starts. The rule holds throughout: merges never cross the pretoken boundaries in force at the time they are made. One algorithm below, SuperBPE, changes what those boundaries are partway through training, which is a different thing from removing them.&lt;/p&gt;
+&lt;p&gt;In a bit more detail: pretokenization is typically done with a simple regular expression (regex), a list of clauses that each specify a pattern in text. Given a string, the regex scans it left to right; at each position the clauses are tried in order, and the first clause that matches produces the pretoken there. Spans that no clause matches also become pretokens.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;  &lt;strong&gt;SCRIPT encoding&lt;/strong&gt; is one procedure that falls into the pretokenization category without being a regex: it groups consecutive characters by character class, so a run of letters of one script forms one pretoken, and the line feed, the tab, and the space share one whitespace class. The two MinGram tokenizers in this post use it.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;Example (GPT-4o pretokenization).&lt;/strong&gt; The pretokenization regex of GPT-4o has the following seven (!!) clauses.&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;#&lt;/th&gt;
+          &lt;th&gt;Clause&lt;/th&gt;
+          &lt;th&gt;Text it matches&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;1&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;[^\r\n\p{L}\p{N}]?[\p{Lu}\p{Lt}\p{Lm}\p{Lo}\p{M}]*[\p{Ll}\p{Lm}\p{Lo}\p{M}]+(?i:&#39;s|&#39;t|&#39;re|&#39;ve|&#39;m|&#39;ll|&#39;d)?&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;An optional single leading character that is neither a line break, a letter, nor a digit, then a run of letters ending in lowercase, then an optional English contraction suffix&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;2&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;[^\r\n\p{L}\p{N}]?[\p{Lu}\p{Lt}\p{Lm}\p{Lo}\p{M}]+[\p{Ll}\p{Lm}\p{Lo}\p{M}]*(?i:&#39;s|&#39;t|&#39;re|&#39;ve|&#39;m|&#39;ll|&#39;d)?&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;The same, for a run of letters that begins with at least one uppercase letter&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;3&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;\p{N}{1,3}&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;One to three digits&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;4&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt; ?[^\s\p{L}\p{N}]+[\r\n/]*&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;An optional single space, then a run of characters that are neither whitespace, letters, nor digits, then any number of line breaks and forward slashes&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;5&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;\s*[\r\n]+&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;Whitespace ending in one or more line breaks&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;6&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;\s+(?!\S)&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;A run of whitespace that is not followed by a non-whitespace character&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;7&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;\s+&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;A run of whitespace&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Consider the following string, in which the second line is indented by four spaces.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;print(x);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    foo();
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The regex produces six pretokens. The table below gives, for each one, the clause that produced it.&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;Pretoken&lt;/th&gt;
+          &lt;th&gt;Clause&lt;/th&gt;
+          &lt;th&gt;Why&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;print&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;1&lt;/td&gt;
+          &lt;td&gt;The optional leading character matches nothing, since &lt;code&gt;p&lt;/code&gt; is a letter. The uppercase run is empty. The lowercase run matches &lt;code&gt;print&lt;/code&gt; and stops at &lt;code&gt;(&lt;/code&gt;.&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;(x&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;1&lt;/td&gt;
+          &lt;td&gt;The optional leading character matches &lt;code&gt;(&lt;/code&gt;, and the lowercase run matches &lt;code&gt;x&lt;/code&gt;.&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;);\n&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;4&lt;/td&gt;
+          &lt;td&gt;Clauses 1 to 3 fail at &lt;code&gt;)&lt;/code&gt;, because clauses 1 and 2 both require at least one letter after the optional leading character. Clause 4 matches &lt;code&gt;);&lt;/code&gt; as a run of non-alphanumeric, non-whitespace characters, and its trailing &lt;code&gt;[\r\n/]*&lt;/code&gt; extends the match over the line break.&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;three spaces&lt;/td&gt;
+          &lt;td&gt;6&lt;/td&gt;
+          &lt;td&gt;Clause 4 fails, because it requires a non-whitespace character after the optional space. Clause 5 fails, because no line break follows the indentation. Clause 6 matches the longest run of spaces that is followed by another space, which is three of the four.&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt; foo&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;1&lt;/td&gt;
+          &lt;td&gt;The optional leading character matches the fourth space, and the lowercase run matches &lt;code&gt;foo&lt;/code&gt;.&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;();\n&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;4&lt;/td&gt;
+          &lt;td&gt;As for &lt;code&gt;);\n&lt;/code&gt; above.&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;p&gt;Most of the discussion below is surrounding one particular regex class and how it&amp;rsquo;s handled. The class &lt;code&gt;[^\s\p{L}\p{N}]&lt;/code&gt; matches any character that is neither whitespace, nor a letter, nor a digit, which is to say punctuation and symbols. Which clauses in a regex this class appears in determines which pretokens whitespace is allowed to be part of. We&amp;rsquo;ll later see the downstream effects of this choice.&lt;/p&gt;
+&lt;h4 id=&#34;learning-algorithms&#34;&gt;Learning Algorithms&lt;/h4&gt;
+&lt;p&gt;Five &lt;strong&gt;vocabulary-learning algorithms&lt;/strong&gt; appear in this post.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;BPE&lt;/strong&gt; (
+) starts from the corpus represented as just bytes or characters and learns a vocabulary by merging adjacent token pairs (within a given pretoken, of course) into a new token. Merges are chosen greedily: the most frequent pair is merged, and this repeats until the vocabulary reaches its target size. The resulting vocabulary is the initial byte or character alphabet plus the set of merged sequences; in the byte-coverage section below, we talk about what happens when that initial alphabet is incomplete.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Unigram&lt;/strong&gt; (
+) starts from a large set of candidate entries and removes candidates one batch at a time, keeping the ones whose removal would most reduce the likelihood of the training corpus under a model that treats tokens as independent. It selects entries rather than building them by merges; the pretoken boundaries apply to it as a limit on which candidate strings enter the initial set.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;SuperBPE&lt;/strong&gt; (
+) is BPE run in two stages with two pretokenization regexes. The first stage uses an ordinary regex. Partway through training, the second stage switches to a reduced regex that draws a subset of the first one&amp;rsquo;s boundaries, so the pretokens get coarser (e.g., a rule that split on whitespace is dropped, and a span of several words becomes one pretoken). Merges still never cross a pretoken boundary; there are simply fewer boundaries to respect, so later merges can produce entries that the first stage&amp;rsquo;s boundaries would have blocked, such as entries spanning more than one word.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Parity-aware BPE&lt;/strong&gt; (
+) is BPE with a modified merge criterion that balances compression across languages rather than maximizing it in aggregate. Sixteen of the 58 tokenizers in this study use it.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;MinGram&lt;/strong&gt; (
+) is a minimalist variant of UnigramLM that offers better compression than the original algorithm.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Aside: Tokenizer naming scheme used in this post&lt;/strong&gt;: Every custom tokenizer in this post is named &lt;code&gt;&amp;lt;pretokenizer&amp;gt;-&amp;lt;tokenizer training corpus&amp;gt;-&amp;lt;algorithm&amp;gt;&lt;/code&gt;, sometimes with a modifier between corpus and algorithm. So gpt4o-balanced-bpe is the GPT-4o pretokenizer, our balanced tokenizer training corpus (described in the next section), and BPE. Running text shortens names to the distinguishing parts (gpt4o, gpt4o-code, gpt4onl, clean-multi, punct, claude-approx for our Claude reconstruction, scripttok-mingram-scriptenc_cb); the appendix tables show the full names.&lt;/p&gt;
+&lt;h3 id=&#34;what-we-trained&#34;&gt;What we trained&lt;/h3&gt;
+&lt;p&gt;The 70 runs cover 58 distinct tokenizers: 53 tokenizers have one run each, five have three seeds each (the five in the Appendix B seed table), and two of those five, gpt4o-balanced-bpe and punct-balanced-bpe, each have a fourth run repeating seed 42, giving 58 + 10 + 2 = 70. Each run uses the same 24-layer transformer body, the same training data (a mixture of math and code, 50/50 by bytes, about 20 billion tokens), and the same step count of 19,073. Total parameters are about 1.27 billion for the runs whose vocabularies have 128K to 131K entries, and higher for the two runs whose vocabularies hold 200,000 entries, because their embedding tables are larger.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;Scores are &lt;strong&gt;seed-stratified&lt;/strong&gt; throughout the post. For replicate runs that share a random seed, we average those together first, and the mean for a tokenizer is then taken over the seed-level values.&lt;/p&gt;
+&lt;p&gt;The tokenizer training corpora are separate, smaller corpora taken from the same sources as the model training data. The &amp;ldquo;&lt;strong&gt;balanced&lt;/strong&gt;&amp;rdquo; corpus is a sample of roughly 10 GB drawn document by document. Its draw is weighted 37 percent English (FineWeb-Edu), 33 percent multilingual (30 languages from FineWeb2, with Russian largest at 10.1 percent), 15 percent math (FineMath), and 15 percent code (10 percent Python and 5 percent JavaScript, from StarCoderData). Those weights come with two qualifications. They weight the draw of documents, not of bytes, so a source with longer documents contributes more bytes than its weight suggests. For the &amp;ldquo;&lt;strong&gt;code&lt;/strong&gt;&amp;rdquo; corpus, the draw is 50 percent English and 50 percent code, across Python, JavaScript, Java, and C++. The &amp;ldquo;&lt;strong&gt;english&lt;/strong&gt;&amp;rdquo; corpus is drawn from FineWeb-Edu alone. The four grid corpora in 
+ follow the &amp;ldquo;balanced&amp;rdquo; scheme but with the code fraction moved to 0, 5, 30, and 50 percent and the other sources rescaled.&lt;/p&gt;
+&lt;h3 id=&#34;how-we-evaluated&#34;&gt;How we evaluated&lt;/h3&gt;
+&lt;p&gt;We evaluate on two generation benchmarks: MBPP (
+) and HumanEval (
+).&lt;/p&gt;
+&lt;p&gt;On &lt;strong&gt;MBPP&lt;/strong&gt;, the model writes a complete Python function from the first character, prompted with three worked examples. Every line break and every indentation character in the answer is emitted by the model. A typical problem consists of the task text &amp;ldquo;Write a function to count the most common words in a dictionary.&amp;rdquo; plus three test lines, one of which is:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;assert count_common([&amp;#39;one&amp;#39;, &amp;#39;two&amp;#39;, &amp;#39;three&amp;#39;, &amp;#39;four&amp;#39;, &amp;#39;five&amp;#39;, &amp;#39;one&amp;#39;, &amp;#39;two&amp;#39;, &amp;#39;one&amp;#39;, &amp;#39;three&amp;#39;, &amp;#39;one&amp;#39;]) == [(&amp;#39;one&amp;#39;, 4), (&amp;#39;two&amp;#39;, 2), (&amp;#39;three&amp;#39;, 2), (&amp;#39;four&amp;#39;, 1)]
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Its reference solution is a four-line function built on &lt;code&gt;collections.Counter&lt;/code&gt;, and the model must produce something equivalent from scratch. On &lt;strong&gt;HumanEval&lt;/strong&gt;, the model completes an already-started function body (starting from inside its indentation), with no other problems shown as worked examples The prompt supplies just the function header and the indentation context. A typical prompt, which the model continues from inside the function body:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;def greatest_common_divisor(a: int, b: int) -&amp;gt; int:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &amp;#34;&amp;#34;&amp;#34; Return a greatest common divisor of two integers a and b
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &amp;gt;&amp;gt;&amp;gt; greatest_common_divisor(3, 5)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &amp;gt;&amp;gt;&amp;gt; greatest_common_divisor(25, 15)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    5
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &amp;#34;&amp;#34;&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Both benchmarks are scored with &lt;strong&gt;pass@1&lt;/strong&gt;, the fraction of problems whose generated program passes the tests.&lt;/p&gt;
+&lt;p&gt;These benchmarks differ in an important property: whether the model or the prompt supplies the formatting syntax. A defect in emitting line breaks and indentation is therefore measurable on MBPP and barely measurable on HumanEval. Across the same models, HumanEval pass@1 spans 0.134 to 0.195, a range of 0.061. On MBPP, the range is 0.248.&lt;/p&gt;
+&lt;p&gt;The same evaluation configuration is used for all the numbers cited in this post, pass@1 values and failure-mode rates alike:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;The beginning-of-sequence token is prepended to the generation context. This is the token that starts every document during training.&lt;/li&gt;
+&lt;li&gt;Generation stops at the document-boundary token.&lt;/li&gt;
+&lt;li&gt;Token healing is applied at the prompt boundary.&lt;/li&gt;
+&lt;li&gt;Decoding is greedy throughout: one generation per problem, no sampling, and a cap of 256 generated tokens.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;Token healing.&lt;/strong&gt; As is standard for language model evaluations, the prompt is encoded by the language model&amp;rsquo;s tokenizer before being input to the model. For some tokenizers, that encoding ends in the middle of a token: the prompt&amp;rsquo;s final characters form the start of a token that, in any tokenization of prompt plus continuation, would extend past the prompt&amp;rsquo;s end. Generation then starts from a position that never occurs in the training tokenization. Token healing (
+) drops the trailing token or tokens of the prompt encoding, restarts generation from the shortened context, and constrains decoding to reproduce the dropped characters before continuing freely. As an example, under our whitespace-split tokenizer, &lt;code&gt;def add(a, b):&lt;/code&gt; plus a line break encodes with the line break as its own final token, but in the full solution that same line break sits inside the token &lt;code&gt;\n    return&lt;/code&gt;; the prompt-only encoding therefore ends at a boundary that never occurs in training, and healing re-encodes from the earlier boundary and re-emits the dropped characters. Appendix B shows what happens when we don&amp;rsquo;t use this protocol.&lt;/p&gt;
+&lt;p&gt;Noise in a single run&amp;rsquo;s MBPP score can come from several places. We estimate random seed noise to try account for it in our results: the &lt;strong&gt;seed standard deviation&lt;/strong&gt; of a configuration is the standard deviation of its score across runs that differ only in random seed. It measures run-to-run spread with everything else held fixed. Five configurations were trained with three seeds each on the math+code mixture; we report the exact values in Appendix B.  We see empirically that the magnitude of random seed noise actually depends on the tokenizer. The largest of the five seed standard deviations is 0.1026, and it corresponds to a tokenizer with no entries joining punctuation to a line break. Its three seed-level values span 0.008 to 0.211, even though tokenizer, training data, and step count are identical. Our rule of thumb follows from that table. We do not interpret a single-run MBPP difference smaller than about twice the relevant configuration&amp;rsquo;s seed standard deviation, and we do not assume that standard deviation is small without measuring it.&lt;/p&gt;
+&lt;p&gt;There are two further evaluations that we use in a few select places. &lt;strong&gt;Bits per byte&lt;/strong&gt; is the model&amp;rsquo;s loss on held-out text divided by the number of bytes of that text, so that tokenizers with different vocabularies can be compared on one scale; lower values indicate a better fit. &lt;strong&gt;BLiMP&lt;/strong&gt; (
+) is a benchmark of minimal sentence pairs that differ in one grammatical property, scored as the fraction of pairs in which the model assigns higher likelihood to the grammatical member.&lt;/p&gt;
+&lt;h2 id=&#34;tokenizing-code&#34;&gt;Tokenizing code&lt;/h2&gt;
+
+
+
+  
+  &lt;blockquote class=&#34;border-l-4 border-neutral-300 dark:border-neutral-600 pl-4 italic text-neutral-600 dark:text-neutral-400 my-6&#34;&gt;
+    &lt;p&gt;&lt;strong&gt;In brief.&lt;/strong&gt; Producing natural-language text is an arguably more forgiving task than producing code. In natural-language text, a missing punctuation mark, line break or indentation character might not look as polished, but almost always still accomplishes a user&amp;rsquo;s task. Such missing components in code, however, mean the program does not parse. Pretokenization plays a large part in determining whether line breaks are processed by the model as a single token, or inside a longer token together with things like the function definitions and punctuation before it, the indentation after it, etc. When it occurs inside a longer token, one generation step must then produce the line break and its neighboring characters together in a single, decision-laden step. We found that the number of vocabulary entries containing a line break correlates with mean MBPP pass@1 at rho = -0.719 across the 58 tokenizers (as in, more entries -&amp;gt; worse performance). Two pretokenization choices are associated with low scores: allowing a line break to join to the punctuation run before it, and allowing a line break to join to the indentation after it. A third convention, in which a line break can only join to the whitespace before it, is actually associated with the highest scores across the 58 tokenizers: the highest tokenizer mean in the study, 0.248, belongs to a tokenizer of this convention. Which convention a tokenizer can produce is determined by one or two clauses of its pretokenizer regex.&lt;/p&gt;
+
+  &lt;/blockquote&gt;
+
+&lt;p&gt;In natural-language text, many different segmentations of the same sentence are consistent with the same correct output. The segmentation introduced by a tokenizer can change how efficiently a model learns, but not which outputs count as correct. A missing comma or unclosed brace still produces interpretable text. The situation with code is different: single characters determine (a very concrete definition of) correctness. A line break ends a Python statement, and the indentation on the following line assigns that line to a block; a digit&amp;rsquo;s position sets its place value, a brace opens or closes a scope; one wrong character and the program does not parse, or the number is wrong. A model that cannot reliably emit a line break or an indentation character in the right place cannot produce a correct Python program, however accurate the rest of its output is.&lt;/p&gt;
+&lt;p&gt;Tokenization fixes, before model training starts, which of these characters occur in the training stream as entries of their own and which occur mostly inside longer entries. When line breaks occur mostly inside longer entries, a model must learn which punctuation and whitespace characters are in each token. Producing a program that parses then requires emitting those longer entries at exactly the right positions and potentially making several impactful decisions at once. Pretokenization is the part of the tokenization pipeline that determines whether such entries can actually form during tokenizer training.&lt;/p&gt;
+&lt;p&gt;For digits, the impact of pretokenization choices has already been measured. Singh and Strouse (
+) studied digit-grouping conventions in frontier models and found that how digits are chunked into tokens measurably changes arithmetic ability. For code formatting syntax, and for line breaks and indentation in particular, we know of no comparable measurement.&lt;/p&gt;
+&lt;h3 id=&#34;the-association-across-all-58-tokenizers&#34;&gt;The association across all 58 tokenizers&lt;/h3&gt;
+&lt;p&gt;In every tokenizer, we measure the number of vocabulary entries that contain a line-break character (a line feed &lt;code&gt;\n&lt;/code&gt; or a carriage return &lt;code&gt;\r&lt;/code&gt;). Across the 58 tokenizers,&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt; this count correlates with mean MBPP pass@1 at Spearman rho = -0.719 (a rank correlation: both quantities are converted to ranks, and the correlation of the ranks is reported, from -1 for perfectly opposed orderings to +1 for identical orderings; p = 2.1e-10). This correlation is the most stable measurement in the post. Three different ways of aggregating across the tokenizers give correlations between -0.70 and -0.73: Restricted to the 56 tokenizers that we train ourselves, the correlation is rho = -0.705; Grouping near-duplicate tokenizers into 27 configuration families and taking one tokenizer per family, the correlation is -0.73. So, yeah, the finding is pretty robust in this context.&lt;/p&gt;
+&lt;p&gt;Another statistic to back up this finding: Mean MBPP pass@1 across the 21 tokenizers with at least one entry joining punctuation to a line break is 0.095 vs. 0.206 across the 37 with no such vocabulary entries. Under a Mann-Whitney rank-sum test, which pools and ranks all values and measures how often a value from one group outranks a value from the other, that difference is significant (p = 3.0e-7), with the caveat that the 58 tokenizers are not independent design points, so the implicit independence assumption of the test is violated.&lt;/p&gt;
+&lt;h3 id=&#34;new-line-characters-in-a-token--bad&#34;&gt;New line characters in a token = bad?&lt;/h3&gt;
+&lt;p&gt;So then is it just bad for model coding performance to have vocab entries with &lt;code&gt;\n&lt;/code&gt;? We look into this a bit more. There are several ways that whitespace can appear inside a vocabulary entry. This can be seen by looking at just a few of our tokenizers and counting their vocab entries that contain a line break. Between some of these rows, the difference is only a single tokenizer design choice (e.g., gpt4o -&amp;gt; gpt4o-code or gpt4o -&amp;gt; gpt4onl) . We see a large spread in MBPP pass@1.&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;Tokenizer (short name)&lt;/th&gt;
+          &lt;th&gt;What the line break can join to&lt;/th&gt;
+          &lt;th&gt;Entries containing a line break&lt;/th&gt;
+          &lt;th&gt;Mean MBPP pass@1&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;gpt4o&lt;/td&gt;
+          &lt;td&gt;The punctuation run before it&lt;/td&gt;
+          &lt;td&gt;1,091&lt;/td&gt;
+          &lt;td&gt;0.086&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;gpt4o-code&lt;/td&gt;
+          &lt;td&gt;The punctuation run before it (code-heavy tokenizer training corpus)&lt;/td&gt;
+          &lt;td&gt;2,522&lt;/td&gt;
+          &lt;td&gt;0.016&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;gpt4onl&lt;/td&gt;
+          &lt;td&gt;Only the whitespace before it&lt;/td&gt;
+          &lt;td&gt;74&lt;/td&gt;
+          &lt;td&gt;0.230&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;clean-multi&lt;/td&gt;
+          &lt;td&gt;Only the whitespace before it&lt;/td&gt;
+          &lt;td&gt;86&lt;/td&gt;
+          &lt;td&gt;0.218&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;scripttok-mingram-scriptenc_cb&lt;/td&gt;
+          &lt;td&gt;The indentation after it&lt;/td&gt;
+          &lt;td&gt;201&lt;/td&gt;
+          &lt;td&gt;0.016&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;punct&lt;/td&gt;
+          &lt;td&gt;The indentation after it (as in scripttok-mingram-scriptenc_cb)&lt;/td&gt;
+          &lt;td&gt;266&lt;/td&gt;
+          &lt;td&gt;0.101&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;claude-approx&lt;/td&gt;
+          &lt;td&gt;Nothing; whitespace is split by type&lt;/td&gt;
+          &lt;td&gt;9&lt;/td&gt;
+          &lt;td&gt;0.241&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;The obvious conclusion here would just be that the more vocabulary entries with line break characters -&amp;gt; the worse your coding model is going to perform. But several of the above examples speak against that simple conclusion. More entries containing a line break are not necessarily bad. In the gpt4onl and clean-multi rules, the clause matching line breaks begins with &lt;code&gt;\s*&lt;/code&gt;, so spaces preceding a line break can join the line-break pretoken. In those tokenizers, we get 74 and 86 entries containing a line break. Mean MBPP pass@1 for those two tokenizers is 0.230 and 0.218, among the highest in the study. What the two poorly-performing tokenizers, gpt4o-code and scripttok-mingram-scriptenc_cb (both at 0.016), have in common is that a line break can join a character that is load-bearing for Python syntax: the punctuation before it for gpt4o-code, the indentation after it for scripttok-mingram-scriptenc_cb. The count of entries containing a line break is therefore a proxy: what it stands in for is which characters the pretokenizer lets a line break join, not the number of entries as such.&lt;/p&gt;
+&lt;p&gt;A note on the table: punct and scripttok-mingram-scriptenc_cb place a line break in the same pretoken as the indentation that follows it, so punct is a second instance of that convention, not a third convention; the punct vocabulary holds 247 such entries against 187 for scripttok-mingram-scriptenc_cb. The difference between them is consistency. The model trained with scripttok-mingram-scriptenc_cb (MinGram cb in the figure below) fails on indentation in 86.4 percent of its generations, while the punct models do so in one seed out of three (81.2 percent for that run, against 9.4, 2.6 and 6.6 percent for the others).&lt;/p&gt;
+&lt;p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure  &gt;
+  &lt;div class=&#34;flex justify-center	&#34;&gt;
+    &lt;div class=&#34;w-full&#34; &gt;
+          &lt;img alt=&#34;Scatter plot of mean MBPP pass@1 vs. the count of vocabulary entries containing a line break, one point per tokenizer, colored by convention&#34; 
+               srcset=&#34;https://cimeister.github.io/blog/code_tokenizer_ablations/blog_figures/fig1_arrangement_scatter_hu_83ba48faeeb2431f.webp 320w, https://cimeister.github.io/blog/code_tokenizer_ablations/blog_figures/fig1_arrangement_scatter_hu_4bf4a585b6180cf2.webp 480w, https://cimeister.github.io/blog/code_tokenizer_ablations/blog_figures/fig1_arrangement_scatter_hu_95e9413bc33dbc5c.webp 760w&#34;
+               sizes=&#34;(max-width: 480px) 100vw, (max-width: 768px) 90vw, (max-width: 1024px) 80vw, 760px&#34;
+               src=&#34;https://cimeister.github.io/blog/code_tokenizer_ablations/blog_figures/fig1_arrangement_scatter_hu_83ba48faeeb2431f.webp&#34;
+               width=&#34;760&#34;
+               height=&#34;460&#34;
+               loading=&#34;lazy&#34; data-zoomable /&gt;&lt;/div&gt;
+  &lt;/div&gt;&lt;/figure&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Every tokenizer in the study, placed by its count of entries containing a line break (log scale) and its mean MBPP pass@1. Color marks what a line break can join: blue circles join punctuation to a line break, orange triangles join the line break to the indentation after it, and green squares do neither. Two tokenizers land on exactly the same point and are drawn slightly apart so both stay visible.&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id=&#34;the-pretokenization-choices-that-permit-whitespace-inside-tokens&#34;&gt;The pretokenization choice(s) that permit whitespace inside tokens&lt;/h3&gt;
+&lt;p&gt;Code corpora contain many lines like &lt;code&gt;print(x);&lt;/code&gt; or &lt;code&gt;if something(x):&lt;/code&gt; followed by a line break. So sequences like &lt;code&gt;);&lt;/code&gt; and &lt;code&gt;):&lt;/code&gt; occur frequently next to &lt;code&gt;\n&lt;/code&gt; in our tokenizer&amp;rsquo;s training corpus. There are two ways such examples could be handled when we&amp;rsquo;re segmenting the text into pretokens. If the pretokenizer regex clause that matches punctuation runs may continue across a following line break, then &lt;code&gt;);\n&lt;/code&gt; (and possible characters before or after it) will be a single pretoken. That pretoken is frequent, BPE merges frequent adjacent pairs within a pretoken, and after enough merges the vocabulary contains &lt;code&gt;);\n&lt;/code&gt; as a single entry. If the regex instead splits before every line break, &lt;code&gt;);&lt;/code&gt; is one pretoken and &lt;code&gt;\n&lt;/code&gt; is another. No sequence of merges can join them, so that entry cannot form, at any vocabulary size, on any corpus. Let&amp;rsquo;s come back to the GPT-4o punctuation clause as an example:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; ?[^\s\p{L}\p{N}]+[\r\n/]*
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This regex matches: an optional space, then one or more punctuation or symbol characters, then zero or more characters from the set carriage return, line feed, &lt;code&gt;/&lt;/code&gt;. So &lt;code&gt;);&lt;/code&gt; or &lt;code&gt;):&lt;/code&gt; followed by a line break becomes a single pretoken together with it: &lt;code&gt;);\n&lt;/code&gt;, &lt;code&gt;):\n&lt;/code&gt;. The vocabulary of gpt4o-balanced-bpe, trained with this regex, contains 1,024 entries in which a punctuation character is followed immediately by a line break. As examples, here are the eleven with vocabulary ids below 1,000 (low ids mean early, high-frequency merges): &lt;code&gt;.\n&lt;/code&gt; (id 306), &lt;code&gt;)\n&lt;/code&gt; (427), &lt;code&gt;:\n&lt;/code&gt; (466), &lt;code&gt;,\n&lt;/code&gt; (481), &lt;code&gt;.\n\n&lt;/code&gt; (563), &lt;code&gt;;\n&lt;/code&gt; (589), &lt;code&gt;)\n\n&lt;/code&gt; (700), &lt;code&gt;):\n&lt;/code&gt; (780), &lt;code&gt; {\n&lt;/code&gt; (834), &lt;code&gt;);\n&lt;/code&gt; (868), and &lt;code&gt;&amp;quot;\n&lt;/code&gt; (957). The variant of this tokenizer fit on a code-heavy corpus, gpt4o-code, contains 2,350 such entries.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;A concrete edit.&lt;/strong&gt; Preventing the case where new lines can attach to punctuation runs takes one deletion in the case of the above GPT-4o-style regex:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; ?[^\s\p{L}\p{N}]+[\r\n/]*      before
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; ?[^\s\p{L}\p{N}]+              after
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;That deletion is the only difference between the two tokenizers in the first 
+ below, and the count of entries joining punctuation to a line break falls from 1,024 to 0.&lt;/p&gt;
+&lt;p&gt;Depending on what other clauses are in the pretokenization regex, some additional edits may have to be done. For instance, if there&amp;rsquo;s another clause later in the regex that matches another of the above mentioned failure cases, that would also have to be modified. Leaving whitespace unmatched by every clause is also not a good option. As mentioned in 
+, a span that no clause matches is kept as a single pretoken. That span extends over every consecutive character that no clause matches, so a any character next to the whitespace that also doesn&amp;rsquo;t match any clause will be placed in the same pretoken. Merges within that pretoken can then produce tokens that combine whitespace with punctuation, letters, or digits. HuggingFace&amp;rsquo;s &lt;code&gt;WhitespaceSplit&lt;/code&gt; pretokenizer takes the opposite approach and discards whitespace entirely. Under this scheme, inputs that differ only in whitespace produce identical token sequences. The implication of this is that the model has no way of learning (or emitting) the different types of whitespaces, which would be a disaster if you were trying to have your model write Python code.&lt;/p&gt;
+&lt;p&gt;There&amp;rsquo;s another pretokenizer whitespace-handling case worth mentioning, as it likewise had a large impact on code performance (discussed in the 
+ section): under SCRIPT encoding, the new line, the tab, and the space belong to one shared character class, so a line break and the indentation that follows it form one pretoken. This isn&amp;rsquo;t the earlier situation we discussed of having line breaks join with punctuation. It&amp;rsquo;s literally just whitespace joining different types of whitespace. When looking at the MinGram tokenizers that use this SCRIPT encoding, we&amp;rsquo;ll see that this method of handling whitespace also negatively impacts code performance.&lt;/p&gt;
+&lt;h3 id=&#34;open-source-tokenizers&#34;&gt;Open-source tokenizers&lt;/h3&gt;
+&lt;p&gt;Many widely-used tokenizers use the trailing line break paradigm. The LLaMA-3 vocabulary contains 2,257 entries containing a line break, of which 2,050 join a punctuation run to one. The Mistral-Nemo vocabulary contains 1,070 and 1,064 respectively, and its pretokenizer clause for handling punctuation is identical to GPT-4o&amp;rsquo;s.&lt;/p&gt;
+&lt;p&gt;Tokenizers from LLMs, including those for dedicated code models,  are divided on whether they allow vocabulary entries joining whitespace to punctuation. Of the five code models we audited, three have no entry with a line break joined to a punctuation run: StarCoder2-3B, stable-code-3b, and phi-2. Amongst those, phi-2 has only 4 entries containing a line break of any kind. StarCoder2-3B does allow other whitespace merges though: it has 456 vocab entries where a line break is joined to the whitespace run after it. Qwen2.5-Coder-3B and CodeGemma-2B, though, allow entries joining a punctuation run to a line break and have 1,977 and 291 such entries, respectively. Those models are trained on far more code than our 20-billion-token runs, and they perform well. Importantly, our findings are not at odds with these records. They simply state what this one choice does at our scale, with everything else held fixed.&lt;/p&gt;
+&lt;h2 id=&#34;controlled-comparisons&#34;&gt;Controlled comparisons&lt;/h2&gt;
+
+
+
+  
+  &lt;blockquote class=&#34;border-l-4 border-neutral-300 dark:border-neutral-600 pl-4 italic text-neutral-600 dark:text-neutral-400 my-6&#34;&gt;
+    &lt;p&gt;&lt;strong&gt;In brief.&lt;/strong&gt; Deleting one pretokenizer regex clause, with the tokenizer training corpus held fixed, moves mean MBPP pass@1 from 0.086 to 0.230 across three seeds per tokenizer, and the two seed ranges do not overlap. Adding one line-break rule to the pretokenizer regex for an unrelated tokenizer family changes it from 0.016 to 0.216. We do a 2x4 grid that varies the pretokenizer regex clause and the fraction of code data in the tokenizer training corpus independently: at all code fractions, the model trained with the tokenizer that does not allow new lines to fuse to punctuation runs scores at or above its counterpart that does. On the other hand, there is no consistent performance ranking according to tokenizer training data&amp;rsquo;s code fraction.&lt;/p&gt;
+
+  &lt;/blockquote&gt;
+
+&lt;h3 id=&#34;one-regex-clause-three-seeds-per-tokenizer&#34;&gt;One regex clause, three seeds per tokenizer&lt;/h3&gt;
+&lt;p&gt;gpt4o-balanced-bpe and gpt4onl-balanced-bpe are two tokenizers fit on the same corpus. They differ only in one clause of their pretokenizer regex. Specifically, in the latter,  the trailing &lt;code&gt;[\r\n/]*&lt;/code&gt; is gone from the punctuation clause of the pretokenizer regex, i.e., new lines are not allowed to fuse to punctuation runs. With this change alone, the count of vocabulary entries joining a line break to punctuation falls from 1,024 to 0. We trained code-specialized language models (three seeds) on each.&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;Tokenizer&lt;/th&gt;
+          &lt;th&gt;Entries joining punctuation to a line break&lt;/th&gt;
+          &lt;th&gt;MBPP pass@1 per seed&lt;/th&gt;
+          &lt;th&gt;Mean&lt;/th&gt;
+          &lt;th&gt;Seed SD&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;gpt4o-balanced-bpe&lt;/td&gt;
+          &lt;td&gt;1,024&lt;/td&gt;
+          &lt;td&gt;0.167*, 0.072, 0.018&lt;/td&gt;
+          &lt;td&gt;0.086&lt;/td&gt;
+          &lt;td&gt;0.0754&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;gpt4onl-balanced-bpe&lt;/td&gt;
+          &lt;td&gt;0&lt;/td&gt;
+          &lt;td&gt;0.224, 0.246, 0.220&lt;/td&gt;
+          &lt;td&gt;0.230&lt;/td&gt;
+          &lt;td&gt;0.0140&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;* The seed-42 value is the mean of two runs both trained with that seed, 0.174 and 0.160.&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;The two score ranges do not overlap: the worst-performing seed for the tokenizer prohibiting punctuation-to-line-break fusing scores 0.220. This is  above the highest score for any of the seeds trained with the tokenizer allowing this fusing. The means across seeds differ by 0.144. The deletion also makes the scores more stable: the three runs for the tokenizer prohibiting punctuation-to-line-break fusing span 0.026 points, where for the other tokenizer, values span 0.149 points. So removing one character class from a pretokenizer regex clause raises the mean and reduces variance at once.&lt;/p&gt;
+&lt;h3 id=&#34;changing-line-break-treatment-in-an-unrelated-tokenizer-family&#34;&gt;Changing line break treatment in an unrelated tokenizer family&lt;/h3&gt;
+&lt;p&gt;We repeat a similar contrast with the pretokenization scheme used by the SCRIPT-encoded MinGram pair, which is quite different from the GPT-4o regex family. What we refer to as the &amp;ldquo;cb&amp;rdquo; variant is the tokenizer whose pretokenization allows line breaks to be part of the same pretoken as the indentation after it; the &amp;ldquo;cb_nl&amp;rdquo; variant adds a single rule to the pretokenizer and is otherwise identical. It adds a forced pretoken boundary at line-break characters. The models trained using the cb and cb_nl tokenizers (one training run each) achieve MBPP pass@1 of 0.016 and 0.216, respectively. This is a pretty dramatic difference&amp;hellip; To make sure this isn&amp;rsquo;t just noise, we perform an exact McNemar test (a paired comparison over the 500 problems in the eval set, counting only the problems that exactly one model solves). The cb_nl model solves 104 problems the cb model misses and misses 4 that it solves. Under this test, the improvement from cb to cb_nl is significant with p-value of 3.4e-26. That p-value comes with a caution: the test compares this one pair of runs, so it tells us that the difference between these two specific models&amp;rsquo; performance on this benchmark is significant. It doesn&amp;rsquo;t say anything about whether a retrain of the models with different seeds would show a similar result.&lt;/p&gt;
+&lt;h3 id=&#34;the-regex-clause-and-the-tokenizer-training-corpus-varied-independently&#34;&gt;The regex clause and the tokenizer training corpus, varied independently&lt;/h3&gt;
+&lt;p&gt;Maybe the punctuation-to-line-break fusing clause only matters when the tokenizer training corpus is code-heavy? The third comparison tests this hypothesis. We fit tokenizers using the gpt4o and gpt4onl pretokenizer regex discussed in the first comparison, on each of four corpora with code fractions of 0, 5, 30, and 50 percent (described in 
+). That gives us eight tokenizers in total. We trained one language model on each; the language-model training data is identical across all eight runs. As a sanity check, we checked the vocabulary. As the code-data fraction  rises the gpt4o-based tokenizers (the ones allowing punctuation-to-line-break fusing) have 482, 749, 1,393, and 1,831 vocab entries joining punctuation to a line break. Every gpt4onl-based tokenizer has zero.&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;Code fraction of the tokenizer training corpus&lt;/th&gt;
+          &lt;th&gt;Fusing regex (gpt4o)&lt;/th&gt;
+          &lt;th&gt;Non-fusing regex (gpt4onl)&lt;/th&gt;
+          &lt;th&gt;Non-fusing minus fusing&lt;/th&gt;
+          &lt;th&gt;McNemar p&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;0%&lt;/td&gt;
+          &lt;td&gt;0.232&lt;/td&gt;
+          &lt;td&gt;0.248&lt;/td&gt;
+          &lt;td&gt;+0.016&lt;/td&gt;
+          &lt;td&gt;0.41&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;5%&lt;/td&gt;
+          &lt;td&gt;0.050&lt;/td&gt;
+          &lt;td&gt;0.206&lt;/td&gt;
+          &lt;td&gt;+0.156&lt;/td&gt;
+          &lt;td&gt;2.5e-16&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;30%&lt;/td&gt;
+          &lt;td&gt;0.178&lt;/td&gt;
+          &lt;td&gt;0.224&lt;/td&gt;
+          &lt;td&gt;+0.046&lt;/td&gt;
+          &lt;td&gt;0.0076&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;50%&lt;/td&gt;
+          &lt;td&gt;0.088&lt;/td&gt;
+          &lt;td&gt;0.212&lt;/td&gt;
+          &lt;td&gt;+0.124&lt;/td&gt;
+          &lt;td&gt;4.7e-12&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;In short, the model trained with the non-fusing tokenizer scores at or above its fusing counterpart at every code fraction. Every score in the table comes from a single training run, and the same warning about the p-value from the previous section applies.&lt;/p&gt;
+&lt;p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure  &gt;
+  &lt;div class=&#34;flex justify-center	&#34;&gt;
+    &lt;div class=&#34;w-full&#34; &gt;
+          &lt;img alt=&#34;Line chart of MBPP pass@1 vs. tokenizer training corpus code fraction, one line per regex, with seed-level points at 15 percent&#34; 
+               srcset=&#34;https://cimeister.github.io/blog/code_tokenizer_ablations/blog_figures/fig2_ladder_panel_hu_6182de9ff30132b5.webp 320w, https://cimeister.github.io/blog/code_tokenizer_ablations/blog_figures/fig2_ladder_panel_hu_1a7b1699ace5214f.webp 480w, https://cimeister.github.io/blog/code_tokenizer_ablations/blog_figures/fig2_ladder_panel_hu_cc46ebdace49cfe6.webp 760w&#34;
+               sizes=&#34;(max-width: 480px) 100vw, (max-width: 768px) 90vw, (max-width: 1024px) 80vw, 760px&#34;
+               src=&#34;https://cimeister.github.io/blog/code_tokenizer_ablations/blog_figures/fig2_ladder_panel_hu_6182de9ff30132b5.webp&#34;
+               width=&#34;760&#34;
+               height=&#34;517&#34;
+               loading=&#34;lazy&#34; data-zoomable /&gt;&lt;/div&gt;
+  &lt;/div&gt;&lt;/figure&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Performance of the eight models in the code-training-data grid. At every code fraction, the model whose tokenizer has non-fusing regex performs above the fusing counterpart. The open circles at 15 percent are the three-seed pair from the first comparison: separate tokenizer builds on the same training data.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Reading down a column, it can look as though a code-heavier tokenizer training corpus -&amp;gt; lower score for the models trained on that tokenizer. But this is not a significant trend. Neither column is ordered by tokenizer training corpus code fraction and within each column, the rank correlation between code fraction and MBPP pass@1 is rho = -0.400 (p = 0.600, n = 4 rungs). Two other evaluations on the same eight tokenizers show concrete benefits of including code in tokenizer training data. HumanEval pass@1 is highest at 50 percent code in both columns: 0.189 and 0.195 at 50 percent vs. 0.165 and 0.171 at 0 percent. Bits per byte on held-out math+code data decreases (improves) monotonically as the code fraction rises: from 0.3396 at 0 percent to 0.3348 at 50 in the fusing column, and from 0.3420 to 0.3366 in the non-fusing column. The 
+ section below returns to a related measure, computed on held-out code, over the full set of tokenizers.&lt;/p&gt;
+&lt;!-- **Miscellaneous.** One commonly-used configuration deserves its own warning. The off-the-shelf HuggingFace whitespace-split pretokenizer attaches every whitespace run to the text after it, so a line break is always mid-token in training, and a prompt that ends with one therefore uses a token that is &#34;out-of-distribution&#34; for code data. In the three cells short of the full protocol, the model trained with this pretokenizer scores 0.006 to 0.016 on MBPP; fully healed and with the beginning-of-sequence token it reaches 0.102. The improved score still isn&#39;t great (perhaps because the whitespace handling isn&#39;t ideal!), but this case exemplifies just how big an impact evaluation protocol can have.  --&gt;
+&lt;h2 id=&#34;how-the-failing-generations-fail&#34;&gt;How the failing generations fail&lt;/h2&gt;
+
+
+
+  
+  &lt;blockquote class=&#34;border-l-4 border-neutral-300 dark:border-neutral-600 pl-4 italic text-neutral-600 dark:text-neutral-400 my-6&#34;&gt;
+    &lt;p&gt;&lt;strong&gt;In brief.&lt;/strong&gt; We passed every model&amp;rsquo;s scored MBPP generation through Python&amp;rsquo;s &lt;code&gt;compile()&lt;/code&gt;, which parses without executing. For the generations that did not compile, we recorded the exception type. Models trained with tokenizers that allowed joining of a line break to the indentation after it had an &lt;code&gt;IndentationError&lt;/code&gt; on 86.4 percent of generations. When the tokenizer allowed joining a line break to the punctuation run before, the corresponding models&amp;rsquo; generations failed with &lt;code&gt;SyntaxError&lt;/code&gt; and a low parse rate instead. A closer analysis points to the harm happening during training, in what the model gets to practice, and showing up throughout its generations rather than at the moments one of these entries is emitted. The comparison that leads us to this explanation has confounds, which we state below, so we offer it as the better-supported explanation and not as an established one.&lt;/p&gt;
+
+  &lt;/blockquote&gt;
+
+&lt;p&gt;For the model trained with the scripttok-mingram-scriptenc_cb tokenizer, which allows a line break to join the indentation after it, 86.4 percent of MBPP generations fail with &lt;code&gt;IndentationError&lt;/code&gt; or &lt;code&gt;TabError&lt;/code&gt;, and 12.4 percent parse. For its cb_nl counterpart, 0.6 percent fail on indentation and 95.2 percent parse. For the claude-approx tokenizer, whose vocabulary contains 9 entries containing a line break, 0.3 percent fail with &lt;code&gt;IndentationError&lt;/code&gt;. The failing generations break at exactly the boundary the pretokenizer joined: the model emits a bare line break without the indentation that Python requires on the following line, and &lt;code&gt;compile()&lt;/code&gt; raises &lt;code&gt;IndentationError&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Tokenizers that allow punctuation-to-line-break fusion give way to models that have a different failure mode. For gpt4o-code-bpe, whose vocabulary contains 2,350 entries joining punctuation to a line break, 92.4 percent of generations fail with &lt;code&gt;SyntaxError&lt;/code&gt; and 7.6 percent parse, while the indentation-failure rate is 0.000.&lt;/p&gt;
+&lt;p&gt;The table lists the six tokenizers with the lowest MBPP parse rates, with the median over the 58 tokenizers for scale. Rates are shares of the 500 MBPP generations, seed-stratified. In Python, &lt;code&gt;IndentationError&lt;/code&gt; and &lt;code&gt;TabError&lt;/code&gt; are subclasses of &lt;code&gt;SyntaxError&lt;/code&gt;; the classification checks for them first, so the two error columns are disjoint and the &lt;code&gt;SyntaxError&lt;/code&gt; column holds only other parse failures.&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;Tokenizer&lt;/th&gt;
+          &lt;th&gt;Parses&lt;/th&gt;
+          &lt;th&gt;IndentationError or TabError&lt;/th&gt;
+          &lt;th&gt;SyntaxError&lt;/th&gt;
+          &lt;th&gt;Mean MBPP pass@1&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Mistral-Nemo&lt;/td&gt;
+          &lt;td&gt;0.000&lt;/td&gt;
+          &lt;td&gt;0.002&lt;/td&gt;
+          &lt;td&gt;0.998&lt;/td&gt;
+          &lt;td&gt;0.000&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;gpt4o-balanced-unigram&lt;/td&gt;
+          &lt;td&gt;0.000&lt;/td&gt;
+          &lt;td&gt;0.002&lt;/td&gt;
+          &lt;td&gt;0.998&lt;/td&gt;
+          &lt;td&gt;0.000&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;rightalign-balanced-unigram&lt;/td&gt;
+          &lt;td&gt;0.000&lt;/td&gt;
+          &lt;td&gt;0.000&lt;/td&gt;
+          &lt;td&gt;1.000&lt;/td&gt;
+          &lt;td&gt;0.000&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;gpt4o-code-bpe&lt;/td&gt;
+          &lt;td&gt;0.076&lt;/td&gt;
+          &lt;td&gt;0.000&lt;/td&gt;
+          &lt;td&gt;0.924&lt;/td&gt;
+          &lt;td&gt;0.016&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;scripttok-mingram-scriptenc_cb&lt;/td&gt;
+          &lt;td&gt;0.124&lt;/td&gt;
+          &lt;td&gt;0.864&lt;/td&gt;
+          &lt;td&gt;0.012&lt;/td&gt;
+          &lt;td&gt;0.016&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;superbpe-apertus-fineweb2full-capped-hybridwindow*&lt;/td&gt;
+          &lt;td&gt;0.128&lt;/td&gt;
+          &lt;td&gt;0.024&lt;/td&gt;
+          &lt;td&gt;0.848&lt;/td&gt;
+          &lt;td&gt;0.012&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Median over the 58 tokenizers&lt;/td&gt;
+          &lt;td&gt;0.938&lt;/td&gt;
+          &lt;td&gt;0.006&lt;/td&gt;
+          &lt;td&gt;0.049&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;* superbpe-apertus-fineweb2full-capped-hybridwindow is SuperBPE fit on a capped FineWeb-2 corpus with NFC normalization. Its pretokenizer, derived from the Mistral-Nemo one, lets a punctuation run extend across a following line break, and its vocabulary holds 613 entries joining punctuation to a line break.&lt;/p&gt;
+&lt;p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure  &gt;
+  &lt;div class=&#34;flex justify-center	&#34;&gt;
+    &lt;div class=&#34;w-full&#34; &gt;
+          &lt;img alt=&#34;Stacked horizontal bars showing, for ten selected rows, the share of MBPP generations that parse, fail on indentation, or fail with another syntax error&#34; 
+               srcset=&#34;https://cimeister.github.io/blog/code_tokenizer_ablations/blog_figures/fig3_failure_signatures_hu_a0e6d2b1e7446980.webp 320w, https://cimeister.github.io/blog/code_tokenizer_ablations/blog_figures/fig3_failure_signatures_hu_b58762c55eb76436.webp 480w, https://cimeister.github.io/blog/code_tokenizer_ablations/blog_figures/fig3_failure_signatures_hu_abe4dcce3f33dcfe.webp 760w&#34;
+               sizes=&#34;(max-width: 480px) 100vw, (max-width: 768px) 90vw, (max-width: 1024px) 80vw, 760px&#34;
+               src=&#34;https://cimeister.github.io/blog/code_tokenizer_ablations/blog_figures/fig3_failure_signatures_hu_a0e6d2b1e7446980.webp&#34;
+               width=&#34;760&#34;
+               height=&#34;499&#34;
+               loading=&#34;lazy&#34; data-zoomable /&gt;&lt;/div&gt;
+  &lt;/div&gt;&lt;/figure&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;How models&amp;rsquo; MBPP generations parse, split by what &lt;code&gt;compile()&lt;/code&gt; raises. The two failure types show up as color: models trained with a tokenizer that joins a line break to the indentation after it fail with &lt;code&gt;IndentationError&lt;/code&gt; (orange), while the models scoring 0.000 fail almost entirely with other kinds of &lt;code&gt;SyntaxError&lt;/code&gt; (blue). The three punct rows correspond to one tokenizer with three seeds of model training.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Across the 58 tokenizers, the median MBPP indentation-failure rate is 0.006 and the maximum is 0.864. The three highest rates belong to the scripttok-mingram-scriptenc_cb variant (0.864), gpt4o-english-fullbyte-bpe (0.396), and punct-balanced-bpe (0.313 as a seed-stratified mean over three seeds). The mean score of the punct tokenizer deserves special attention. This tokenizer was one that had large seed instability (documented in 
+): across four models with identical configurations, the identation error rate spans 0.026 to 0.812, with one seed in near-total indentation collapse (0.812, the run scoring 0.008 on MBPP). On the other hand, the run using the canonical seed is at 0.094.&lt;/p&gt;
+&lt;h3 id=&#34;does-using-a-fused-entry-break-the-generation-it-appears-in&#34;&gt;Does using a fused entry break the generation it appears in?&lt;/h3&gt;
+&lt;p&gt;We see two plausible routes via which these vocabulary entries could be harming a model. It could be that emitting one of these entries is itself the failure point: the model has to get several characters right in a single step, and the program breaks right there. Or the damage could be done during training, in what the model gets to practice, showing up throughout its generations rather than at the moments one of these entries is emitted. To test for evidence of the former, we checked whether, when a model emits one of these apparently harmful vocab entries, if the program breaks there. To do this, we re-encoded every MBPP generation for the models trained with a punctuation-to-line-break fusing tokenizer. We split these generations into two sets: generations that contained at least one entry joining punctuation to a line break and generations that contain none. Perhaps unexpectedly, in 15 of the 18 tokenizers with at least 20 generations in both groups, the generations that use a fused entry parse more often than the ones that use none; of the remaining three, two are the 0.000-scoring models and one is a near-tie (0.540 against 0.543). For the gpt4o model, rates averaged across its seeds, generations that featured a fused entry had a parse rate of 0.534 against 0.082 for those that didn&amp;rsquo;t; pooled over the seeds, the two groups have 1,406 and 594 generations. We see a similar trend amongst the MinGram models. 0 of its 421 generations that never use a newline-plus-indentation entry parse. This is in comparison to a parse rate of 0.785 for the 79 that do: for that tokenizer, the fused entry really is the only way to produce an indented line that parses.&lt;/p&gt;
+&lt;p&gt;Of course, there are confounds to any conclusions that can be drawn from this particular analysis. We&amp;rsquo;re not comparing to generations from tokenizers that do &lt;em&gt;not&lt;/em&gt; feature these tokens, so we don&amp;rsquo;t have a clear baseline. Further, a generation that contains one of these fused entries marks a generation where the model got far enough in solving the problem. It might fail right off the bat for more complex problems, not outputting anything sensical (including an entry joining punctuation to a line break). Still, we take these results as evidence agains the first explanation of how these entries cause harm, since generations that use one of these entries parse more often, not less. Better support for the second explantion comes from the per-example analysis noted in Appendix C, where we find no evidence that a problem&amp;rsquo;s tokenization properties predict which problems a model passes.&lt;/p&gt;
+&lt;h2 id=&#34;the-zero-scores-and-evaluations-that-do-not-show-the-defect&#34;&gt;The zero scores, and evaluations that do not show the defect&lt;/h2&gt;
+
+
+
+  
+  &lt;blockquote class=&#34;border-l-4 border-neutral-300 dark:border-neutral-600 pl-4 italic text-neutral-600 dark:text-neutral-400 my-6&#34;&gt;
+    &lt;p&gt;&lt;strong&gt;In brief.&lt;/strong&gt; Three tokenizers whose models score exactly 0.000 fail with &lt;code&gt;SyntaxError&lt;/code&gt; on 99.8 percent or more of their generations and almost never on indentation. We read those generations, and all three break at the same spot: the first line of the function definition does not end in the colon Python requires, while two comparison models whose tokenizers have no entries joining punctuation to a line break never fail there. Beyond these three, there are other aspects of standard evaluation setups (including ours) that make it difficult to identify and diagnose potential sources of consistent model failures: HumanEval supplies the formatting syntax in its prompts, code bits per byte shows no association with MBPP at any reporting level, and a single training run contains seed noise larger than many of the differences being compared.&lt;/p&gt;
+
+  &lt;/blockquote&gt;
+
+&lt;h3 id=&#34;the-three-scores-of-0000&#34;&gt;The three scores of 0.000&lt;/h3&gt;
+&lt;p&gt;Mean MBPP pass@1 is exactly 0.000 for the models trained with Mistral-Nemo, gpt4o-unigram, and rightalign-unigram. All three fail with &lt;code&gt;SyntaxError&lt;/code&gt; on 99.8 percent or more of their generations and almost never on indentation. We read the generations to see where they break. In Python, the first line of a function definition has to end with a colon, as in &lt;code&gt;def sort_matrix(matrix):&lt;/code&gt;. The Mistral-Nemo model gets that line wrong in every generation that contains one, 499 of 499; it typically writes the colon and then keeps going, as in &lt;code&gt;def remove_Occ(s, c):---&lt;/code&gt;. The rightalign-unigram model gets the line wrong in 93.0 percent of its generations that contain one, the gpt4o-unigram model in 66.9 percent, and these two mostly leave the colon out altogether, as in &lt;code&gt;def sort_matrix(matrix)&lt;/code&gt;. For comparison, two models whose tokenizers hold no entries joining punctuation to a line break, gpt4onl and claude-approx, get that line wrong in exactly zero of their generations. All three zero-score tokenizers do hold such entries: 1,064 for Mistral-Nemo and 302 for each of the other two. So the place these models most often fail is the punctuation-to-line-break junction this whole post is about, at the opening line of the function definition. This check does not account for everything, though: 165 gpt4o-unigram generations and 35 rightalign-unigram generations have a well-formed def header and still fail to parse, and we have not identified what breaks those.&lt;/p&gt;
+&lt;!-- Truncation does not explain this: the three models reach the 256-token generation cap on 2.4 to 7.4 percent of their generations, vs. 3.6 and 6.2 percent for the two comparison models, and their generations are of ordinary length. (The cap rates are lower bounds, because we re-encode the trimmed generation text rather than the raw token stream.)
+
+The caveats, so this stays honest. Each of these rates comes from a single training run. We checked only the outer function-header line, so a missing colon on a nested definition or an `if` line would not show up. And these numbers alone do not separate the vocabulary explanation from the algorithm one, since two of the three zero-score models use Unigram; worth saying plainly, though, the model failing at 100 percent is the BPE one. Why these vocabularies make the model run past the end of the function header, or never complete it, is not established.
+ --&gt;
+&lt;h3 id=&#34;humaneval&#34;&gt;HumanEval&lt;/h3&gt;
+&lt;p&gt;On HumanEval, the prompt supplies the function header and the indentation context, so the model actually isn&amp;rsquo;t required to emit the syntax that would require the two classes of whitespace tokens discussed here. HumanEval pass@1 across the same models spans 0.134 to 0.195, a range of 0.061, vs. 0.248 on MBPP. As an informal analysis, we looked at performance of five of our tokenizers on the two benchmarks: whitespace, punct, claude-approx, and the scripttok-mingram-scriptenc_cb and cb_nl pair, the five that recur through Appendix B. With prompt boundaries healed, their indentation-failure rates on HumanEval ranged from 0.0 to 3.7 percent, while the MBPP rates for those same five range from 0.3 percent to 86.4 percent. Our conclusion is that an evaluation that uses HumanEval alone does not expose this type of defect.&lt;/p&gt;
+&lt;h3 id=&#34;code-bits-per-byte&#34;&gt;Code bits per byte&lt;/h3&gt;
+&lt;p&gt;A team that never runs generation benchmarks might instead monitor code bits per byte, the bits-per-byte measure from the 
+ section, computed on held-out code. For HumanEval, that measure behaves as we would expect: it correlates negatively (lower bits per byte, better HumanEval) with HumanEval pass@1 at every reporting level: rho = -0.43 across the 57 tokenizers; -0.59 over one representative per configuration family (p = 0.002); and -0.49 over family means. However, it shows no association with MBPP at any level: +0.07, -0.12, and -0.04 on the same three levels, every p above 0.5. So a team watching code BPB would see its tokenizers ranked plausibly by code-modeling quality and would still miss syntax generation issues that we observe. A related observation appears in the grid of 
+: held-out math+code bits per byte improves monotonically with the code fraction there, while the MBPP ranking does not follow it.&lt;/p&gt;
+&lt;p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure  &gt;
+  &lt;div class=&#34;flex justify-center	&#34;&gt;
+    &lt;div class=&#34;w-full&#34; &gt;
+          &lt;img alt=&#34;Two scatter panels of pass@1 vs. code bits per byte, HumanEval on the left and MBPP on the right&#34; 
+               srcset=&#34;https://cimeister.github.io/blog/code_tokenizer_ablations/blog_figures/fig4_codebpb_twin_hu_f3d068fcbb87b41a.webp 320w, https://cimeister.github.io/blog/code_tokenizer_ablations/blog_figures/fig4_codebpb_twin_hu_8f4eed37d70a3df6.webp 480w, https://cimeister.github.io/blog/code_tokenizer_ablations/blog_figures/fig4_codebpb_twin_hu_1ea8693c0fa63eeb.webp 760w&#34;
+               sizes=&#34;(max-width: 480px) 100vw, (max-width: 768px) 90vw, (max-width: 1024px) 80vw, 760px&#34;
+               src=&#34;https://cimeister.github.io/blog/code_tokenizer_ablations/blog_figures/fig4_codebpb_twin_hu_f3d068fcbb87b41a.webp&#34;
+               width=&#34;760&#34;
+               height=&#34;341&#34;
+               loading=&#34;lazy&#34; data-zoomable /&gt;&lt;/div&gt;
+  &lt;/div&gt;&lt;/figure&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Each point is one tokenizer, placed by code bits per byte and pass@1 for the model trained on it. Lower bits per byte goes with higher HumanEval (left) and with nothing on MBPP (right); the two panels use different vertical ranges because the two benchmarks span very different score ranges.&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;byte-coverage&#34;&gt;Byte coverage&lt;/h2&gt;
+
+
+
+  
+  &lt;blockquote class=&#34;border-l-4 border-neutral-300 dark:border-neutral-600 pl-4 italic text-neutral-600 dark:text-neutral-400 my-6&#34;&gt;
+    &lt;p&gt;&lt;strong&gt;In brief.&lt;/strong&gt; Given no explicit initial alphabet, the HuggingFace BpeTrainer puts into the base vocabulary only the byte values that occur in its sampled tokenizer training corpus, and raises no error or warning. A byte that never occurred has no vocabulary entry and no unknown-token fallback, so text containing it cannot round-trip. Five of the 58 tokenizers in this study fail a byte round-trip check through this mechanism. One of them cannot represent &lt;code&gt;{&lt;/code&gt;, and the model trained on it passes 1 of the 22 MBPP problems whose reference solution contains &lt;code&gt;{&lt;/code&gt;. The fix is to pass an explicit 256-byte initial alphabet and to run the check on every trained tokenizer.&lt;/p&gt;
+
+  &lt;/blockquote&gt;
+
+&lt;p&gt;Throughout these experiments, we ran into two separate instances of (unintentional) incomplete byte coverage:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;The brace defect&lt;/strong&gt;: three tokenizers fit on an English-only corpus (gpt4o-english, claude-english, punct-english) are missing critical bytes in their vocabulary, including the opening brace &lt;code&gt;{&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;The control-byte defect&lt;/strong&gt;: the two tokenizers fit with no code in the corpus, the 0 percent rung of the grid, are missing two non-printable bytes used by some programming languages, NUL and the carriage return.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Here we discuss the concrete consequences, focusing on the first defect: gpt4o-english is missing 32 of the 128 tested byte values, among them the carriage return and &lt;code&gt;{&lt;/code&gt;. The model trained on it cannot emit &lt;code&gt;{&lt;/code&gt; at all. Twenty-one of its 500 MBPP generations contain an orphaned &lt;code&gt;}&lt;/code&gt;, for example &lt;code&gt;res = }&lt;/code&gt; where &lt;code&gt;res = {}&lt;/code&gt; was intended, and the model passes 1 of the 22 MBPP problems whose reference solution contains &lt;code&gt;{&lt;/code&gt;. At the overall pass rate of this model, 0.212, about 4.7 of the 22 would be expected to pass. The one pass is a problem whose given tests can be satisfied without writing &lt;code&gt;{&lt;/code&gt;, and the passing generation contains no brace at all. To measure what the missing bytes change, we trained gpt4o-english-fullbyte, using the identical tokenizer training corpus and settings plus an explicit 256-byte initial alphabet.&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;&lt;/th&gt;
+          &lt;th&gt;gpt4o-english (32 bytes missing)&lt;/th&gt;
+          &lt;th&gt;gpt4o-english-fullbyte (byte-complete)&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Bits per byte on held-out balanced-mixture text, 1B balanced models*&lt;/td&gt;
+          &lt;td&gt;0.7375&lt;/td&gt;
+          &lt;td&gt;0.7382&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;BLiMP, 1B balanced models*&lt;/td&gt;
+          &lt;td&gt;0.8158&lt;/td&gt;
+          &lt;td&gt;0.8168&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;MBPP pass@1, math+code&lt;/td&gt;
+          &lt;td&gt;0.212&lt;/td&gt;
+          &lt;td&gt;0.064&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;MBPP parse rate&lt;/td&gt;
+          &lt;td&gt;0.944&lt;/td&gt;
+          &lt;td&gt;0.542&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;MBPP indentation-failure rate&lt;/td&gt;
+          &lt;td&gt;0.006&lt;/td&gt;
+          &lt;td&gt;0.396&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;HumanEval parse rate&lt;/td&gt;
+          &lt;td&gt;0.829&lt;/td&gt;
+          &lt;td&gt;0.841&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;*These results are from models trained on a dataset balanced between English, multilingual, and math+code data.&lt;/p&gt;
+&lt;p&gt;The two measurements from balanced models differ by only about a thousandth each, and not in one direction. Bits per byte for the defective tokenizer, on held-out text from that balanced mixture rather than the math+code data of the grid section, is 0.7375 vs. 0.7382 for the byte-complete tokenizer: lower, which is the better direction. BLiMP is 0.8158 vs. 0.8168: lower again, which on this benchmark is the worse direction. Neither margin is large enough to read as a difference between the tokenizers. We also cannot explain one of the table&amp;rsquo;s numbers: the byte-complete tokenizer has one of the highest MBPP indentation-failure rates in the study, 0.396 vs. a median of 0.006, even though its pretokenizer does not let a line break join the indentation after it. We take this result as indication that caution should be taken: tokenizer defects don&amp;rsquo;t always surface obviously. While our results don&amp;rsquo;t indicate that this defect severely impaired the respective model, it ultimately caps performance since the missing bytes may be required in certain settings. Most importantly, this defect was one that was quick to diagnose and easy to avoid. It can be seen by just looking at the vocabulary and solved by passing an explicit 256-byte initial alphabet.&lt;/p&gt;
+&lt;h2 id=&#34;scope-and-limitations&#34;&gt;Scope and limitations&lt;/h2&gt;
+&lt;p&gt;Everything here comes from one architecture, a 24-layer decoder of about 1.27 billion total parameters, and one training mixture of about 20 billion tokens. Most results are based on one benchmark in one programming language. The correlations across the 58 tokenizers are correlational, and those 58 are not independent design points. Seed noise is large and tokenizer-dependent, so single-run comparisons are unreliable. Our controlled evidence covers a single scale: whether these effects persist at production scale is untested.&lt;/p&gt;
+&lt;p&gt;We also left some things uncontrolled. Every run takes the same 19,073 optimization steps over the same number of tokens, so a tokenizer that packs the corpus into fewer tokens per byte covers more raw text within that budget; we did not equalize the amount of text seen. Vocabulary size varies from 127,826 to 200,000 entries across the field, and a larger vocabulary could raise the count of entries containing a line break by size alone; as noted in 
+, the two 200,000-entry tokenizers hold 28 and 29 such entries, among the lowest in the study, so this particular confound did not materialize. The vocabulary-learning algorithm and the pretokenizer also vary together in most of our designs. Even so, the algorithm is not what distinguishes the worst scores: of the three models at exactly 0.000, two use Unigram and one (Mistral-Nemo) uses BPE, while the one Unigram tokenizer with an ordinary score, claude-balanced-unigram at 0.222, has no entries joining punctuation to a line break. The count of such entries sets the three apart from it; the algorithm does not.&lt;/p&gt;
+&lt;p&gt;What remains unexplained, as of now: why the three zero-score vocabularies make their models break at the function-header colon in the first place (in 
+ we say where the failure happens, not why); the byte-complete rebuild of gpt4o-english sitting near the top of the indentation-failure ranking despite a pretokenizer that keeps line breaks apart from the indentation after them; and why the size of seed noise depends on the tokenizer at all, with punct-balanced-bpe the extreme case (one seed of three at 0.008 while the other two score 0.211 and 0.084).&lt;/p&gt;
+&lt;p&gt;There are likely similar mechanisms across different programming languages, though we measured none of this: MBPP is Python-only. Other languages have characters comparable to line breaks that a parser requires. In Java and the C family, &lt;code&gt;;&lt;/code&gt; ends statements and &lt;code&gt;{&lt;/code&gt;&amp;hellip;&lt;code&gt;}&lt;/code&gt; delimit blocks, and the shipped vocabularies we audited put entries exactly at those junctions (&lt;code&gt; {\n&lt;/code&gt;, &lt;code&gt;;\n&lt;/code&gt;, &lt;code&gt;}\r&lt;/code&gt;). A build with the brace defect could not emit a Java block at all. We state this as a hypothesis about where the same measurements would land in other languages, not as a finding.&lt;/p&gt;
+&lt;h2 id=&#34;checklists&#34;&gt;Checklists&lt;/h2&gt;
+
+
+
+  
+  &lt;blockquote class=&#34;border-l-4 border-neutral-300 dark:border-neutral-600 pl-4 italic text-neutral-600 dark:text-neutral-400 my-6&#34;&gt;
+    &lt;p&gt;&lt;strong&gt;In brief.&lt;/strong&gt; You only need to look at the tokenizer files to check for both of the issues mentioned above. And they are both easily fixable.&lt;/p&gt;
+
+  &lt;/blockquote&gt;
+
+&lt;p&gt;Checks we suggest before training a tokenizer:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Look at how your pretokenizer handles whitespace. Evidence here suggests that changing it to avoid new lines binding with punctuation or following indentations can give an easy bump to your model&amp;rsquo;s performance on Python. This change is often as simple as deleting a trailing clause in the pretokenizer regex.&lt;/li&gt;
+&lt;li&gt;Pass an explicit 256-byte initial alphabet to the trainer, then run the byte round-trip check, plus a round-trip of real multi-script text, before any language-model training.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Checks we suggest before interpreting a code-generation score:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Heal the prompt boundary, or verify that it lands on a token boundary for every tokenizer evaluated.&lt;/li&gt;
+&lt;li&gt;Keep beginning-of-sequence handling consistent with training-time packing.&lt;/li&gt;
+&lt;li&gt;Do not compare numbers across evaluation configurations.&lt;/li&gt;
+&lt;li&gt;Measure the seed standard deviation for at least one configuration per tokenizer family before interpreting single-run differences.&lt;/li&gt;
+&lt;li&gt;Include a benchmark on which the model produces complete programs from the first character. Completion-style benchmarks alone do not expose defects in emitting line breaks.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;appendix-a-pretokenization-rules-used-in-this-study&#34;&gt;Appendix A: pretokenization rules used in this study&lt;/h2&gt;
+&lt;p&gt;The post uses ten pretokenizer names. This section gives each one a short entry: what its splitting rule does in plain language, its line-break-relevant clause verbatim, and the answer to one question: can a punctuation run extend across a following line break, so that an entry joining punctuation to a line break can form? For the custom tokenizers the clauses are quoted from our tokenizer-training configuration. For Mistral-Nemo and LLaMA-3 they are read from the shipped tokenizer files. We checked every entry by running its pretokenizer on sample code. Each entry closes with a one-word verdict on the fusing question.&lt;/p&gt;
+&lt;p&gt;Reading the clauses takes six facts about regex notation. &lt;code&gt;\p{L}&lt;/code&gt; matches any letter and &lt;code&gt;\p{N}&lt;/code&gt; any digit. &lt;code&gt;\s&lt;/code&gt; matches any whitespace character, including line breaks; &lt;code&gt;\r&lt;/code&gt; and &lt;code&gt;\n&lt;/code&gt; are the carriage return and the line feed. &lt;code&gt;[^...]&lt;/code&gt; matches any single character not listed inside the brackets, so &lt;code&gt;[^\s\p{L}\p{N}]&lt;/code&gt; matches any character that is neither whitespace nor a letter nor a digit: punctuation and symbols. &lt;code&gt;+&lt;/code&gt; repeats the preceding item one or more times, &lt;code&gt;*&lt;/code&gt; zero or more times, &lt;code&gt;?&lt;/code&gt; zero or one time. &lt;code&gt;|&lt;/code&gt; separates alternative clauses, tried left to right, and each pretoken comes from the first clause that matches. A clause beginning &lt;code&gt; ?&lt;/code&gt; therefore starts with an optional single space.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;GPT-4o&lt;/strong&gt; (the regex behind gpt4o-balanced-bpe, gpt4o-code-bpe, and the fusing column of the crossed grid). The pretokenizer regex of OpenAI&amp;rsquo;s GPT-4o tokenizer. Its clauses match, in order: words (optionally with one leading character such as a space), digit runs of up to three digits, punctuation runs, and whitespace. The punctuation clause is the one that matters here:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; ?[^\s\p{L}\p{N}]+[\r\n/]*
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;An optional space, then one or more punctuation or symbol characters, then zero or more line-break characters (or &lt;code&gt;/&lt;/code&gt;). Because of the trailing &lt;code&gt;[\r\n/]*&lt;/code&gt;, the clause keeps matching past the punctuation and into the line break, so a punctuation run may extend across a following line break. &lt;code&gt;);&lt;/code&gt; followed by a line break is one pretoken, and the entry &lt;code&gt;);\n&lt;/code&gt; can form. Fuses: yes.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;gpt4onl&lt;/strong&gt; (GPT-4o with a line-break split; the non-fusing variant in the controlled comparisons and in the crossed grid). Identical to GPT-4o except that the punctuation clause ends at the punctuation:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; ?[^\s\p{L}\p{N}]+
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;A following line break is matched by the separate whitespace clause &lt;code&gt;\s*[\r\n]+&lt;/code&gt; instead and lands in a pretoken of its own. &lt;code&gt;);&lt;/code&gt; and the line break can never share a pretoken, so the entry &lt;code&gt;);\n&lt;/code&gt; cannot form at any vocabulary size, on any corpus. Fuses: no.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Right-align digits&lt;/strong&gt; (rightalign-balanced-bpe). GPT-4o with one changed clause, and it is not the punctuation clause: digits are grouped in threes from the right (1234 splits as 1, then 234) instead of from the left (123, then 4), a change aimed at arithmetic. Its punctuation clause is byte-identical to GPT-4o&amp;rsquo;s, so its vocabulary contains the same count of 1,024 entries joining punctuation to a line break that the body reports for gpt4o-balanced-bpe. Fuses: yes.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Mistral-Nemo&lt;/strong&gt; (off the shelf). We read its splitting rule from the shipped tokenizer file. It differs from the GPT-4o regex in two places: digits are matched one at a time rather than in groups of up to three, and there is no clause for English contractions. Its punctuation clause is byte-identical to GPT-4o&amp;rsquo;s:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; ?[^\s\p{L}\p{N}]+[\r\n/]*
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;right down to the &lt;code&gt;/&lt;/code&gt;. The punctuation-line-break entries in its shipped vocabulary are therefore not a separate design decision; they come from the same clause, in a different vendor&amp;rsquo;s tokenizer. Fuses: yes.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;LLaMA-3&lt;/strong&gt; (off the shelf). Also read from the shipped tokenizer file. Its punctuation clause is&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; ?[^\s\p{L}\p{N}]+[\r\n]*
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;the same shape as GPT-4o&amp;rsquo;s, with the trailing class restricted to line-break characters (no &lt;code&gt;/&lt;/code&gt;). On the question of this section it behaves the same: a punctuation run may extend across a following line break. Fuses: yes.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;punct&lt;/strong&gt; (punct-balanced-bpe). Not a single regex: two splitting stages run in sequence. The first stage isolates punctuation characters one at a time, so &lt;code&gt;(&lt;/code&gt;, &lt;code&gt;)&lt;/code&gt;, and &lt;code&gt;;&lt;/code&gt; each become a pretoken of their own, and no punctuation run of two or more characters remains, let alone one extending across a line break. The second stage splits the remaining text with a general-purpose rule (the GPT-2 splitting regex), under which a line break groups with the whitespace that follows it, never with the punctuation before it. Running the composed pretokenizer on &lt;code&gt;print(x);&lt;/code&gt; followed by an indented line yields &lt;code&gt;;&lt;/code&gt; as one pretoken and, as another, the line break plus all but the last of the next line&amp;rsquo;s indentation spaces; the last space attaches forward to the next word. Fuses: no.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Claude&lt;/strong&gt; (claude-balanced-bpe; the body&amp;rsquo;s short name is claude-approx). A reconstruction of the splitting rule of the production Claude tokenizer, recovered by probing its token-counting API (the rule itself is not published). The reconstruction is an early one, and a later round of probing corrected several of its structural claims about letter grouping; the property that matters here, that a punctuation run never extends across a line break, holds in both versions. Its punctuation clause is&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;[ ]?[^\s\p{L}\p{N}]+
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;an optional leading space, then the punctuation run, with no trailing line-break class. Whitespace is split by type into separate clauses: &lt;code&gt;[ ]+&lt;/code&gt; for spaces, &lt;code&gt;[\t]+&lt;/code&gt; for tabs, &lt;code&gt;[\n]+&lt;/code&gt; for line feeds, &lt;code&gt;[\r]+&lt;/code&gt; for carriage returns. A punctuation run and a following line break therefore always land in different pretokens. The effect is the same as gpt4onl&amp;rsquo;s, arrived at independently. Fuses: no.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;clean-multi&lt;/strong&gt; (bpe-nfc-clean-balanced). This project&amp;rsquo;s multilingual-neutral regex. Words are matched with an optional leading space, digits are matched one at a time, and the punctuation clause is &lt;code&gt; ?[^\s\p{L}\p{N}]+&lt;/code&gt;, with no trailing line-break class. Line breaks are matched by the separate clause &lt;code&gt;\s*[\r\n]+&lt;/code&gt;; its leading &lt;code&gt;\s*&lt;/code&gt; means whitespace before a line break may join the line-break pretoken, but the punctuation before it still cannot. Fuses: no.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;whitespace&lt;/strong&gt; (whitespace-balanced-bpe). Two stages again; the first attaches every whitespace run to the pretoken that follows it. Splitting &lt;code&gt;print(x);&lt;/code&gt; followed by an indented &lt;code&gt;foo();&lt;/code&gt; yields the pretoken &lt;code&gt;print(x);&lt;/code&gt; and then a single pretoken holding the line break, the indentation, and &lt;code&gt;foo();&lt;/code&gt; together. Nothing attaches whitespace to the preceding text, so a punctuation run never extends across a following line break and the fused count is zero. The forward attachment has a consequence of its own: this is the one tokenizer of the fourteen runs in our prompt-boundary audit whose MBPP prompt boundary splits mid-token, because in its training text a line break is always part of the token that starts the next line, and encoding a prompt that ends with a line break leaves that line break at a boundary that never occurs in training. Appendix B returns to this. Fuses: no; whitespace fuses forward instead.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;MinGram cb and cb_nl, with SCRIPT encoding&lt;/strong&gt; (scripttok-mingram-scriptenc_cb and scripttok-mingram-scriptenc_cb_nl). The one entry that is neither a regex nor BPE. MinGram is a vocabulary-learning algorithm from a separate project; SCRIPT encoding is its pretokenization scheme. Instead of matching a regex, SCRIPT encoding groups consecutive characters by character class, and it places the line feed, the tab, and the space in one shared whitespace class. In the cb variant a line break and the following indentation therefore form one indivisible pretoken: the line break plus the next line&amp;rsquo;s leading spaces is a single unit, and the vocabulary contains 187 entries that fuse a line break with the following indentation. The cb_nl variant adds one rule, a forced break at line-break characters, and is otherwise identical; under it the line break stands alone, and the count is zero. Punctuation belongs to a different class than whitespace in both variants, so neither variant has an entry joining punctuation to a line break; the cb variant&amp;rsquo;s fusion joins the line break to the indentation after it. This is the pair the controlled comparisons return to. Fuses (punctuation with line break): no, in both; cb fuses the line break with the following indentation instead.&lt;/p&gt;
+&lt;p&gt;In summary: GPT-4o, Right-align digits, Mistral-Nemo, and LLaMA-3 let a punctuation run extend across a following line break; gpt4onl, punct, Claude, clean-multi, whitespace, and both MinGram variants do not. Two of the non-fusing entries fuse at a different boundary instead: scripttok-mingram-scriptenc_cb joins the line break to the following indentation, and whitespace joins every whitespace run to what follows it.&lt;/p&gt;
+&lt;h2 id=&#34;appendix-b-evaluation-details-seed-noise-and-the-prompt-boundary&#34;&gt;Appendix B: evaluation details: seed noise and the prompt boundary&lt;/h2&gt;
+&lt;h3 id=&#34;seed-noise-in-a-single-run&#34;&gt;Seed noise in a single run&lt;/h3&gt;
+&lt;p&gt;The below table gives the measured seed spread across tokenizers.&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;Tokenizer&lt;/th&gt;
+          &lt;th&gt;Vocabulary entries containing a line break&lt;/th&gt;
+          &lt;th&gt;MBPP pass@1 per seed&lt;/th&gt;
+          &lt;th&gt;Seed SD&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;claude-balanced-bpe&lt;/td&gt;
+          &lt;td&gt;9&lt;/td&gt;
+          &lt;td&gt;0.250, 0.234, 0.240&lt;/td&gt;
+          &lt;td&gt;0.0081&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;gpt4onl-balanced-bpe&lt;/td&gt;
+          &lt;td&gt;74&lt;/td&gt;
+          &lt;td&gt;0.224, 0.246, 0.220&lt;/td&gt;
+          &lt;td&gt;0.0140&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;bpe-nfc-plus2-balanced&lt;/td&gt;
+          &lt;td&gt;74&lt;/td&gt;
+          &lt;td&gt;0.114, 0.212, 0.228&lt;/td&gt;
+          &lt;td&gt;0.0617&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;gpt4o-balanced-bpe&lt;/td&gt;
+          &lt;td&gt;1,091&lt;/td&gt;
+          &lt;td&gt;0.167**, 0.072, 0.018&lt;/td&gt;
+          &lt;td&gt;0.0754&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;punct-balanced-bpe&lt;/td&gt;
+          &lt;td&gt;266&lt;/td&gt;
+          &lt;td&gt;0.211*, 0.008, 0.084&lt;/td&gt;
+          &lt;td&gt;0.1026&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;* This value is the mean of two runs trained with the same seed, 0.230 and 0.192, three months apart under one software environment.&lt;/p&gt;
+&lt;p&gt;** The mean of two runs trained with the same seed, 0.174 (2026-04, before an environment rebuild) and 0.160 (2026-08, after it); the pair is discussed in 
+.&lt;/p&gt;
+&lt;p&gt;One name in this table appears nowhere else in the post: bpe-nfc-plus2-balanced is a variant of clean-multi (bpe-nfc-clean-balanced), trained on the same balanced corpus with NFC normalization. Its regex adds one prefix clause that attaches apostrophes and the Tibetan word separator to words, and its punctuation clause, like the clean-multi one, has no trailing line-break class.&lt;/p&gt;
+&lt;h3 id=&#34;the-evaluation-configuration-ablation-and-the-prompt-boundary&#34;&gt;The evaluation-configuration ablation and the prompt boundary&lt;/h3&gt;
+&lt;p&gt;For three tokenizers we scored all four combinations of the beginning-of-sequence token and token healing.&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;Model (tokenizer)&lt;/th&gt;
+          &lt;th&gt;Benchmark&lt;/th&gt;
+          &lt;th&gt;Neither&lt;/th&gt;
+          &lt;th&gt;Healing only&lt;/th&gt;
+          &lt;th&gt;BOS only&lt;/th&gt;
+          &lt;th&gt;Both&lt;/th&gt;
+          &lt;th&gt;Both against neither, McNemar p&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;claude-balanced-bpe&lt;/td&gt;
+          &lt;td&gt;HumanEval&lt;/td&gt;
+          &lt;td&gt;0.1463&lt;/td&gt;
+          &lt;td&gt;0.1402&lt;/td&gt;
+          &lt;td&gt;0.1707&lt;/td&gt;
+          &lt;td&gt;0.1707&lt;/td&gt;
+          &lt;td&gt;0.42&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;claude-balanced-bpe&lt;/td&gt;
+          &lt;td&gt;MBPP&lt;/td&gt;
+          &lt;td&gt;0.220&lt;/td&gt;
+          &lt;td&gt;0.214&lt;/td&gt;
+          &lt;td&gt;0.256&lt;/td&gt;
+          &lt;td&gt;0.250&lt;/td&gt;
+          &lt;td&gt;0.049&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;scripttok-mingram-scriptenc_cb&lt;/td&gt;
+          &lt;td&gt;HumanEval&lt;/td&gt;
+          &lt;td&gt;0.0000&lt;/td&gt;
+          &lt;td&gt;0.0305&lt;/td&gt;
+          &lt;td&gt;0.0854&lt;/td&gt;
+          &lt;td&gt;0.1768&lt;/td&gt;
+          &lt;td&gt;3.7e-9&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;scripttok-mingram-scriptenc_cb&lt;/td&gt;
+          &lt;td&gt;MBPP&lt;/td&gt;
+          &lt;td&gt;0.008&lt;/td&gt;
+          &lt;td&gt;0.008&lt;/td&gt;
+          &lt;td&gt;0.016&lt;/td&gt;
+          &lt;td&gt;0.016&lt;/td&gt;
+          &lt;td&gt;0.34&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;whitespace-balanced-bpe&lt;/td&gt;
+          &lt;td&gt;HumanEval&lt;/td&gt;
+          &lt;td&gt;0.0000&lt;/td&gt;
+          &lt;td&gt;0.0061&lt;/td&gt;
+          &lt;td&gt;0.1524&lt;/td&gt;
+          &lt;td&gt;0.1768&lt;/td&gt;
+          &lt;td&gt;3.7e-9&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;whitespace-balanced-bpe&lt;/td&gt;
+          &lt;td&gt;MBPP&lt;/td&gt;
+          &lt;td&gt;0.006&lt;/td&gt;
+          &lt;td&gt;0.016&lt;/td&gt;
+          &lt;td&gt;0.006&lt;/td&gt;
+          &lt;td&gt;0.102&lt;/td&gt;
+          &lt;td&gt;9.1e-14&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;One agreement in the table is a verified coincidence, not a transcription error: the scripttok-mingram-scriptenc_cb and whitespace-balanced-bpe HumanEval rows match at 0.0000, 0.1768, and p = 3.7e-9 because both models solve exactly 29 of the 164 problems in the cell with both changes and exactly 0 without them, and the identical scores and identical 29-to-0 McNemar splits follow from those counts.&lt;/p&gt;
+&lt;p&gt;Both edits are important independently. In the HumanEval rows of the two affected models, the cell with both changes is above each single-ingredient cell. The two changes also matter for different tokenizers and different benchmarks. For the model trained with claude-balanced-bpe, whose prompt boundary is clean, none of the four healing contrasts reaches significance, with all four p-values at 0.25 or above, while adding the beginning-of-sequence token alone raises MBPP pass@1 from 0.220 to 0.256 (p = 0.018). For the whitespace-balanced-bpe model, MBPP pass@1 reaches 0.102 only in the cell with both changes; healing alone moves it just 0.006 to 0.016.&lt;/p&gt;
+&lt;p&gt;The boundary artifact is tokenizer-dependent. For the four tokenizers in the 16-tokenizer healing check whose pretokenization lets a punctuation or whitespace run extend past a following line break or indentation, encoding the HumanEval prompt alone ends mid-token on 97.6 to 99.4 percent of examples. Across the 14 runs checked on MBPP, the prompt boundary is clean for 13; the exception is whitespace-balanced-bpe, at 99.8 percent split, because its pretokenization attaches every whitespace run to the text that follows it, so a line break at the end of a prompt lands at a boundary that never occurs in training. Without healing, HumanEval pass@1 is exactly 0.0000 for three models, those trained with whitespace-balanced-bpe, punct-balanced-bpe, and scripttok-mingram-scriptenc_cb; with healing it is 0.0061, 0.0671, and 0.0305 respectively.&lt;/p&gt;
+&lt;p&gt;The evaluation configuration also changes diagnostics, not only scores. The MBPP indentation-failure rate for punct-balanced-bpe&amp;rsquo;s canonical seed-42 run is 9.4 percent under generation-spec v2, against 42.6 percent for the same run in an earlier scoring pass without the beginning-of-sequence token on the generation context. That 42.6 percent was partly an artifact of the missing token. The three-seed stratified mean is 31.3 percent, driven by one seed&amp;rsquo;s collapse; 
+ unpacks the per-seed spread.&lt;/p&gt;
+&lt;h2 id=&#34;appendix-c-tokenizer-only-metrics-and-the-configuration-family-panel&#34;&gt;Appendix C: tokenizer-only metrics and the configuration-family panel&lt;/h2&gt;
+&lt;p&gt;Ten metrics computed on the tokenizer alone, with no model involved, were correlated with MBPP, HumanEval, and GSM8K. MBPP and HumanEval are the benchmarks from the body; GSM8K (
+) is a benchmark of grade-school math word problems, on which the model generates a worked solution and is scored by whether the final number it produces matches the reference answer. Of the 58 tokenizers, 46 enter that analysis, and they group into 27 configuration families whose members agree on corpus, pretokenizer lineage, algorithm, normalizer, and data composition. The correlations below take one representative per family, chosen by a rule applied without reference to results, so that a cluster of near-duplicate designs counts once rather than thirteen times. The rule has four steps: first keep the members that pass the byte round-trip audit; then keep those whose vocabulary lies in the 127,826 to 131,072 band; then take the member with the fewest hyphen-separated name segments; and break any remaining tie lexicographically. Six of the thirty metric-benchmark correlations reach significance after the Benjamini-Hochberg adjustment, and five are listed here; the sixth, tokens per identifier against HumanEval (rho = -0.51, adjusted p = 0.023), is the one cell whose family-mean variant is not significant (adjusted p = 0.22), which flags a result that rides on which member represents its family, so we report it and do not build on it.&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;Metric&lt;/th&gt;
+          &lt;th&gt;Benchmark&lt;/th&gt;
+          &lt;th&gt;Spearman rho (n = 27 families)&lt;/th&gt;
+          &lt;th&gt;Adjusted p&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Count of vocabulary entries containing a line break&lt;/td&gt;
+          &lt;td&gt;MBPP&lt;/td&gt;
+          &lt;td&gt;-0.73&lt;/td&gt;
+          &lt;td&gt;0.00016&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Numeric magnitude fertility&lt;/td&gt;
+          &lt;td&gt;HumanEval&lt;/td&gt;
+          &lt;td&gt;-0.75&lt;/td&gt;
+          &lt;td&gt;0.00016&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;AST boundary alignment&lt;/td&gt;
+          &lt;td&gt;MBPP&lt;/td&gt;
+          &lt;td&gt;+0.60&lt;/td&gt;
+          &lt;td&gt;0.0049&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Digit boundary F1&lt;/td&gt;
+          &lt;td&gt;HumanEval&lt;/td&gt;
+          &lt;td&gt;+0.61&lt;/td&gt;
+          &lt;td&gt;0.0049&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Operator isolation, prose corpus&lt;/td&gt;
+          &lt;td&gt;MBPP&lt;/td&gt;
+          &lt;td&gt;+0.54&lt;/td&gt;
+          &lt;td&gt;0.015&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Four of these metrics need a definition. Numeric magnitude fertility is the average number of tokens per digit when numbers are encoded, so lower values indicate that numbers are split into fewer pieces relative to their length. AST boundary alignment is the fraction of token boundaries that land on AST node boundaries in the tree-sitter library parses. Digit boundary F1 measures how closely the tokenizer&amp;rsquo;s split positions inside a number agree with right-aligned three-digit grouping. Operator isolation is the fraction of code operators emitted as standalone tokens, measured here on a prose corpus.&lt;/p&gt;
+&lt;p&gt;The TokEval paper carries the rest of this analysis: the remaining correlations, the control of the AST correlation for line-break handling, the dependence of each correlation on the training mixture, and the per-example fits, which find no evidence that per-problem tokenization properties predict which problems a model passes.&lt;/p&gt;
+&lt;p&gt;Values in the paper differ slightly from the values here, because the two documents compute them over different sets of tokenizers and models. The paper&amp;rsquo;s math+code panel holds 20 custom tokenizers, and this post reports over the 58 tokenizers or over the 27 configuration families. Each document states its panel alongside every number.&lt;/p&gt;
+&lt;p&gt;For reference, every tokenizer count the post reports over, in one place:&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;Count&lt;/th&gt;
+          &lt;th&gt;What it is&lt;/th&gt;
+          &lt;th&gt;What it leaves out&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;58&lt;/td&gt;
+          &lt;td&gt;Every distinct tokenizer with a completed training run under this evaluation protocol&lt;/td&gt;
+          &lt;td&gt;Nothing; this is the full set&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;56&lt;/td&gt;
+          &lt;td&gt;The custom-trained tokenizers&lt;/td&gt;
+          &lt;td&gt;The two off-the-shelf references, Mistral-Nemo and LLaMA-3&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;46&lt;/td&gt;
+          &lt;td&gt;The panel behind this appendix&amp;rsquo;s correlations&lt;/td&gt;
+          &lt;td&gt;The two references, the whitespace-split probe, and the nine tokenizers of the grid experiment (the eight grid tokenizers plus their non-fusing base), which were built to manipulate the very quantity being correlated&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;27&lt;/td&gt;
+          &lt;td&gt;One representative per configuration family&lt;/td&gt;
+          &lt;td&gt;The near-duplicate members within the 46&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;57&lt;/td&gt;
+          &lt;td&gt;The tokenizers in the code bits per byte comparison&lt;/td&gt;
+          &lt;td&gt;One tokenizer whose text normalizer rewrites characters in a way that changes byte counts, which invalidates its bits-per-byte measurement&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;26&lt;/td&gt;
+          &lt;td&gt;Family representatives, and family means, for the code bits per byte comparison&lt;/td&gt;
+          &lt;td&gt;That same tokenizer&amp;rsquo;s family, which has no other member&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;20&lt;/td&gt;
+          &lt;td&gt;The TokEval paper&amp;rsquo;s own math+code panel&lt;/td&gt;
+          &lt;td&gt;Everything this post covers beyond that paper&amp;rsquo;s panel; the paper states its own membership rules&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;18&lt;/td&gt;
+          &lt;td&gt;The tokenizers in the fused-entry usage comparison&lt;/td&gt;
+          &lt;td&gt;Every tokenizer without at least 20 MBPP generations in each of the two groups (for a tokenizer with no fused entries, the group that uses one does not exist)&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Two further pairs of numbers are splits within these sets rather than panels of their own: the 21 and 37 of the Mann-Whitney comparison divide the 58 by whether the vocabulary holds an entry joining punctuation to a line break, and the 16 and 14 in Appendix B are the number of tokenizers in the healing check and the number of runs checked for a clean MBPP prompt boundary.&lt;/p&gt;
+&lt;h2 id=&#34;appendix-d-statistical-tests&#34;&gt;Appendix D: statistical tests&lt;/h2&gt;
+&lt;p&gt;Statistical claims in this post use five tests, and &amp;ldquo;significant&amp;rdquo; always means a p-value below 0.05, with every test two-sided.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Spearman rank correlation.&lt;/strong&gt; Both quantities are converted to ranks, and the correlation of the ranks is reported as rho, from -1 for perfectly opposed orderings to +1 for identical orderings.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Mann-Whitney rank-sum test.&lt;/strong&gt; All values from two groups are pooled and ranked, and the test measures how often a value from one group outranks a value from the other. Used once, comparing MBPP pass@1 between the tokenizers with at least one entry joining punctuation to a line break and the tokenizers with none.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Exact McNemar test.&lt;/strong&gt; A paired comparison of two models on the same 500 problems. Problems that both models solve, and problems that both miss, are uninformative about the difference. The test counts the problems that exactly one model solves and computes, from the binomial distribution, the probability of a split at least this uneven if each such problem were equally likely to favor either model.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Benjamini-Hochberg adjustment.&lt;/strong&gt; Applied to families of related correlations in Appendix C. It controls the expected fraction of false positives among the significant results in a family.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Partial rank correlation.&lt;/strong&gt; The rank correlation between two quantities after removing from both the part predicted by a third quantity, computed from the three pairwise rank correlations and tested with a t-test. The TokEval paper uses it to control the AST correlation for line-break handling, as noted in Appendix C.&lt;/p&gt;
+&lt;p&gt;Two standard deviations recur and measure different things. The seed standard deviation of a configuration is the standard deviation of a score across training runs that differ only in random seed. Where a pooled seed standard deviation is quoted, it is the square root of the mean of the per-configuration seed variances. The standard deviation across a set of tokenizers is used only as a ruler for effect sizes, and it is always stated with the size of the set.&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;Claim&lt;/th&gt;
+          &lt;th&gt;Test&lt;/th&gt;
+          &lt;th&gt;n&lt;/th&gt;
+          &lt;th&gt;Statistic&lt;/th&gt;
+          &lt;th&gt;p&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Count of entries containing a line break against mean MBPP, all 58 tokenizers&lt;/td&gt;
+          &lt;td&gt;Spearman&lt;/td&gt;
+          &lt;td&gt;58&lt;/td&gt;
+          &lt;td&gt;rho = -0.719&lt;/td&gt;
+          &lt;td&gt;2.1e-10&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;The same, custom-trained tokenizers only&lt;/td&gt;
+          &lt;td&gt;Spearman&lt;/td&gt;
+          &lt;td&gt;56&lt;/td&gt;
+          &lt;td&gt;rho = -0.705&lt;/td&gt;
+          &lt;td&gt;1.4e-9&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Mean MBPP, tokenizers with entries joining punctuation to a line break against tokenizers with none&lt;/td&gt;
+          &lt;td&gt;Mann-Whitney&lt;/td&gt;
+          &lt;td&gt;21 and 37&lt;/td&gt;
+          &lt;td&gt;means 0.095 and 0.206&lt;/td&gt;
+          &lt;td&gt;3.0e-7&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;MinGram pair on the math+code mixture, MBPP&lt;/td&gt;
+          &lt;td&gt;McNemar&lt;/td&gt;
+          &lt;td&gt;500 problems&lt;/td&gt;
+          &lt;td&gt;104 solved only by the cb_nl variant, 4 only by cb&lt;/td&gt;
+          &lt;td&gt;3.4e-26&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;BOS against no BOS, unhealed, model trained with claude-balanced-bpe, MBPP&lt;/td&gt;
+          &lt;td&gt;McNemar&lt;/td&gt;
+          &lt;td&gt;500 problems&lt;/td&gt;
+          &lt;td&gt;scores 0.220 and 0.256&lt;/td&gt;
+          &lt;td&gt;0.018&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Healing against no healing, model trained with claude-balanced-bpe&lt;/td&gt;
+          &lt;td&gt;McNemar&lt;/td&gt;
+          &lt;td&gt;164 and 500&lt;/td&gt;
+          &lt;td&gt;four contrasts, score changes 0.000 to -0.006&lt;/td&gt;
+          &lt;td&gt;0.25, 0.375, 1.0, 1.0&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Every count and rate in the fused-entry usage passage carries no row here and no test claim; that comparison fits no model by construction.&lt;/p&gt;
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Austin et al., 2021. 
+. arXiv:2108.07732.&lt;/li&gt;
+&lt;li&gt;Chen et al., 2021. 
+. arXiv:2107.03374.&lt;/li&gt;
+&lt;li&gt;Cobbe et al., 2021. 
+. arXiv:2110.14168.&lt;/li&gt;
+&lt;li&gt;Dagan, Synnaeve, and Rozière, 2024. 
+. arXiv:2402.01035.&lt;/li&gt;
+&lt;li&gt;Foroutan, Meister, Paul, Niklaus, Ahmadi, Bosselut, and Sennrich, 2025. 
+. arXiv:2508.04796.&lt;/li&gt;
+&lt;li&gt;Kudo, 2018. 
+. arXiv:1804.10959.&lt;/li&gt;
+&lt;li&gt;Land, 2026. 
+. arXiv:2606.27019.&lt;/li&gt;
+&lt;li&gt;Liu, Hayase, Hofmann, Oh, Smith, and Choi, 2025. 
+. arXiv:2503.13423 (COLM 2025).&lt;/li&gt;
+&lt;li&gt;Meister, 2026. 
+. arXiv:2608.18062.&lt;/li&gt;
+&lt;li&gt;Sennrich, Haddow, and Birch, 2016. 
+. arXiv:1508.07909.&lt;/li&gt;
+&lt;li&gt;Singh and Strouse, 2024. 
+. arXiv:2402.14903.&lt;/li&gt;
+&lt;li&gt;Warstadt et al., 2020. 
+. arXiv:1912.00582.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The models and tools the post names without a citation marker, for completeness: 
+ (arXiv:2407.21783), 
+, 
+, 
+ (arXiv:2402.19173), 
+ (arXiv:2404.01226), 
+, 
+ (arXiv:2409.12186), and 
+ (arXiv:2406.11409).&lt;/p&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;This is the standard way to treat unmatched spans, but most libraries let you set this configuration. E.g., in HuggingFace, via the &lt;code&gt;SplitDelimiterBehavior&lt;/code&gt; parameter.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34;&gt;
+&lt;p&gt;The two are pabpe-nfc-clean-fineweb2full-consv2-eusino-v2c-frde-kr120-gm130k-v200k and pabpe-nfc-clean-fineweb2full-consv2-eusino-v2c-gm120k-v200k; a larger vocabulary could raise the line-break count studied below by size alone, but it does not here, since those two hold 28 and 29 entries containing a line break, among the lowest values in the study. The tokenizer is otherwise the only axis of variation.&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34;&gt;
+&lt;p&gt;The TokEval paper (
+) reports the same comparison over its 20-tokenizer math+code panel, and its values differ slightly for that reason; Appendix C states why.&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:4&#34;&gt;
+&lt;p&gt;One disclosure about the fusing side&amp;rsquo;s seed-42 value: the two runs for that seed fall on either side of a documented rebuild of the training software environment. The canonical run was trained in 2026-04, before the rebuild, and a same-seed, same-configuration retrain was trained in 2026-08. The pair reproduces closely. Validation bits per byte is 0.3352 against 0.3356, MBPP pass@1 is 0.174 against 0.160, and HumanEval is identical at 0.1646. The magnitude of the MBPP movement is within the noise across seeds.&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
     </item>
     
     <item>
